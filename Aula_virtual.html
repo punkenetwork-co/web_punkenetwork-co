@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aula Virtual | ERTO Academia</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Librerías para certificado -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5fc;
+            color: #1a1a1a;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ==================== LOGIN ==================== */
+        #loginScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            padding: 20px;
+        }
+        #loginScreen .login-box {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 40px 32px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+        #loginScreen .login-box img {
+            max-height: 60px;
+            margin: 0 auto 20px;
+        }
+        #loginScreen .login-box h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #0200AF;
+        }
+        #loginScreen .login-box p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        #loginScreen .form-group {
+            margin-bottom: 16px;
+        }
+        #loginScreen .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        #loginScreen .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafafa;
+            transition: border 0.3s;
+        }
+        #loginScreen .form-group input:focus {
+            border-color: #0200AF;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(2,0,175,0.08);
+            background: #fff;
+        }
+        #loginScreen .btn-login {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: #0200AF;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        #loginScreen .btn-login:hover {
+            background: #0500d9;
+        }
+        #loginScreen .error {
+            color: #e74c3c;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ==================== CONTENIDO PRINCIPAL (oculto hasta login) ==================== */
+        #mainContent {
+            display: none;
+            padding: 20px 0 40px;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header-aula {
+            background: #ffffff;
+            border-bottom: 1px solid #eaeaea;
+            padding: 16px 0;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .header-aula .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .header-aula .logo img {
+            height: 40px;
+        }
+        .header-aula .user-info {
+            font-size: 14px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-aula .user-info .btn-logout {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 6px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .header-aula .user-info .btn-logout:hover {
+            background: #f0f0f0;
+        }
+
+        /* ==================== MÓDULOS (accordion) ==================== */
+        .modulo {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+        .modulo:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .modulo-header {
+            padding: 18px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fafafa;
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .modulo-header:hover {
+            background: #f0f0ff;
+        }
+        .modulo-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modulo-header h3 .badge {
+            background: #0200AF;
+            color: #fff;
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 30px;
+        }
+        .modulo-header .icon {
+            font-size: 20px;
+            color: #0200AF;
+            transition: transform 0.3s;
+        }
+        .modulo-header .icon.open {
+            transform: rotate(180deg);
+        }
+        /* Módulo bloqueado */
+        .modulo-bloqueado .modulo-header {
+            cursor: not-allowed;
+            opacity: 0.7;
+            background: #f5f5f5;
+        }
+        .modulo-bloqueado .modulo-header:hover {
+            background: #f5f5f5;
+        }
+        .modulo-bloqueado .modulo-header .badge {
+            background: #999;
+        }
+        .modulo-bloqueado .modulo-header .icon {
+            color: #999;
+        }
+        .modulo-bloqueado .modulo-header .candado {
+            color: #999;
+            margin-left: 8px;
+        }
+        .modulo-body {
+            padding: 0 24px 24px;
+            display: none;
+        }
+        .modulo-body.open {
+            display: block;
+        }
+        .modulo-body .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-bottom: 16px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .modulo-body .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .modulo-body .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .modulo-body .btn-secundario {
+            padding: 8px 20px;
+            border: 1px solid #0200AF;
+            border-radius: 30px;
+            background: transparent;
+            color: #0200AF;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modulo-body .btn-secundario:hover {
+            background: #f0f0ff;
+        }
+        .modulo-body .btn-secundario i {
+            margin-right: 6px;
+        }
+        .modulo-body .btn-siguiente {
+            padding: 8px 24px;
+            border: none;
+            border-radius: 30px;
+            background: #0200AF;
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .modulo-body .btn-siguiente:hover {
+            background: #0500d9;
+            transform: scale(1.02);
+        }
+        .modulo-body .btn-siguiente:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ==================== EXAMEN ==================== */
+        #examenSection {
+            display: none;
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 32px 28px;
+            margin-top: 24px;
+        }
+        #examenSection h2 {
+            font-size: 26px;
+            color: #0200AF;
+            margin-bottom: 4px;
+        }
+        #examenSection .sub {
+            color: #666;
+            margin-bottom: 24px;
+        }
+        #examenSection .campos-examen {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        #examenSection .campos-examen .full {
+            grid-column: 1 / -1;
+        }
+        #examenSection .campos-examen label {
+            font-weight: 500;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        #examenSection .campos-examen input,
+        #examenSection .campos-examen select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #fafafa;
+        }
+        #examenSection .campos-examen input:focus,
+        #examenSection .campos-examen select:focus {
+            border-color: #0200AF;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(2,0,175,0.08);
+        }
+        .pregunta {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .pregunta p {
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+        .pregunta label {
+            display: block;
+            font-weight: 400;
+            font-size: 15px;
+            margin-bottom: 4px;
+            padding-left: 8px;
+            cursor: pointer;
+        }
+        .pregunta label input {
+            margin-right: 8px;
+        }
+        .btn-examen {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 50px;
+            background: #0200AF;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-examen:hover {
+            background: #0500d9;
+        }
+        #resultadoExamen {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            display: none;
+        }
+        #resultadoExamen.aprobado {
+            background: #e6f9ed;
+            border: 1px solid #2ecc71;
+            display: block;
+        }
+        #resultadoExamen.reprobado {
+            background: #fde8e8;
+            border: 1px solid #e74c3c;
+            display: block;
+        }
+
+        /* ==================== CERTIFICADO ==================== */
+        #certificadoSection {
+            display: none;
+            margin-top: 30px;
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+        }
+        #certificadoSection h2 {
+            color: #0200AF;
+            margin-bottom: 8px;
+        }
+        #certificadoSection .sub {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        #certificadoPreview {
+            border: 2px solid #eaeaea;
+            border-radius: 16px;
+            padding: 30px 20px;
+            background: #fafafa;
+            max-width: 700px;
+            margin: 0 auto 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        #certificadoPreview .cert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        #certificadoPreview .cert-header img {
+            height: 50px;
+        }
+        #certificadoPreview .cert-titulo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0200AF;
+            margin-bottom: 6px;
+        }
+        #certificadoPreview .cert-sub {
+            font-size: 16px;
+            color: #555;
+        }
+        #certificadoPreview .cert-nombre {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 16px 0 4px;
+        }
+        #certificadoPreview .cert-doc {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+        #certificadoPreview .cert-curso {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0200AF;
+            margin-bottom: 8px;
+        }
+        #certificadoPreview .cert-fecha {
+            font-size: 14px;
+            color: #888;
+            margin-top: 12px;
+        }
+        #certificadoPreview .cert-codigo {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 8px;
+            font-family: monospace;
+        }
+        #certificadoPreview .cert-footer {
+            margin-top: 16px;
+            font-size: 13px;
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: 12px;
+        }
+        .cert-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .cert-actions .btn-cert {
+            padding: 10px 28px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-cert.png {
+            background: #0200AF;
+            color: #fff;
+        }
+        .btn-cert.png:hover {
+            background: #0500d9;
+        }
+        .btn-cert.pdf {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .btn-cert.pdf:hover {
+            background: #c0392b;
+        }
+        .btn-cert.finalizar {
+            background: #2ecc71;
+            color: #fff;
+        }
+        .btn-cert.finalizar:hover {
+            background: #27ae60;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer-aula {
+            background: #111;
+            color: #aaa;
+            padding: 20px 0;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .footer-aula a {
+            color: #aaa;
+            margin: 0 12px;
+        }
+        .footer-aula a:hover {
+            color: #fff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            #loginScreen .login-box {
+                padding: 28px 20px;
+            }
+            .modulo-header {
+                padding: 14px 18px;
+            }
+            .modulo-body {
+                padding: 0 18px 18px;
+            }
+            #examenSection {
+                padding: 24px 18px;
+            }
+            #examenSection .campos-examen {
+                grid-template-columns: 1fr;
+            }
+            #certificadoPreview {
+                padding: 20px 12px;
+            }
+            #certificadoPreview .cert-header img {
+                height: 36px;
+            }
+            #certificadoPreview .cert-titulo {
+                font-size: 22px;
+            }
+            .cert-actions .btn-cert {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        @media (max-width: 480px) {
+            .header-aula .container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .header-aula .user-info {
+                justify-content: space-between;
+            }
+        }
+
+        /* Bloqueo de selección y copia (adicional) */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PANTALLA DE LOGIN ==================== -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network" style="max-height:60px;">
+            <h2>Aula Virtual</h2>
+            <p>ERTO Academia · Acceso restringido</p>
+            <div id="loginError" class="error">Usuario o contraseña incorrectos.</div>
+            <div class="form-group">
+                <label for="loginUser">Usuario</label>
+                <input type="text" id="loginUser" placeholder="Ingresa tu usuario" />
+            </div>
+            <div class="form-group">
+                <label for="loginPass">Contraseña</label>
+                <input type="password" id="loginPass" placeholder="Ingresa tu contraseña" />
+            </div>
+            <button class="btn-login" id="btnLogin">Ingresar</button>
+        </div>
+    </div>
+
+    <!-- ==================== CONTENIDO PRINCIPAL (oculto) ==================== -->
+    <div id="mainContent">
+
+        <!-- HEADER -->
+        <header class="header-aula">
+            <div class="container">
+                <div class="logo">
+                    <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+                </div>
+                <div class="user-info">
+                    <span><i class="fas fa-user-circle"></i> <span id="userDisplay">Usuario</span></span>
+                    <button class="btn-logout" id="btnLogout">Cerrar sesión</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+
+            <h1 style="font-size:28px; margin-bottom:6px; color:#0200AF;">Formación ERTO</h1>
+            <p style="color:#666; margin-bottom:24px;">Completa los 4 módulos y luego realiza la evaluación final para obtener tu certificado.</p>
+
+            <!-- ==================== MÓDULOS ==================== -->
+            <div id="modulosContainer">
+                <!-- Módulo 1 - DISPONIBLE -->
+                <div class="modulo" data-modulo="1" data-disponible="true">
+                    <div class="modulo-header" data-target="moduloBody1">
+                        <h3><span class="badge">Módulo 1</span> Introducción a las Normas APA y estructura de un trabajo académico </h3>
+                        <i class="fas fa-chevron-down icon"></i>   
+                    </div>
+                    <div class="modulo-body" id="moduloBody1">
+                        <div class="video-container">
+                            <iframe src="https://youtu.be/LSul3Q3ft-Y?list=PLCl8Nwe_IBSY" allowfullscreen></iframe>
+                            <iframe width="936" height="496" src="https://www.youtube.com/embed/LSul3Q3ft-Y?list=PLCl8Nwe_IBSY" title="Curso Gratuito de Normas APA 7 ª Edición   Erto Academia BY Punke Network" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        </div>
+                        <div class="acciones">
+                            <button class="btn-secundario" onclick="abrirEmergente('https://docs.google.com/presentation/d/1CBuCZnbi2CrqZuJGGkwUrh37wuKkZCV9mVCHe_d8gUY/edit?usp=sharing')"><i class="fas fa-file-powerpoint"></i> Diapositivas</button>
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com/file/d/ejemplo2/view?usp=sharing')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        </div>
+                        <button class="btn-siguiente" data-siguiente="2">Siguiente módulo →</button>
+                    </div>
+                </div>
+
+                <!-- Módulo 2 - BLOQUEADO (ejemplo) -->
+                <div class="modulo modulo-bloqueado" data-modulo="2" data-disponible="false">
+                    <div class="modulo-header" data-target="moduloBody2">
+                        <h3><span class="badge">Módulo 2</span> Estrategia de Contenidos <i class="fas fa-lock candado"></i></h3>
+                        <i class="fas fa-chevron-down icon"></i>
+                    </div>
+                    <div class="modulo-body" id="moduloBody2">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                        </div>
+                        <div class="acciones">
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com/file/d/ejemplo3/view?usp=sharing')"><i class="fas fa-file-powerpoint"></i> Diapositivas</button>
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com/file/d/ejemplo4/view?usp=sharing')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        </div>
+                        <button class="btn-siguiente" data-siguiente="3">Siguiente módulo →</button>
+                    </div>
+                </div>
+
+                <!-- Módulo 3 - BLOQUEADO -->
+                <div class="modulo modulo-bloqueado" data-modulo="3" data-disponible="false">
+                    <div class="modulo-header" data-target="moduloBody3">
+                        <h3><span class="badge">Módulo 3</span> Branding y Posicionamiento <i class="fas fa-lock candado"></i></h3>
+                        <i class="fas fa-chevron-down icon"></i>
+                    </div>
+                    <div class="modulo-body" id="moduloBody3">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                        </div>
+                        <div class="acciones">
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com/file/d/ejemplo5/view?usp=sharing')"><i class="fas fa-file-powerpoint"></i> Diapositivas</button>
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com/file/d/ejemplo6/view?usp=sharing')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        </div>
+                        <button class="btn-siguiente" data-siguiente="4">Siguiente módulo →</button>
+                    </div>
+                </div>
+
+                <!-- Módulo 4 - BLOQUEADO -->
+                <div class="modulo modulo-bloqueado" data-modulo="4" data-disponible="false">
+                    <div class="modulo-header" data-target="moduloBody4">
+                        <h3><span class="badge">Módulo 4</span> Analítica y Optimización <i class="fas fa-lock candado"></i></h3>
+                        <i class="fas fa-chevron-down icon"></i>
+                    </div>
+                    <div class="modulo-body" id="moduloBody4">
+                        <div class="video-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                        </div>
+                        <div class="acciones">
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com')"><i class="fas fa-file-powerpoint"></i> Diapositivas</button>
+                            <button class="btn-secundario" onclick="abrirEmergente('https://drive.google.com/file/d/ejemplo8/view?usp=sharing')"><i class="fas fa-file-pdf"></i> PDF</button>
+                        </div>
+                        <button class="btn-siguiente" data-siguiente="examen">Ir a la evaluación final →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== EXAMEN FINAL ==================== -->
+            <div id="examenSection">
+                <h2>Evaluación final</h2>
+                <p class="sub">Completa todos los campos y responde las 8 preguntas. Necesitas 7 respuestas correctas para aprobar.</p>
+
+                <div class="campos-examen">
+                    <div>
+                        <label>Primer nombre *</label>
+                        <input type="text" id="exNombre1" placeholder="Ej: José" />
+                    </div>
+                    <div>
+                        <label>Segundo nombre *</label>
+                        <input type="text" id="exNombre2" placeholder="Ej: Miguel" />
+                    </div>
+                    <div>
+                        <label>Primer apellido *</label>
+                        <input type="text" id="exApellido1" placeholder="Ej: Landero" />
+                    </div>
+                    <div>
+                        <label>Segundo apellido *</label>
+                        <input type="text" id="exApellido2" placeholder="Ej: Torres" />
+                    </div>
+                    <div class="full">
+                        <label>Cédula de ciudadanía / ID *</label>
+                        <input type="text" id="exCedula" placeholder="Número de identificación" />
+                    </div>
+                    <div class="full">
+                        <label>Curso / Programa *</label>
+                        <input type="text" id="exCurso" placeholder="Ej: Marketing Digital" value="Marketing Digital" />
+                    </div>
+                </div>
+
+                <div id="preguntasContainer">
+                    <!-- 8 preguntas generadas con JS -->
+                </div>
+
+                <button class="btn-examen" id="btnCalificar">Calificar examen</button>
+                <div id="resultadoExamen"></div>
+            </div>
+
+            <!-- ==================== CERTIFICADO ==================== -->
+            <div id="certificadoSection">
+                <h2>¡Felicidades!</h2>
+                <p class="sub">Has aprobado la evaluación. Aquí tienes tu certificado.</p>
+                <div id="certificadoPreview">
+                    <div class="cert-header">
+                        <img src="img/logo/punke-network.png" alt="Punke Network" id="certLogoPN">
+                        <img src="img/logo/erto-logo.png" alt="ERTO Academia" id="certLogoERTO" style="height:40px;">
+                    </div>
+                    <div class="cert-titulo">Certificado de Constancia</div>
+                    <div class="cert-sub">ERTO Academia · Unidad especializada de Punke Network</div>
+                    <div class="cert-nombre" id="certNombre">Nombre Apellido</div>
+                    <div class="cert-doc" id="certDoc">C.C. 123456789</div>
+                    <div class="cert-curso" id="certCurso">Curso: Marketing Digital</div>
+                    <div class="cert-fecha" id="certFecha">Fecha: 13 de agosto de 2026</div>
+                    <div class="cert-codigo" id="certCodigo">Código: ERTO-2026-XXXX</div>
+                    <div class="cert-footer">Este certificado acredita la participación y aprobación del curso. <br> Punke Network · Impulsando talento. Creando oportunidades.</div>
+                </div>
+
+                <div class="cert-actions">
+                    <button class="btn-cert png" id="btnDescargarPNG"><i class="fas fa-image"></i> Descargar PNG</button>
+                    <button class="btn-cert pdf" id="btnDescargarPDF"><i class="fas fa-file-pdf"></i> Descargar PDF</button>
+                    <button class="btn-cert finalizar" id="btnFinalizar"><i class="fas fa-check-circle"></i> Finalizar</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer-aula">
+            <div class="container">
+                <p>&copy; 2026 Punke Network · ERTO Academia</p>
+                <div>
+                    <a href="politica-privacidad.html">Política de Privacidad</a>
+                    <a href="terminos-condiciones.html">Términos</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // ============================================================
+        // 1. BLOQUEO DE INSPECCIÓN Y CLAIC DERECHO
+        // ============================================================
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('El clic derecho está deshabilitado por seguridad.');
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                alert('Esta acción no está permitida.');
+                return false;
+            }
+        });
+
+        document.addEventListener('copy', function(e) {
+            e.preventDefault();
+            alert('No está permitido copiar contenido de esta página.');
+        });
+        document.addEventListener('cut', function(e) {
+            e.preventDefault();
+            alert('No está permitido cortar contenido de esta página.');
+        });
+        document.addEventListener('dragstart', function(e) {
+            e.preventDefault();
+        });
+
+        // ============================================================
+        // 2. USUARIOS REGISTRADOS (editar aquí)
+        // ============================================================
+        const usuarios = [
+            { user: 'Eliecer', pass: '1004282484', nombre: 'Eliecer Rafael Torres Ochoa' },
+            { user: 'Landero', pass: '1193581963', nombre: 'José Miguel Landero Torres' },
+            { user: '-', pass: '-', nombre: 'Admin' },
+            // Agrega más usuarios aquí
+        ];
+
+        // ============================================================
+        // 3. LOGIN
+        // ============================================================
+        const loginScreen = document.getElementById('loginScreen');
+        const mainContent = document.getElementById('mainContent');
+        const loginUser = document.getElementById('loginUser');
+        const loginPass = document.getElementById('loginPass');
+        const btnLogin = document.getElementById('btnLogin');
+        const loginError = document.getElementById('loginError');
+        const userDisplay = document.getElementById('userDisplay');
+        let usuarioActual = null;
+
+        function intentarLogin() {
+            const user = loginUser.value.trim();
+            const pass = loginPass.value.trim();
+            const encontrado = usuarios.find(u => u.user === user && u.pass === pass);
+            if (encontrado) {
+                usuarioActual = encontrado;
+                loginError.style.display = 'none';
+                loginScreen.style.display = 'none';
+                mainContent.style.display = 'block';
+                userDisplay.textContent = encontrado.nombre;
+                iniciarModulos();
+            } else {
+                loginError.style.display = 'block';
+                loginUser.value = '';
+                loginPass.value = '';
+                loginUser.focus();
+            }
+        }
+
+        btnLogin.addEventListener('click', intentarLogin);
+        loginPass.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') intentarLogin();
+        });
+        loginUser.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') loginPass.focus();
+        });
+
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            if (confirm('¿Seguro que quieres cerrar sesión? Se perderá el progreso.')) {
+                location.reload();
+            }
+        });
+
+        // ============================================================
+        // 4. MÓDULOS (accordion y navegación con control de disponibilidad)
+        // ============================================================
+        function iniciarModulos() {
+            const headers = document.querySelectorAll('.modulo-header');
+            const bodies = document.querySelectorAll('.modulo-body');
+            const botonesSiguiente = document.querySelectorAll('.btn-siguiente');
+
+            // Solo abrir el primer módulo si está disponible
+            const primerModulo = document.querySelector('.modulo[data-modulo="1"]');
+            if (primerModulo && primerModulo.dataset.disponible === 'true') {
+                const body1 = document.getElementById('moduloBody1');
+                const icon1 = primerModulo.querySelector('.icon');
+                if (body1) body1.classList.add('open');
+                if (icon1) icon1.classList.add('open');
+            } else {
+                // Si el módulo 1 no está disponible, mostrar mensaje o dejar todo cerrado
+                // Podríamos mostrar un aviso, pero mejor dejamos cerrado
+            }
+
+            // Evento click en header (con control de bloqueo)
+            headers.forEach((header, index) => {
+                header.addEventListener('click', function(e) {
+                    const modulo = this.closest('.modulo');
+                    const disponible = modulo.dataset.disponible === 'true';
+                    if (!disponible) {
+                        alert('Este módulo aún no está disponible. Espera a que el administrador lo habilite.');
+                        return;
+                    }
+                    const targetId = this.dataset.target;
+                    const body = document.getElementById(targetId);
+                    if (body) {
+                        const icon = this.querySelector('.icon');
+                        // Cerrar otros abiertos
+                        bodies.forEach((b, i) => {
+                            if (i !== index) {
+                                b.classList.remove('open');
+                                const ic = headers[i].querySelector('.icon');
+                                if (ic) ic.classList.remove('open');
+                            }
+                        });
+                        body.classList.toggle('open');
+                        if (icon) icon.classList.toggle('open');
+                    }
+                });
+            });
+
+            // Botones "Siguiente módulo" (validan disponibilidad)
+            botonesSiguiente.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const moduloActual = this.closest('.modulo');
+                    // Verificar que el módulo actual esté disponible
+                    if (moduloActual.dataset.disponible !== 'true') {
+                        alert('Este módulo no está disponible.');
+                        return;
+                    }
+                    const siguiente = this.dataset.siguiente;
+                    if (siguiente === 'examen') {
+                        // Verificar que el módulo 4 esté disponible y completado (o al menos disponible)
+                        const mod4 = document.querySelector('.modulo[data-modulo="4"]');
+                        if (mod4 && mod4.dataset.disponible === 'true') {
+                            // Mostrar examen
+                            document.getElementById('examenSection').style.display = 'block';
+                            document.getElementById('examenSection').scrollIntoView({ behavior: 'smooth' });
+                            // Ocultar módulo 4
+                            const body4 = mod4.querySelector('.modulo-body');
+                            const icon4 = mod4.querySelector('.icon');
+                            if (body4) body4.classList.remove('open');
+                            if (icon4) icon4.classList.remove('open');
+                            cargarPreguntas();
+                        } else {
+                            alert('El módulo 4 no está disponible. No puedes acceder al examen.');
+                        }
+                    } else {
+                        const targetMod = document.querySelector(`.modulo[data-modulo="${siguiente}"]`);
+                        if (targetMod) {
+                            // Verificar que el módulo destino esté disponible
+                            if (targetMod.dataset.disponible !== 'true') {
+                                alert('El siguiente módulo aún no está disponible.');
+                                return;
+                            }
+                            const header = targetMod.querySelector('.modulo-header');
+                            const body = targetMod.querySelector('.modulo-body');
+                            const icon = targetMod.querySelector('.icon');
+                            // Cerrar todos
+                            document.querySelectorAll('.modulo-body').forEach(b => b.classList.remove('open'));
+                            document.querySelectorAll('.modulo-header .icon').forEach(i => i.classList.remove('open'));
+                            // Abrir el destino
+                            if (body) body.classList.add('open');
+                            if (icon) icon.classList.add('open');
+                            targetMod.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+        }
+
+        // ============================================================
+        // 5. VENTANA EMERGENTE (diapositivas/PDF)
+        // ============================================================
+        function abrirEmergente(url) {
+            window.open(url, '_blank', 'width=900,height=600,scrollbars=yes');
+        }
+
+        // ============================================================
+        // 6. EXAMEN (8 preguntas)
+        // ============================================================
+        const preguntas = [
+            {
+                pregunta: '¿Qué es el marketing digital?',
+                opciones: ['Publicidad en TV', 'Estrategias de promoción en medios digitales', 'Venta de productos físicos', 'Marketing tradicional'],
+                correcta: 1
+            },
+            {
+                pregunta: '¿Cuál es una herramienta clave para el SEO?',
+                opciones: ['Photoshop', 'Google Analytics', 'WordPress', 'Mailchimp'],
+                correcta: 1
+            },
+            {
+                pregunta: '¿Qué mide el CTR (Click-Through Rate)?',
+                opciones: ['El número de clics en un enlace', 'El tiempo de carga de una página', 'El número de seguidores', 'El alcance orgánico'],
+                correcta: 0
+            },
+            {
+                pregunta: '¿Qué es el branding?',
+                opciones: ['Diseño de logotipos', 'Construcción de una identidad de marca', 'Publicidad en redes', 'Análisis de datos'],
+                correcta: 1
+            },
+            {
+                pregunta: '¿Cuál es la función principal de las redes sociales en marketing?',
+                opciones: ['Vender productos directamente', 'Conectar con la audiencia y construir comunidad', 'Publicar noticias', 'Realizar encuestas'],
+                correcta: 1
+            },
+            {
+                pregunta: '¿Qué significa ROI?',
+                opciones: ['Retorno de la Inversión', 'Registro de Impacto', 'Red de Organizaciones', 'Recursos de Internet'],
+                correcta: 0
+            },
+            {
+                pregunta: '¿Qué herramienta se usa para análisis web?',
+                opciones: ['Google Ads', 'Google Analytics', 'Facebook Ads', 'Hootsuite'],
+                correcta: 1
+            },
+            {
+                pregunta: '¿Cuál es el primer paso en una estrategia de contenido?',
+                opciones: ['Crear el contenido', 'Definir los objetivos y la audiencia', 'Publicar en redes', 'Medir resultados'],
+                correcta: 1
+            }
+        ];
+
+        let respuestasUsuario = [];
+
+        function cargarPreguntas() {
+            const container = document.getElementById('preguntasContainer');
+            container.innerHTML = '';
+            respuestasUsuario = new Array(preguntas.length).fill(null);
+
+            preguntas.forEach((p, idx) => {
+                const div = document.createElement('div');
+                div.className = 'pregunta';
+                div.innerHTML = `<p>${idx+1}. ${p.pregunta}</p>`;
+                p.opciones.forEach((opc, j) => {
+                    const label = document.createElement('label');
+                    const input = document.createElement('input');
+                    input.type = 'radio';
+                    input.name = `pregunta${idx}`;
+                    input.value = j;
+                    input.addEventListener('change', function() {
+                        respuestasUsuario[idx] = parseInt(this.value);
+                    });
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(' ' + opc));
+                    div.appendChild(label);
+                });
+                container.appendChild(div);
+            });
+        }
+
+        document.getElementById('btnCalificar').addEventListener('click', function() {
+            const n1 = document.getElementById('exNombre1').value.trim();
+            const n2 = document.getElementById('exNombre2').value.trim();
+            const a1 = document.getElementById('exApellido1').value.trim();
+            const a2 = document.getElementById('exApellido2').value.trim();
+            const cedula = document.getElementById('exCedula').value.trim();
+            const curso = document.getElementById('exCurso').value.trim();
+
+            if (!n1 || !n2 || !a1 || !a2 || !cedula || !curso) {
+                alert('Por favor, completa todos los campos personales.');
+                return;
+            }
+
+            const todasRespondidas = respuestasUsuario.every(r => r !== null);
+            if (!todasRespondidas) {
+                alert('Debes responder todas las 8 preguntas.');
+                return;
+            }
+
+            let aciertos = 0;
+            preguntas.forEach((p, idx) => {
+                if (respuestasUsuario[idx] === p.correcta) aciertos++;
+            });
+
+            const resultadoDiv = document.getElementById('resultadoExamen');
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.className = '';
+
+            if (aciertos >= 7) {
+                resultadoDiv.className = 'aprobado';
+                resultadoDiv.innerHTML = `<strong>✅ ¡Aprobado!</strong> Obtuviste ${aciertos} de 8 respuestas correctas (${Math.round(aciertos/8*100)}%). Generando certificado...`;
+                generarCertificado(n1, n2, a1, a2, cedula, curso);
+                document.getElementById('certificadoSection').style.display = 'block';
+                document.getElementById('certificadoSection').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                resultadoDiv.className = 'reprobado';
+                resultadoDiv.innerHTML = `<strong>❌ No aprobado.</strong> Obtuviste ${aciertos} de 8 respuestas correctas (${Math.round(aciertos/8*100)}%). Necesitas al menos 7 correctas. Revisa los módulos y vuelve a intentarlo.`;
+                document.getElementById('certificadoSection').style.display = 'none';
+            }
+        });
+
+        // ============================================================
+        // 7. CERTIFICADO
+        // ============================================================
+        function generarCertificado(n1, n2, a1, a2, cedula, curso) {
+            const nombreCompleto = `${n1} ${n2} ${a1} ${a2}`;
+            document.getElementById('certNombre').textContent = nombreCompleto;
+            document.getElementById('certDoc').textContent = `C.C. ${cedula}`;
+            document.getElementById('certCurso').textContent = `Curso: ${curso}`;
+
+            const hoy = new Date();
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('certFecha').textContent = `Fecha: ${hoy.toLocaleDateString('es-ES', opciones)}`;
+
+            const codigo = 'ERTO-' + hoy.getFullYear() + '-' + String(Math.floor(1000 + Math.random() * 9000));
+            document.getElementById('certCodigo').textContent = `Código: ${codigo}`;
+        }
+
+        document.getElementById('btnDescargarPNG').addEventListener('click', function() {
+            const preview = document.getElementById('certificadoPreview');
+            html2canvas(preview, {
+                scale: 2,
+                backgroundColor: '#fafafa',
+                allowTaint: false,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `certificado-${document.getElementById('certCodigo').textContent.replace('Código: ', '')}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+
+        document.getElementById('btnDescargarPDF').addEventListener('click', function() {
+            const preview = document.getElementById('certificadoPreview');
+            html2canvas(preview, {
+                scale: 2,
+                backgroundColor: '#fafafa',
+                allowTaint: false,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                pdf.save(`certificado-${document.getElementById('certCodigo').textContent.replace('Código: ', '')}.pdf`);
+            });
+        });
+
+        document.getElementById('btnFinalizar').addEventListener('click', function() {
+            const codigo = document.getElementById('certCodigo').textContent.replace('Código: ', '');
+            alert(`Redirigiendo al formulario de finalización. Código del certificado: ${codigo}`);
+            // Reemplazar con URL real de JotForm
+            window.open('https://www.jotform.com', '_blank');
+        });
+
+        // ============================================================
+        // 8. INICIALIZACIÓN
+        // ============================================================
+        window.onload = function() {
+            loginUser.focus();
+        };
+    </script>
+
+</body>
+</html>

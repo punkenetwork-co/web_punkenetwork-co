@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Punke Network | Impulsando talento. Creando oportunidades.</title>
+    <meta name="description" content="Punke Network es una agencia digital especializada en representación de creadores, redes sociales, branding, diseño gráfico y producción de contenido." />
+    <meta property="og:title" content="Punke Network | Impulsando talento. Creando oportunidades." />
+    <meta property="og:description" content="Agencia digital para creadores, marcas y emprendedores. Estrategia, creatividad y acompañamiento." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO CON IMAGEN DE FONDO ==================== */
+        .hero {
+            padding: 100px 0 120px;
+            background: linear-gradient(135deg, rgba(2, 0, 175, 0.85) 0%, rgba(5, 0, 217, 0.85) 100%), url('img/hero/hero-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            position: relative;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 50px;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 18px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 520px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #ffffff;
+            color: #0200AF;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .btn-primary:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+            border-color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        .hero-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-visual .icon-big {
+            font-size: 140px;
+            color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.06);
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(2px);
+        }
+
+        .hero-visual .icon-big i {
+            font-size: 120px;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* ==================== SECCIÓN SERVICIOS (una fila) ==================== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 56px;
+        }
+
+        .section-header h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #666666;
+        }
+
+        .servicios-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 24px;
+        }
+
+        .servicio-card {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 28px 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .servicio-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .servicio-card .icon {
+            font-size: 32px;
+            color: #0200AF;
+            margin-bottom: 16px;
+            background: #f0f0ff;
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+        }
+
+        .servicio-card h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .servicio-card p {
+            color: #666666;
+            font-size: 14px;
+            margin-bottom: 18px;
+            flex-grow: 1;
+        }
+
+        .servicio-card .btn-small {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 13px;
+            background-color: #0200AF;
+            color: #ffffff;
+            border: none;
+            transition: background 0.3s, transform 0.2s;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .servicio-card .btn-small:hover {
+            background-color: #0500d9;
+            transform: scale(1.02);
+        }
+
+        .servicio-card .tag {
+            display: inline-block;
+            background-color: #ffd700;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 3px 12px;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+            margin-left: 4px;
+            vertical-align: middle;
+        }
+
+        .servicio-card .btn-small.disabled {
+            background-color: #eaeaea;
+            color: #999;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* ==================== CARRUSEL DE BENEFICIOS ==================== */
+        .bg-light {
+            background-color: #f8f8fc;
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-slide {
+            flex: 0 0 100%;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            padding: 4px 0;
+        }
+
+        .beneficio-item {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 30px 20px;
+            text-align: center;
+            border: 1px solid #eaeaea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .beneficio-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .beneficio-item .icon {
+            font-size: 32px;
+            color: #0200AF;
+            margin-bottom: 12px;
+            background: #f0f0ff;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .beneficio-item h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .beneficio-item p {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #d0d0d0;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .carousel-dot.active {
+            background-color: #0200AF;
+        }
+
+        /* ==================== PROCESO ==================== */
+        .proceso-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 36px 40px;
+        }
+
+        .proceso-paso {
+            display: flex;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .proceso-paso .step {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0200AF;
+            line-height: 1;
+            min-width: 48px;
+            opacity: 0.3;
+        }
+
+        .proceso-paso h4 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+        }
+
+        .proceso-paso p {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        /* ==================== PROYECTOS ==================== */
+        .proyectos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .proyecto-card {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 24px;
+            padding: 36px 30px 32px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .proyecto-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .proyecto-logo {
+            width: 100%;
+            height: 90px;
+            background: #f5f5fa;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 1px dashed #d0d0d0;
+            color: #999;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .proyecto-logo img {
+            max-height: 70px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .proyecto-card h3 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #0200AF;
+            margin-bottom: 2px;
+        }
+
+        .proyecto-card .sub {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .proyecto-card p {
+            color: #666666;
+            margin-bottom: 22px;
+            flex-grow: 1;
+        }
+
+        .proyecto-card .btn-small {
+            align-self: flex-start;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            background-color: #0200AF;
+            color: #ffffff;
+            border: none;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .proyecto-card .btn-small:hover {
+            background-color: #0500d9;
+        }
+
+        /* ==================== COMPROMISO ==================== */
+        .compromiso {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .compromiso h2 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .compromiso .lead {
+            font-size: 18px;
+            color: #666666;
+        }
+
+        .compromiso p {
+            font-size: 17px;
+            color: #555555;
+            line-height: 1.8;
+            margin-top: 16px;
+        }
+
+        /* ==================== CTA ==================== */
+        .cta {
+            background: #0200AF;
+            color: #ffffff;
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .cta .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta .btn-primary {
+            background: #ffffff;
+            color: #0200AF;
+        }
+
+        .cta .btn-primary:hover {
+            background: #f0f0f0;
+        }
+
+        .cta .btn-outline-light {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .cta .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom .legal-links {
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-bottom .legal-links a {
+            color: #888888;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom .legal-links a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content p {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .hero-visual .icon-big {
+                width: 200px;
+                height: 200px;
+            }
+
+            .hero-visual .icon-big i {
+                font-size: 80px;
+            }
+
+            .servicios-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .carousel-slide {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .proceso-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .proyectos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .hero {
+                padding: 60px 0 70px;
+            }
+
+            .hero-content h1 {
+                font-size: 34px;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .servicios-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .carousel-slide {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .proceso-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 28px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .section {
+                padding: 50px 0;
+            }
+
+            .cta h2 {
+                font-size: 28px;
+            }
+
+            .servicios-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .carousel-slide {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Impulsamos talento.<br />Creamos oportunidades.</h1>
+                <p>En Punke Network ayudamos a creadores de contenido, marcas, emprendimientos y proyectos a fortalecer su presencia digital, conectar con nuevas audiencias y convertir sus ideas en oportunidades de crecimiento.</p>
+                <div class="hero-buttons">
+                    <a href="servicios.html" class="btn btn-primary">Conoce nuestros servicios</a>
+                    <a href="https://api.whatsapp.com/send?phone=573026022017" class="btn btn-outline">Solicitar cotización</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="icon-big">
+                    <i class="fas fa-rocket"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SERVICIOS ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Servicios destacados</h2>
+                <p>Soluciones diseñadas para impulsar tu crecimiento digital.</p>
+            </div>
+            <div class="servicios-grid">
+                <div class="servicio-card">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <h3>Representación de Creadores</h3>
+                    <p>Ayudamos a creadores a desarrollar su marca personal y encontrar oportunidades.</p>
+                    <a href="servicios.html" class="btn-small">Ver más</a>
+                </div>
+                <div class="servicio-card">
+                    <div class="icon"><i class="fas fa-hashtag"></i></div>
+                    <h3>Manejo de Redes Sociales</h3>
+                    <p>Diseñamos estrategias y gestionamos la presencia digital de marcas y negocios.</p>
+                    <a href="servicios.html" class="btn-small">Ver más</a>
+                </div>
+                <div class="servicio-card">
+                    <div class="icon"><i class="fas fa-pen-fancy"></i></div>
+                    <h3>Branding e Identidad Visual</h3>
+                    <p>Construimos identidades visuales coherentes para diferenciar y posicionar.</p>
+                    <a href="servicios.html" class="btn-small">Ver más</a>
+                </div>
+                <div class="servicio-card">
+                    <div class="icon"><i class="fas fa-paint-brush"></i></div>
+                    <h3>Diseño Gráfico</h3>
+                    <p>Creamos piezas visuales profesionales para campañas y comunicación digital.</p>
+                    <a href="servicios.html" class="btn-small">Ver más</a>
+                </div>
+                <div class="servicio-card">
+                    <div class="icon"><i class="fas fa-video"></i></div>
+                    <h3>Producción de Contenido</h3>
+                    <p>Desarrollamos contenido pensado para comunicar, conectar y generar impacto.</p>
+                    <a href="servicios.html" class="btn-small">Ver más</a>
+                </div>
+                <div class="servicio-card">
+                    <div class="icon"><i class="fas fa-code"></i></div>
+                    <h3>Desarrollo Web</h3>
+                    <p>Soluciones web modernas para marcas y proyectos digitales.</p>
+                    <span class="tag">PRÓXIMAMENTE</span>
+                    <a href="#" class="btn-small disabled">Ver más</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CARRUSEL BENEFICIOS ==================== -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Por qué elegir Punke Network?</h2>
+                <p>Más que un proveedor, un aliado estratégico.</p>
+            </div>
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-bullseye"></i></div>
+                            <h4>Estrategia</h4>
+                            <p>Analizamos cada proyecto para construir soluciones alineadas con sus objetivos.</p>
+                        </div>
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                            <h4>Creatividad</h4>
+                            <p>Convertimos ideas en contenido, conceptos y experiencias que conectan con las personas.</p>
+                        </div>
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-handshake"></i></div>
+                            <h4>Profesionalismo</h4>
+                            <p>Trabajamos con procesos claros, comunicación constante y compromiso con cada proyecto.</p>
+                        </div>
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-heart"></i></div>
+                            <h4>Acompañamiento</h4>
+                            <p>No solo entregamos un servicio; acompañamos el crecimiento y evolución de cada marca.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-bullseye"></i></div>
+                            <h4>Estrategia</h4>
+                            <p>Analizamos cada proyecto para construir soluciones alineadas con sus objetivos.</p>
+                        </div>
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                            <h4>Creatividad</h4>
+                            <p>Convertimos ideas en contenido, conceptos y experiencias que conectan con las personas.</p>
+                        </div>
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-handshake"></i></div>
+                            <h4>Profesionalismo</h4>
+                            <p>Trabajamos con procesos claros, comunicación constante y compromiso con cada proyecto.</p>
+                        </div>
+                        <div class="beneficio-item">
+                            <div class="icon"><i class="fas fa-heart"></i></div>
+                            <h4>Acompañamiento</h4>
+                            <p>No solo entregamos un servicio; acompañamos el crecimiento y evolución de cada marca.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-controls" id="carouselControls">
+                <button class="carousel-dot active" data-index="0"></button>
+                <button class="carousel-dot" data-index="1"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROCESO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Cómo trabajamos</h2>
+                <p>Nuestro proceso</p>
+            </div>
+            <div class="proceso-grid">
+                <div class="proceso-paso">
+                    <span class="step">01</span>
+                    <div>
+                        <h4>Escuchamos tus necesidades</h4>
+                        <p>Conocemos tu proyecto, tus objetivos y tu visión.</p>
+                    </div>
+                </div>
+                <div class="proceso-paso">
+                    <span class="step">02</span>
+                    <div>
+                        <h4>Analizamos tu proyecto</h4>
+                        <p>Evaluamos el contexto, la competencia y las oportunidades.</p>
+                    </div>
+                </div>
+                <div class="proceso-paso">
+                    <span class="step">03</span>
+                    <div>
+                        <h4>Diseñamos la estrategia</h4>
+                        <p>Creamos un plan a medida con objetivos claros y medibles.</p>
+                    </div>
+                </div>
+                <div class="proceso-paso">
+                    <span class="step">04</span>
+                    <div>
+                        <h4>Creamos el contenido</h4>
+                        <p>Desarrollamos piezas visuales y textuales que comunican tu esencia.</p>
+                    </div>
+                </div>
+                <div class="proceso-paso">
+                    <span class="step">05</span>
+                    <div>
+                        <h4>Ejecutamos el plan</h4>
+                        <p>Ponemos en marcha la estrategia con seguimiento constante.</p>
+                    </div>
+                </div>
+                <div class="proceso-paso">
+                    <span class="step">06</span>
+                    <div>
+                        <h4>Medimos y optimizamos</h4>
+                        <p>Analizamos resultados y ajustamos para maximizar el impacto.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROYECTOS ==================== -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nuestras marcas y proyectos</h2>
+                <p>Proyectos que nacen desde nuestra visión de impulsar talento, conocimiento y oportunidades.</p>
+            </div>
+            <div class="proyectos-grid">
+                <div class="proyecto-card">
+                    <div class="proyecto-logo">
+                        <img src="https://static.wixstatic.com/media/1580a1_8096310a05d14c84b559b6a860fc8f9e~mv2.png/v1/crop/x_0,y_0,w_1024,h_889/fill/w_217,h_188,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/1580a1_8096310a05d14c84b559b6a860fc8f9e~mv2.png" alt="Recreaniñez" onerror="this.style.display='none'; this.parentElement.innerHTML='Logo Recreaniñez'">
+                        <span style="display: none;">Logo Recreaniñez</span>
+                    </div>
+                    <h3>Recreaniñez</h3>
+                    <div class="sub">"Unidos por el bienestar infantil."</div>
+                    <p>Proyecto social orientado a promover espacios de recreación, integración y bienestar para niños y comunidades mediante actividades lúdicas y experiencias que aporten al desarrollo social.</p>
+                    <a href="recreaninez.html" class="btn-small">Conocer el proyecto</a>
+                </div>
+                <div class="proyecto-card">
+                    <div class="proyecto-logo">
+                        <img src="https://static.wixstatic.com/media/1580a1_bd5946673e7342b4830bf3fe2c074ea3~mv2.png/v1/crop/x_37,y_292,w_1181,h_620/fill/w_254,h_133,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Unidad%20especializada%20PN_edited.png" alt="ERTO" onerror="this.style.display='none'; this.parentElement.innerHTML='Logo ERTO'">
+                        <span style="display: none;">Logo ERTO</span>
+                    </div>
+                    <h3>ERTO</h3>
+                    <div class="sub">Educación para el Rendimiento, la Transformación y las Oportunidades.</div>
+                    <p>Unidad especializada de Punke Network enfocada en formación, investigación y consultoría, con iniciativas orientadas al desarrollo de conocimientos, habilidades y oportunidades.</p>
+                    <a href="erto_academia.html" class="btn-small">Conocer el proyecto</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== COMPROMISO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="compromiso">
+                <h2>Nuestro compromiso</h2>
+                <p class="lead">Trabajamos para construir marcas con impacto.</p>
+                <p>En Punke Network creemos que cada proyecto tiene una historia, un propósito y una oportunidad de crecer. Nuestro compromiso es aportar estrategia, creatividad y acompañamiento para transformar ideas en marcas capaces de conectar, evolucionar y generar nuevas oportunidades.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta">
+        <div class="container">
+            <h2>¿Listo para llevar tu marca al siguiente nivel?</h2>
+            <p>Cuéntanos sobre tu proyecto y encontremos juntos la estrategia adecuada para hacerlo crecer.</p>
+            <div class="btn-group">
+                <a href="contacto.html" class="btn btn-primary">Solicitar cotización</a>
+                <a href="https://wa.me/573026022017" target="_blank" class="btn btn-outline-light">Escribir por WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="recreaninez.html">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="erto_academia.html">ERTO — Unidad Especializada</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 Punke Network. Todos los derechos reservados.</div>
+                <div class="legal-links">
+                    <a href="Política_Privacidad.html">Política de Privacidad</a>
+                    <a href="Términos_Condiciones.html">Términos y Condiciones</a>
+                    <a href="tratamiento-datos.html">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+
+        // Carrusel de beneficios
+        const track = document.getElementById('carouselTrack');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let currentIndex = 0;
+        const totalSlides = dots.length;
+
+        function goToSlide(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+            currentIndex = index;
+            track.style.transform = 'translateX(-' + (index * 100) + '%)';
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', function() {
+                goToSlide(i);
+            });
+        });
+
+        setInterval(() => {
+            goToSlide(currentIndex + 1);
+        }, 6000);
+    </script>
+</body>
+</html>

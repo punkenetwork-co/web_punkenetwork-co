@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cursos | ERTO Academia</title>
+    <meta name="description" content="Explora los cursos de ERTO, la unidad especializada de Punke Network. Formación en marketing, branding, contenido, desarrollo web y más." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .btn-aula {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0200AF;
+            color: #ffffff !important;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-aula:hover {
+            background: #0500d9;
+            transform: scale(1.03);
+            color: #ffffff !important;
+        }
+
+        .btn-aula i {
+            font-size: 16px;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 60px 0 70px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 40px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ==================== MENÚ SECUNDARIO (horizontal compacto) ==================== */
+        .academia-menu {
+            background: #f8f8fc;
+            border-bottom: 1px solid #eaeaea;
+            padding: 10px 0;
+        }
+
+        .academia-menu .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px 35px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .academia-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            padding: 4px 0;
+            transition: color 0.2s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .academia-menu a:hover {
+            color: #0200AF;
+        }
+
+        .academia-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .academia-menu a:hover::after {
+            width: 100%;
+        }
+
+        .academia-menu a.active {
+            color: #0200AF;
+        }
+        .academia-menu a.active::after {
+            width: 100%;
+        }
+
+        /* ==================== CARRUSEL DE CURSOS ==================== */
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 40px;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            font-size: 17px;
+            color: #666666;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            margin: 0 -10px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease;
+            gap: 20px;
+            padding: 0 10px;
+        }
+
+        .curso-card {
+            flex: 0 0 calc(33.333% - 14px);
+            min-width: 0;
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .curso-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+        }
+
+        .curso-imagen {
+            width: 100%;
+            height: 160px;
+            background: #f0f0f5;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .curso-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .curso-imagen .placeholder-text {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .curso-contenido {
+            padding: 20px 20px 24px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .curso-contenido .categoria {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0200AF;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 4px;
+        }
+
+        .curso-contenido h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .curso-contenido .descripcion {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 12px;
+            flex-grow: 1;
+        }
+
+        .curso-contenido .meta {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .curso-contenido .meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .curso-contenido .btn-small {
+            align-self: flex-start;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            background-color: #0200AF;
+            color: #ffffff;
+            border: none;
+            transition: background 0.3s, transform 0.2s;
+            cursor: pointer;
+        }
+
+        .curso-contenido .btn-small:hover {
+            background-color: #0500d9;
+            transform: scale(1.02);
+        }
+
+        /* Flechas del carrusel */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #1a1a1a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: background 0.2s, box-shadow 0.2s;
+            z-index: 5;
+            background: #ffffff;
+        }
+
+        .carousel-btn:hover {
+            background: #f0f0ff;
+            box-shadow: 0 4px 16px rgba(2, 0, 175, 0.12);
+        }
+
+        .carousel-btn.prev {
+            left: 0;
+        }
+
+        .carousel-btn.next {
+            right: 0;
+        }
+
+        /* Indicadores de página (dots) */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #d0d0d0;
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s;
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background-color: #0200AF;
+        }
+
+        /* ==================== FOOTER (igual que las demás páginas) ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .curso-card {
+                flex: 0 0 calc(50% - 10px);
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .btn-aula {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .academia-menu .container {
+                gap: 12px 20px;
+            }
+            .academia-menu a {
+                font-size: 14px;
+            }
+
+            .section-header h2 {
+                font-size: 28px;
+            }
+
+            .curso-card {
+                flex: 0 0 calc(100% - 0px);
+            }
+
+            .carousel-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 26px;
+            }
+            .section {
+                padding: 40px 0;
+            }
+            .carousel-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 12px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+                <li>
+                    <a href="#" class="btn-aula" id="btnAulaVirtual">
+                        <i class="fas fa-chalkboard-teacher"></i> Ir a Aula Virtual
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>Ofertas académicas</h1>
+            <p>Explora nuestros cursos diseñados para potenciar tus habilidades y convertir el conocimiento en oportunidades.</p>
+        </div>
+    </section>
+
+    <!-- ==================== MENÚ SECUNDARIO (horizontal) ==================== -->
+    <div class="academia-menu">
+        <div class="container">
+            <a href="#"><i class="fas fa-home"></i> Inicio</a>
+            <a href="#" class="active"><i class="fas fa-book"></i> Cursos</a>
+            <a href="#"><i class="fas fa-headset"></i> Soporte</a>
+            <a href="#"><i class="fas fa-certificate"></i> Certificados</a>
+        </div>
+    </div>
+
+    <!-- ==================== CARRUSEL DE CURSOS ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nuestros cursos</h2>
+                <p>Formación práctica y actualizada para impulsar tu carrera o proyecto.</p>
+            </div>
+
+            <div class="carousel-container" id="carouselCursos">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Curso 1 -->
+                    <div class="curso-card">
+                        <div class="curso-imagen">
+                            <img src="img/cursos/marketing-digital.jpg" alt="Marketing Digital" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-chart-line\' style=\'font-size:36px;color:#ccc;\'></i><br>Marketing</div>'">
+                        </div>
+                        <div class="curso-contenido">
+                            <div class="categoria">Marketing</div>
+                            <h3>Marketing Digital</h3>
+                            <p class="descripcion">Estrategias de contenido, SEO, SEM, email marketing y analítica web para impulsar tu negocio.</p>
+                            <div class="meta">
+                                <span><i class="far fa-clock"></i> 24 horas</span>
+                                <span><i class="fas fa-signal"></i> Intermedio</span>
+                            </div>
+                            <a href="#" class="btn-small">Ver más</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 2 -->
+                    <div class="curso-card">
+                        <div class="curso-imagen">
+                            <img src="img/cursos/branding-personal.jpg" alt="Branding Personal" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-user-tag\' style=\'font-size:36px;color:#ccc;\'></i><br>Branding</div>'">
+                        </div>
+                        <div class="curso-contenido">
+                            <div class="categoria">Branding</div>
+                            <h3>Branding Personal</h3>
+                            <p class="descripcion">Construye una marca personal sólida que te diferencie, conecte con tu audiencia y abra puertas.</p>
+                            <div class="meta">
+                                <span><i class="far fa-clock"></i> 16 horas</span>
+                                <span><i class="fas fa-signal"></i> Inicial</span>
+                            </div>
+                            <a href="#" class="btn-small">Ver más</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 3 -->
+                    <div class="curso-card">
+                        <div class="curso-imagen">
+                            <img src="img/cursos/produccion-contenido.jpg" alt="Producción de Contenido" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-video\' style=\'font-size:36px;color:#ccc;\'></i><br>Contenido</div>'">
+                        </div>
+                        <div class="curso-contenido">
+                            <div class="categoria">Contenido</div>
+                            <h3>Producción de Contenido</h3>
+                            <p class="descripcion">Aprende a planificar, grabar y editar contenido audiovisual profesional para redes y campañas.</p>
+                            <div class="meta">
+                                <span><i class="far fa-clock"></i> 20 horas</span>
+                                <span><i class="fas fa-signal"></i> Intermedio</span>
+                            </div>
+                            <a href="#" class="btn-small">Ver más</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 4 -->
+                    <div class="curso-card">
+                        <div class="curso-imagen">
+                            <img src="img/cursos/desarrollo-web.jpg" alt="Desarrollo Web" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-code\' style=\'font-size:36px;color:#ccc;\'></i><br>Web</div>'">
+                        </div>
+                        <div class="curso-contenido">
+                            <div class="categoria">Tecnología</div>
+                            <h3>Desarrollo Web</h3>
+                            <p class="descripcion">Diseño y desarrollo de sitios web modernos, responsivos y optimizados para conversión.</p>
+                            <div class="meta">
+                                <span><i class="far fa-clock"></i> 30 horas</span>
+                                <span><i class="fas fa-signal"></i> Avanzado</span>
+                            </div>
+                            <a href="#" class="btn-small">Ver más</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 5 -->
+                    <div class="curso-card">
+                        <div class="curso-imagen">
+                            <img src="img/cursos/redes-sociales.jpg" alt="Redes Sociales" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-hashtag\' style=\'font-size:36px;color:#ccc;\'></i><br>Redes</div>'">
+                        </div>
+                        <div class="curso-contenido">
+                            <div class="categoria">Social Media</div>
+                            <h3>Estrategia en Redes Sociales</h3>
+                            <p class="descripcion">Gestión de comunidades, plan de contenido, publicidad y analítica para Instagram, TikTok, Facebook y más.</p>
+                            <div class="meta">
+                                <span><i class="far fa-clock"></i> 18 horas</span>
+                                <span><i class="fas fa-signal"></i> Inicial</span>
+                            </div>
+                            <a href="#" class="btn-small">Ver más</a>
+                        </div>
+                    </div>
+
+                    <!-- Curso 6 -->
+                    <div class="curso-card">
+                        <div class="curso-imagen">
+                            <img src="img/cursos/analitica-digital.jpg" alt="Analítica Digital" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-chart-bar\' style=\'font-size:36px;color:#ccc;\'></i><br>Analítica</div>'">
+                        </div>
+                        <div class="curso-contenido">
+                            <div class="categoria">Analítica</div>
+                            <h3>Analítica Digital</h3>
+                            <p class="descripcion">Mide, interpreta y optimiza el rendimiento de tus campañas y sitios web con herramientas avanzadas.</p>
+                            <div class="meta">
+                                <span><i class="far fa-clock"></i> 14 horas</span>
+                                <span><i class="fas fa-signal"></i> Intermedio</span>
+                            </div>
+                            <a href="#" class="btn-small">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flechas -->
+                <button class="carousel-btn prev" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <!-- Puntos indicadores -->
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="recreaninez.html">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="erto_academia.html">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="politica-privacidad.html">Política de Privacidad</a>
+                    <a href="terminos-condiciones.html">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a:not(.btn-aula)');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+
+        // Botón "Ir a Aula Virtual"
+        document.getElementById('btnAulaVirtual').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de Aula Virtual: próximamente disponible.');
+        });
+
+        // ========== CARRUSEL DE CURSOS ==========
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('carouselDots');
+
+        let currentIndex = 0;
+        let totalCards = 0;
+        let visibleCards = 3;
+
+        function updateVisibleCards() {
+            const width = window.innerWidth;
+            if (width < 768) {
+                visibleCards = 1;
+            } else if (width < 992) {
+                visibleCards = 2;
+            } else {
+                visibleCards = 3;
+            }
+            totalCards = track.children.length;
+            const maxIndex = Math.max(0, totalCards - visibleCards);
+            if (currentIndex > maxIndex) {
+                currentIndex = maxIndex;
+            }
+            renderDots();
+            moveCarousel();
+        }
+
+        function moveCarousel() {
+            const cardWidth = track.children[0]?.offsetWidth || 0;
+            const gap = 20; // el gap definido en CSS
+            const offset = currentIndex * (cardWidth + gap);
+            track.style.transform = 'translateX(-' + offset + 'px)';
+            updateDots();
+        }
+
+        function renderDots() {
+            const totalSlides = Math.max(1, totalCards - visibleCards + 1);
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < totalSlides; i++) {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                dot.dataset.index = i;
+                dot.addEventListener('click', function() {
+                    currentIndex = parseInt(this.dataset.index);
+                    moveCarousel();
+                });
+                dotsContainer.appendChild(dot);
+            }
+            updateDots();
+        }
+
+        function updateDots() {
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        prevBtn.addEventListener('click', function() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                moveCarousel();
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            const maxIndex = Math.max(0, totalCards - visibleCards);
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+                moveCarousel();
+            }
+        });
+
+        window.addEventListener('resize', function() {
+            updateVisibleCards();
+        });
+
+        // Inicializar
+        updateVisibleCards();
+        // Recalcular al cargar completamente
+        window.addEventListener('load', function() {
+            updateVisibleCards();
+        });
+
+        // Enlaces del menú secundario - simulación
+        document.querySelectorAll('.academia-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    alert('Esta sección estará disponible próximamente.');
+                }
+            });
+        });
+
+        // Botones "Ver más" de cursos - simulación
+        document.querySelectorAll('.curso-card .btn-small').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Detalles del curso: próximamente disponible.');
+            });
+        });
+    </script>
+
+</body>
+</html>

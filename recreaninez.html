@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recreaniñez | Punke Network</title>
+    <meta name="description" content="Recreaniñez es un proyecto social que promueve espacios de recreación, integración y bienestar para niños y comunidades." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .slogan {
+            font-size: 22px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ==================== SECCIONES ==================== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 56px;
+        }
+
+        .section-header h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #666666;
+        }
+
+        .bg-light {
+            background-color: #f8f8fc;
+        }
+
+        /* ==================== QUIÉNES SOMOS ==================== */
+        .quienes-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .quienes-texto p {
+            font-size: 17px;
+            color: #555555;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .quienes-imagen {
+            width: 100%;
+            height: 300px;
+            background: #e8e8f0;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 16px;
+            font-weight: 500;
+            overflow: hidden;
+        }
+
+        .quienes-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .quienes-imagen .placeholder-text {
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* ==================== EQUIPO ==================== */
+        .equipo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .miembro-card {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .miembro-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .miembro-foto {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e8e8f0;
+            margin: 0 auto 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .miembro-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .miembro-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #0200AF;
+            margin-bottom: 4px;
+        }
+
+        .miembro-card .cargo {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .miembro-card p {
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.7;
+        }
+
+        /* ==================== COLABORADORES Y PATROCINADORES ==================== */
+        .colaboracion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .colaboracion-item {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .colaboracion-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .colaboracion-item .icon {
+            font-size: 48px;
+            color: #0200AF;
+            margin-bottom: 16px;
+        }
+
+        .colaboracion-item h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .colaboracion-item p {
+            font-size: 15px;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+
+        .colaboracion-item .btn-small {
+            display: inline-block;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            background-color: #0200AF;
+            color: #ffffff;
+            border: none;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .colaboracion-item .btn-small:hover {
+            background-color: #0500d9;
+        }
+
+        /* ==================== CTA ==================== */
+        .cta {
+            background: #0200AF;
+            color: #ffffff;
+            padding: 70px 0;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 28px;
+        }
+
+        .cta .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta .btn-primary {
+            background: #ffffff;
+            color: #0200AF;
+        }
+
+        .cta .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta .btn-outline-light {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .cta .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 90px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .quienes-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .quienes-imagen {
+                height: 250px;
+                order: -1;
+            }
+            .equipo-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .colaboracion-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+            .hero .slogan {
+                font-size: 18px;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            .section {
+                padding: 50px 0;
+            }
+            .cta h2 {
+                font-size: 28px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>Recreaniñez</h1>
+            <div class="slogan">"Unidos por el bienestar infantil."</div>
+            <p>Proyecto social que promueve espacios de recreación, integración y bienestar para niños y comunidades mediante actividades lúdicas y experiencias que aportan al desarrollo social.</p>
+        </div>
+    </section>
+
+    <!-- ==================== QUIÉNES SOMOS ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Qué es Recreaniñez?</h2>
+                <p>Más que un proyecto, un movimiento por la infancia.</p>
+            </div>
+            <div class="quienes-grid">
+                <div class="quienes-texto">
+                    <p><strong>Recreaniñez</strong> nace con el propósito de ofrecer espacios de recreación, integración y bienestar para niños y comunidades, a través de actividades lúdicas que fortalecen el desarrollo social y emocional.</p>
+                    <p>Creemos que el juego, la creatividad y el encuentro son herramientas poderosas para construir infancias felices y comunidades más unidas. Por eso, diseñamos experiencias que fomentan la participación, el aprendizaje y la diversión.</p>
+                    <p>Trabajamos de la mano de familias, instituciones y aliados para llevar alegría y oportunidades a donde más se necesitan.</p>
+                </div>
+                <div class="quienes-imagen">
+                    <!-- Coloca aquí una imagen representativa de Recreaniñez -->
+                    <img src="https://scontent-baq1-1.xx.fbcdn.net/v/t39.30808-6/772932284_1060257493535832_7741407936618195249_n.jpg?stp=dst-jpg_tt6&cstp=mx1220x598&ctp=s1080x2048&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFpQJBeuOFuveKzZR_s1tWNiQnd8URHpQqJCd3xREelCulKnqROZFZ2JJcXZ5hi0V8eMPDDsV_BZFsWjEMGdxLC&_nc_ohc=m8sNth_04dUQ7kNvwE-IgmS&_nc_oc=AdrZPV98qFtOa1t1-5nhIZ6RH-f1SdXRkUFDYkczC8-I3ZpCHXuZu8oJzjuwEUtZrIE&_nc_zt=23&_nc_ht=scontent-baq1-1.xx&_nc_gid=toNvMshU3CVK6-3i-vLeLw&_nc_ss=7b2a8&oh=00_AQEm2az62xJ0qGKRoAgoAFE2ytyPcETUMmmbUnJzfhbuhg&oe=6A846075" alt="Recreaniñez" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-child\' style=\'font-size:48px;color:#ccc;\'></i><br>Imagen del proyecto</div>'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EQUIPO FUNDADOR ==================== -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nuestro equipo fundador</h2>
+                <p>Los pilares que hacen posible Recreaniñez.</p>
+            </div>
+            <div class="equipo-grid">
+                <!-- José Miguel -->
+                <div class="miembro-card">
+                    <div class="miembro-foto">
+                        <!-- Coloca la foto de José Miguel -->
+                        <img src="img/equipo/jose-miguel.jpg" alt="José Miguel Landero Torres" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user-circle\' style=\'font-size:60px;color:#ccc;\'></i>'">
+                    </div>
+                    <h3>José Miguel Landero Torres</h3>
+                    <div class="cargo">Director y Fundador</div>
+                    <p>Líder del proyecto, encargado de la visión estratégica, logística general y gestión de alianzas. Su experiencia en desarrollo de proyectos sociales y su pasión por el bienestar infantil guían cada iniciativa de Recreaniñez.</p>
+                </div>
+                <!-- Fernando José -->
+                <div class="miembro-card">
+                    <div class="miembro-foto">
+                        <!-- Coloca la foto de Fernando José -->
+                        <img src="img/equipo/fernando-caballero.jpg" alt="Fernando José Caballero Herrera" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user-circle\' style=\'font-size:60px;color:#ccc;\'></i>'">
+                    </div>
+                    <h3>Fernando José Caballero Herrera</h3>
+                    <div class="cargo">Co‑fundador</div>
+                    <p>Emprendedor y co‑fundador, responsable de la logística operativa, los recursos lúdicos (saltarines, sonidos, juegos) y la ejecución de las actividades. Su creatividad y energía son clave para hacer realidad cada evento.</p>
+                </div>
+            </div>
+            <p style="text-align:center; margin-top:24px; color:#666; font-size:16px;">Ambos trabajamos juntos en la logística y planificación general del proyecto, uniendo esfuerzos para impactar positivamente a la infancia.</p>
+        </div>
+    </section>
+
+    <!-- ==================== COLABORADORES Y PATROCINADORES ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Únete a Recreaniñez</h2>
+                <p>Crecemos con aliados que comparten nuestra misión.</p>
+            </div>
+            <div class="colaboracion-grid">
+                <!-- Colaborador -->
+                <div class="colaboracion-item">
+                    <div class="icon"><i class="fas fa-hands-helping"></i></div>
+                    <h3>Colaborador</h3>
+                    <p>Si quieres sumarte como voluntario, donar tiempo, conocimientos o recursos, eres bienvenido. Los colaboradores son el corazón del proyecto.</p>
+                    <a href="contacto.html" class="btn-small">Quiero colaborar</a>
+                </div>
+                <!-- Patrocinador -->
+                <div class="colaboracion-item">
+                    <div class="icon"><i class="fas fa-handshake"></i></div>
+                    <h3>Patrocinador</h3>
+                    <p>Empresas, instituciones o personas que deseen apoyar económicamente o con productos y servicios. Tu respaldo nos permite llegar a más niños y comunidades.</p>
+                    <a href="contacto.html" class="btn-small">Quiero patrocinar</a>
+                </div>
+            </div>
+            <p style="text-align:center; margin-top:32px; color:#555; font-size:16px;">Actualmente somos un equipo de dos fundadores, pero queremos crecer con aliados comprometidos. <strong>¡Contamos contigo!</strong></p>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta">
+        <div class="container">
+            <h2>¿Quieres ser parte de Recreaniñez?</h2>
+            <p>Escríbenos y descubre cómo puedes contribuir a llevar alegría y oportunidades a la infancia.</p>
+            <div class="btn-group">
+                <a href="contacto.html" class="btn btn-primary">Contáctanos</a>
+                <a href="https://wa.me/573026022017" target="_blank" class="btn btn-outline-light">Escribir por WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="https://static.wixstatic.com/media/1580a1_bf0e545e797c4ccc9f3b117bb65d9579~mv2.png/v1/fill/w_105,h_111,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo-pn_edited.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="recreaninez.html">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="#">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+    </script>
+
+</body>
+</html>

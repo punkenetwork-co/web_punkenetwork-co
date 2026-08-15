@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Política de Privacidad | Punke Network</title>
+    <meta name="description" content="Política de privacidad de Punke Network. Conoce cómo tratamos tus datos personales y protegemos tu información." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 60px 0 80px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ==================== CONTENIDO LEGAL ==================== */
+        .section {
+            padding: 60px 0;
+        }
+
+        .legal-content {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .legal-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0200AF;
+            margin-top: 40px;
+            margin-bottom: 12px;
+        }
+
+        .legal-content h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .legal-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+
+        .legal-content p {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .legal-content ul {
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .legal-content ul li {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .legal-content .fecha {
+            font-size: 15px;
+            color: #888;
+            margin-top: 30px;
+            border-top: 1px solid #eaeaea;
+            padding-top: 20px;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .legal-content h2 {
+                font-size: 24px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 26px;
+            }
+            .section {
+                padding: 40px 0;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>Política de Privacidad</h1>
+            <p>En Punke Network protegemos tus datos personales y respetamos tu privacidad. Conoce cómo los tratamos.</p>
+        </div>
+    </section>
+
+    <!-- ==================== CONTENIDO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="legal-content">
+
+                <h2>1. Información general</h2>
+                <p>En <strong>Punke Network</strong> (en adelante, "la Agencia", "nosotros" o "nuestro"), valoramos la privacidad y la seguridad de los datos personales de nuestros usuarios, clientes, proveedores y visitantes. Esta Política de Privacidad describe cómo recopilamos, usamos, almacenamos y protegemos la información que nos proporcionas a través de nuestros canales digitales, incluyendo nuestro sitio web, formularios de contacto, redes sociales y otros medios.</p>
+                <p>Al utilizar nuestros servicios o interactuar con nosotros, aceptas las prácticas descritas en este documento.</p>
+
+                <h2>2. Responsable del tratamiento</h2>
+                <p>El responsable del tratamiento de tus datos personales es:</p>
+                <ul>
+                    <li><strong>Punke Network</strong></li>
+                    <li>Correo electrónico: <a href="mailto:serviciomonetizacion.red@gmail.com">serviciomonetizacion.red@gmail.com</a></li>
+                    <li>WhatsApp: <a href="https://wa.me/573026022017">+57 302 602 2017</a></li>
+                </ul>
+
+                <h2>3. Datos que recopilamos</h2>
+                <p>Podemos recopilar los siguientes tipos de datos personales:</p>
+                <ul>
+                    <li><strong>Datos de identificación:</strong> Nombre, apellidos, correo electrónico, número de teléfono, dirección (si aplica).</li>
+                    <li><strong>Datos de navegación:</strong> Dirección IP, tipo de dispositivo, navegador, páginas visitadas, tiempo de sesión, referencias.</li>
+                    <li><strong>Datos de interacción:</strong> Información que nos proporcionas a través de formularios de contacto, cotizaciones, suscripciones a boletines o mensajes directos en redes sociales.</li>
+                    <li><strong>Datos de pago:</strong> Cuando realizas un pago, podemos recibir información de la transacción (número de referencia, monto, método de pago) a través de nuestros procesadores de pago. No almacenamos datos de tarjetas de crédito/débito.</li>
+                </ul>
+
+                <h2>4. Finalidad del tratamiento</h2>
+                <p>Utilizamos tus datos personales para los siguientes fines:</p>
+                <ul>
+                    <li>Gestionar y atender tus solicitudes, cotizaciones y consultas.</li>
+                    <li>Prestar nuestros servicios de representación, redes sociales, branding, diseño, producción de contenido y desarrollo web.</li>
+                    <li>Enviarte comunicaciones comerciales y promocionales, siempre que hayas dado tu consentimiento previo.</li>
+                    <li>Mejorar nuestros servicios y la experiencia de usuario en nuestro sitio web.</li>
+                    <li>Cumplir con obligaciones legales y fiscales aplicables.</li>
+                </ul>
+
+                <h2>5. Base legal para el tratamiento</h2>
+                <p>El tratamiento de tus datos se fundamenta en:</p>
+                <ul>
+                    <li>La ejecución de un contrato o la prestación de un servicio solicitado por ti.</li>
+                    <li>Tu consentimiento expreso (para comunicaciones comerciales, por ejemplo).</li>
+                    <li>El interés legítimo de la Agencia para mejorar sus servicios y garantizar la seguridad de sus plataformas.</li>
+                    <li>El cumplimiento de obligaciones legales.</li>
+                </ul>
+
+                <h2>6. Plazo de conservación</h2>
+                <p>Conservaremos tus datos personales durante el tiempo necesario para cumplir con los fines descritos, y posteriormente durante los plazos legales establecidos para atender posibles responsabilidades. Una vez cumplidos dichos plazos, los datos serán eliminados o anonimizados de forma segura.</p>
+
+                <h2>7. Cesión de datos a terceros</h2>
+                <p>No compartimos tus datos personales con terceros, excepto:</p>
+                <ul>
+                    <li>Cuando sea necesario para la prestación del servicio (por ejemplo, procesadores de pago, plataformas de envío de correos, herramientas de análisis).</li>
+                    <li>Cuando exista una obligación legal o requerimiento de autoridades competentes.</li>
+                    <li>Con tu consentimiento explícito.</li>
+                </ul>
+                <p>En todos los casos, exigimos a dichos terceros que cumplan con estándares de seguridad y confidencialidad adecuados.</p>
+
+                <h2>8. Seguridad de los datos</h2>
+                <p>Implementamos medidas técnicas y organizativas para proteger tus datos personales contra pérdida, acceso no autorizado, alteración o divulgación. Sin embargo, ninguna transmisión por Internet es completamente segura, por lo que no podemos garantizar la seguridad absoluta.</p>
+
+                <h2>9. Tus derechos</h2>
+                <p>De acuerdo con la legislación colombiana (Ley 1581 de 2012 y Decretos reglamentarios), tienes derecho a:</p>
+                <ul>
+                    <li>Conocer, actualizar y rectificar tus datos personales.</li>
+                    <li>Solicitar la supresión de tus datos cuando no sean necesarios para los fines para los que fueron recogidos.</li>
+                    <li>Revocar el consentimiento otorgado.</li>
+                    <li>Presentar quejas ante la Superintendencia de Industria y Comercio (SIC).</li>
+                </ul>
+                <p>Para ejercer estos derechos, puedes enviar un correo electrónico a <a href="mailto:serviciomonetizacion.red@gmail.com">serviciomonetizacion.red@gmail.com</a> indicando tu solicitud y adjuntando una copia de tu documento de identidad.</p>
+
+                <h2>10. Uso de cookies y tecnologías similares</h2>
+                <p>Nuestro sitio web utiliza cookies para mejorar la experiencia del usuario, analizar el tráfico y personalizar contenidos. Puedes configurar tu navegador para rechazar las cookies, aunque esto podría afectar algunas funcionalidades del sitio. Para más información, consulta nuestra <a href="#">Política de Cookies</a> (próximamente).</p>
+
+                <h2>11. Enlaces a sitios externos</h2>
+                <p>Nuestro sitio web puede contener enlaces a páginas de terceros. No somos responsables de las prácticas de privacidad de dichos sitios; te recomendamos leer sus políticas de privacidad al acceder a ellos.</p>
+
+                <h2>12. Cambios a esta política</h2>
+                <p>Podemos actualizar esta Política de Privacidad periódicamente. Cualquier cambio será publicado en esta misma página con la fecha de actualización. Te recomendamos revisarla regularmente.</p>
+
+                <div class="fecha">
+                    <p><strong>Fecha de última actualización:</strong> 12 de agosto de 2026</p>
+                    <p>Para cualquier duda o inquietud, contáctanos a través de nuestro correo o WhatsApp.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="recreaninez.html">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="erto_academia.html">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="politica-privacidad.html">Política de Privacidad</a>
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+    </script>
+
+</body>
+</html>

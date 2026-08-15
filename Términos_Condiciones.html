@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Términos y Condiciones | Punke Network</title>
+    <meta name="description" content="Términos y condiciones de uso del sitio web y servicios de Punke Network. Conoce las reglas y responsabilidades al utilizar nuestros servicios." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 60px 0 80px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ==================== CONTENIDO LEGAL ==================== */
+        .section {
+            padding: 60px 0;
+        }
+
+        .legal-content {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .legal-content h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0200AF;
+            margin-top: 40px;
+            margin-bottom: 12px;
+        }
+
+        .legal-content h2:first-of-type {
+            margin-top: 0;
+        }
+
+        .legal-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 28px;
+            margin-bottom: 8px;
+        }
+
+        .legal-content p {
+            font-size: 16px;
+            color: #444;
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .legal-content ul {
+            padding-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .legal-content ul li {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 8px;
+            line-height: 1.7;
+        }
+
+        .legal-content .fecha {
+            font-size: 15px;
+            color: #888;
+            margin-top: 30px;
+            border-top: 1px solid #eaeaea;
+            padding-top: 20px;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .legal-content h2 {
+                font-size: 24px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 26px;
+            }
+            .section {
+                padding: 40px 0;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>Términos y Condiciones</h1>
+            <p>Lee con atención los términos que rigen el uso de nuestro sitio web y la contratación de nuestros servicios.</p>
+        </div>
+    </section>
+
+    <!-- ==================== CONTENIDO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="legal-content">
+
+                <h2>1. Aceptación de los Términos</h2>
+                <p>Al acceder, navegar o utilizar el sitio web de <strong>Punke Network</strong> (en adelante "la Agencia", "nosotros", "nuestro") y/o contratar cualquiera de nuestros servicios, el usuario (en adelante "el Cliente", "el Usuario" o "tú") acepta de manera expresa e irrevocable los presentes <strong>Términos y Condiciones</strong>. Si no estás de acuerdo con alguno de estos términos, te recomendamos no utilizar nuestro sitio ni nuestros servicios.</p>
+
+                <h2>2. Información general</h2>
+                <p><strong>Punke Network</strong> es una agencia digital colombiana dedicada a la representación de creadores de contenido, manejo de redes sociales, branding, diseño gráfico, producción de contenido y desarrollo web.</p>
+                <ul>
+                    <li><strong>Correo electrónico:</strong> <a href="mailto:serviciomonetizacion.red@gmail.com">serviciomonetizacion.red@gmail.com</a></li>
+                    <li><strong>WhatsApp:</strong> <a href="https://wa.me/573026022017">+57 302 602 2017</a></li>
+                    <li><strong>País:</strong> Colombia</li>
+                </ul>
+
+                <h2>3. Servicios ofrecidos</h2>
+                <p>Punke Network ofrece los siguientes servicios, sujetos a disponibilidad y previa cotización y aceptación:</p>
+                <ul>
+                    <li><strong>Representación de Creadores de Contenido:</strong> Gestión de marca personal, búsqueda de oportunidades y fortalecimiento de presencia digital.</li>
+                    <li><strong>Manejo de Redes Sociales:</strong> Estrategias de contenido, gestión de comunidades y publicidad en redes sociales.</li>
+                    <li><strong>Branding e Identidad Visual:</strong> Diseño de logotipos, paletas de color, tipografía y manuales de marca.</li>
+                    <li><strong>Diseño Gráfico:</strong> Creación de piezas visuales para redes sociales, campañas y comunicación digital.</li>
+                    <li><strong>Producción de Contenido:</strong> Desarrollo de contenido audiovisual y escrito para marcas y proyectos.</li>
+                    <li><strong>Desarrollo Web:</strong> Diseño y desarrollo de sitios web y aplicaciones web modernas (disponible próximamente).</li>
+                </ul>
+                <p>Los servicios se prestan bajo las condiciones acordadas en cada cotización o contrato específico.</p>
+
+                <h2>4. Propiedad intelectual</h2>
+                <p>Todo el contenido de este sitio web, incluyendo textos, imágenes, logotipos, diseños, gráficos, vídeos, código fuente y cualquier otro material, es propiedad de Punke Network o de sus licenciantes y está protegido por las leyes de propiedad intelectual aplicables en Colombia e internacionalmente.</p>
+                <p>El Usuario se compromete a no reproducir, distribuir, modificar o crear obras derivadas de dicho contenido sin la autorización expresa y por escrito de Punke Network.</p>
+
+                <h2>5. Uso del sitio web</h2>
+                <p>El Usuario se compromete a utilizar el sitio web y los servicios de Punke Network de manera responsable y lícita, absteniéndose de:</p>
+                <ul>
+                    <li>Realizar acciones que puedan dañar, deshabilitar o sobrecargar los sistemas o servidores de la Agencia.</li>
+                    <li>Intentar acceder a áreas restringidas del sitio sin autorización.</li>
+                    <li>Utilizar el sitio para difundir contenido ilegal, ofensivo, difamatorio o que vulnere los derechos de terceros.</li>
+                    <li>Suplantar la identidad de otras personas o entidades.</li>
+                </ul>
+                <p>Punke Network se reserva el derecho de restringir o bloquear el acceso a usuarios que incumplan estas normas.</p>
+
+                <h2>6. Cotizaciones y contratación</h2>
+                <p>Las cotizaciones enviadas por Punke Network tienen una validez de <strong>15 días hábiles</strong> a partir de su fecha de emisión, salvo que se indique lo contrario. La contratación de un servicio se formaliza mediante la aceptación expresa de la cotización y el pago de la tarifa acordada.</p>
+                <p>Punke Network se reserva el derecho de modificar las condiciones de los servicios o los precios, previa notificación al Cliente en caso de servicios en curso.</p>
+
+                <h2>7. Pagos y facturación</h2>
+                <p>Los pagos pueden realizarse a través de los medios disponibles en nuestra sección de <a href="pagos.html">Pagos</a>. El Cliente es responsable de proporcionar información veraz y actualizada para la facturación.</p>
+                <p>En caso de incumplimiento en los plazos de pago, Punke Network podrá suspender la prestación del servicio hasta la regularización de la deuda.</p>
+
+                <h2>8. Plazos de entrega</h2>
+                <p>Los plazos de entrega de los servicios se acuerdan en cada cotización o contrato. Punke Network realizará todos los esfuerzos razonables para cumplir con los plazos establecidos, pero no será responsable por retrasos causados por fuerza mayor o por acciones u omisiones del Cliente que afecten el desarrollo del proyecto.</p>
+
+                <h2>9. Responsabilidad del Cliente</h2>
+                <p>El Cliente se compromete a:</p>
+                <ul>
+                    <li>Proporcionar la información, materiales y acceso necesarios para la ejecución del servicio de manera oportuna.</li>
+                    <li>Responder a las consultas y solicitudes de revisión dentro de los plazos establecidos.</li>
+                    <li>Utilizar los servicios de forma ética y legal, y no utilizar los entregables para fines ilícitos.</li>
+                </ul>
+
+                <h2>10. Limitación de responsabilidad</h2>
+                <p>Punke Network no será responsable por:</p>
+                <ul>
+                    <li>Daños indirectos, pérdidas de beneficios o cualquier daño derivado del uso o la imposibilidad de usar los servicios.</li>
+                    <li>Errores o retrasos causados por información inexacta proporcionada por el Cliente.</li>
+                    <li>Cambios en las plataformas de terceros (redes sociales, herramientas de análisis, etc.) que afecten los resultados de los servicios.</li>
+                </ul>
+                <p>La responsabilidad total de Punke Network frente al Cliente, por cualquier concepto, se limitará al monto total pagado por el servicio correspondiente.</p>
+
+                <h2>11. Confidencialidad</h2>
+                <p>Las partes acuerdan mantener la confidencialidad de toda la información comercial, técnica o estratégica compartida durante la ejecución del servicio. Esta obligación subsistirá incluso después de la finalización del contrato.</p>
+
+                <h2>12. Enlaces a terceros</h2>
+                <p>Nuestro sitio web puede contener enlaces a páginas de terceros. Punke Network no asume responsabilidad por el contenido o las prácticas de privacidad de dichos sitios externos.</p>
+
+                <h2>13. Modificaciones de los Términos</h2>
+                <p>Punke Network se reserva el derecho de modificar estos Términos y Condiciones en cualquier momento. Los cambios serán publicados en esta misma página, y la fecha de última actualización será actualizada. Se recomienda a los Usuarios revisar periódicamente esta sección.</p>
+
+                <h2>14. Ley aplicable y jurisdicción</h2>
+                <p>Estos Términos y Condiciones se rigen por las leyes de la <strong>República de Colombia</strong>. Cualquier controversia derivada del uso del sitio o de la prestación de los servicios será sometida a la jurisdicción de los tribunales de la ciudad de Bogotá D.C., Colombia.</p>
+
+                <h2>15. Contacto</h2>
+                <p>Para cualquier consulta relacionada con estos Términos y Condiciones, puedes escribirnos a:</p>
+                <ul>
+                    <li><strong>Correo:</strong> <a href="mailto:serviciomonetizacion.red@gmail.com">serviciomonetizacion.red@gmail.com</a></li>
+                    <li><strong>WhatsApp:</strong> <a href="https://wa.me/573026022017">+57 302 602 2017</a></li>
+                </ul>
+
+                <div class="fecha">
+                    <p><strong>Fecha de última actualización:</strong> 12 de agosto de 2026</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="recreaninez.html">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="erto_academia.html">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="politica-privacidad.html">Política de Privacidad</a>
+                    <a href="terminos-condiciones.html">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contacto | Punke Network</title>
+    <meta name="description" content="Ponte en contacto con Punke Network. Solicita una cotización, resuelve tus dudas o cuéntanos sobre tu proyecto." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-menu a.active {
+            color: #0200AF;
+        }
+        .navbar-menu a.active::after {
+            width: 100%;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 10px;
+        }
+
+        /* ==================== CONTACTO ==================== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 56px;
+        }
+
+        .section-header h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #666666;
+        }
+
+        .contacto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        /* Información de contacto */
+        .contacto-info h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #0200AF;
+        }
+
+        .contacto-info p {
+            color: #555555;
+            font-size: 17px;
+            margin-bottom: 24px;
+        }
+
+        .contacto-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .contacto-item .icon {
+            width: 48px;
+            height: 48px;
+            background: #f0f0ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0200AF;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .contacto-item .info {
+            font-size: 15px;
+            color: #333333;
+        }
+
+        .contacto-item .info strong {
+            display: block;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .contacto-item .info a {
+            color: #0200AF;
+            transition: color 0.2s;
+        }
+
+        .contacto-item .info a:hover {
+            color: #0500d9;
+        }
+
+        .redes-contacto {
+            margin-top: 30px;
+        }
+
+        .redes-contacto h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+
+        .redes-contacto .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .redes-contacto .social-links a {
+            width: 44px;
+            height: 44px;
+            background: #f0f0ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0200AF;
+            font-size: 20px;
+            transition: background 0.3s, color 0.3s, transform 0.2s;
+        }
+
+        .redes-contacto .social-links a:hover {
+            background: #0200AF;
+            color: #ffffff;
+            transform: translateY(-3px);
+        }
+
+        /* Formulario */
+        .contacto-formulario {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .contacto-formulario h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .contacto-formulario .sub {
+            color: #666666;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #0200AF;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+            background: #ffffff;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: #0200AF;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .form-group .btn-submit:hover {
+            background: #0500d9;
+            transform: scale(1.01);
+        }
+
+        /* Mapa (placeholder) */
+        .mapa {
+            margin-top: 60px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+            height: 300px;
+            background: #f0f0f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 16px;
+        }
+
+        .mapa iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* ==================== CTA ==================== */
+        .cta {
+            background: #0200AF;
+            color: #ffffff;
+            padding: 70px 0;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 28px;
+        }
+
+        .cta .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta .btn-primary {
+            background: #ffffff;
+            color: #0200AF;
+        }
+
+        .cta .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta .btn-outline-light {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .cta .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .contacto-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .contacto-formulario {
+                padding: 24px 20px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            .section {
+                padding: 50px 0;
+            }
+            .cta h2 {
+                font-size: 28px;
+            }
+            .contacto-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .contacto-item .icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="img/logo/punke-network.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html" class="active">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>Contáctanos</h1>
+            <p>¿Tienes un proyecto en mente? Escríbenos y descubre cómo podemos ayudarte a impulsar tu marca.</p>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACTO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Hablemos de tu proyecto</h2>
+                <p>Estamos aquí para escucharte, resolver tus dudas y construir juntos una estrategia que funcione.</p>
+            </div>
+            <div class="contacto-grid">
+                <!-- Información de contacto -->
+                <div class="contacto-info">
+                    <h3>Información de contacto</h3>
+                    <p>Puedes comunicarte con nosotros a través de los siguientes medios. Estaremos encantados de atenderte.</p>
+
+                    <div class="contacto-item">
+                        <div class="icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="info">
+                            <strong>WhatsApp</strong>
+                            <a href="https://wa.me/573026022017" target="_blank">+57 302 602 2017</a>
+                        </div>
+                    </div>
+
+                    <div class="contacto-item">
+                        <div class="icon"><i class="far fa-envelope"></i></div>
+                        <div class="info">
+                            <strong>Correo electrónico</strong>
+                            <a href="mailto:serviciomonetizacion.red@gmail.com">serviciomonetizacion.red@gmail.com</a>
+                        </div>
+                    </div>
+
+                    <div class="contacto-item">
+                        <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info">
+                            <strong>Ubicación</strong>
+                            Colombia
+                        </div>
+                    </div>
+
+                    <div class="redes-contacto">
+                        <h4>Síguenos en redes</h4>
+                        <div class="social-links">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario -->
+                <div class="contacto-formulario">
+                    <h3>Envíanos un mensaje</h3>
+                    <p class="sub">Completa el formulario y te responderemos a la brevedad.</p>
+                    <form id="formContacto">
+                        <div class="form-group">
+                            <label for="nombre">Nombre completo</label>
+                            <input type="text" id="nombre" placeholder="Tu nombre" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" placeholder="tucorreo@ejemplo.com" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono (opcional)</label>
+                            <input type="tel" id="telefono" placeholder="+57 300 000 0000" />
+                        </div>
+                        <div class="form-group">
+                            <label for="servicio">Servicio de interés</label>
+                            <select id="servicio">
+                                <option value="">Selecciona un servicio...</option>
+                                <option value="Representación de Creadores">Representación de Creadores</option>
+                                <option value="Manejo de Redes Sociales">Manejo de Redes Sociales</option>
+                                <option value="Branding e Identidad Visual">Branding e Identidad Visual</option>
+                                <option value="Diseño Gráfico">Diseño Gráfico</option>
+                                <option value="Producción de Contenido">Producción de Contenido</option>
+                                <option value="Desarrollo Web">Desarrollo Web</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje</label>
+                            <textarea id="mensaje" placeholder="Cuéntanos sobre tu proyecto, ideas o dudas..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-submit">Enviar mensaje</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Mapa (placeholder) -->
+            <div class="mapa">
+                <!-- Coloca aquí el embed de Google Maps o un iframe de ubicación -->
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.314033123456!2d-74.082!3d4.598!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f99bf7d9b0b1b%3A0x5c5b5c5b5c5b5c5b!2sBogot%C3%A1%2C%20Colombia!5e0!3m2!1ses!2sco!4v1620000000000" allowfullscreen loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta">
+        <div class="container">
+            <h2>¿Prefieres atención inmediata?</h2>
+            <p>Escríbenos por WhatsApp y conversemos directamente sobre tu proyecto.</p>
+            <div class="btn-group">
+                <a href="https://wa.me/573026022017" target="_blank" class="btn btn-primary">Escribir por WhatsApp</a>
+                <a href="mailto:serviciomonetizacion.red@gmail.com" class="btn btn-outline-light">Enviar correo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="#">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="#">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+
+        // Validación y envío del formulario
+        const form = document.getElementById('formContacto');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validación simple
+            const nombre = document.getElementById('nombre').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mensaje = document.getElementById('mensaje').value.trim();
+
+            if (!nombre || !email || !mensaje) {
+                alert('Por favor, completa todos los campos obligatorios.');
+                return;
+            }
+
+            if (!email.includes('@') || !email.includes('.')) {
+                alert('Por favor, ingresa un correo electrónico válido.');
+                return;
+            }
+
+            // Simulación de envío
+            alert('¡Mensaje enviado con éxito! Te contactaremos pronto.');
+            form.reset();
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagos | Punke Network</title>
+    <meta name="description" content="Conoce los métodos de pago disponibles en Punke Network. Realiza tus pagos de manera segura y consulta el estado de tus transacciones." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        .navbar-menu a.active {
+            color: #0200AF;
+        }
+        .navbar-menu a.active::after {
+            width: 100%;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 10px;
+        }
+
+        /* ==================== SECCIONES ==================== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 56px;
+        }
+
+        .section-header h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #666666;
+        }
+
+        .bg-light {
+            background-color: #f8f8fc;
+        }
+
+        /* ==================== MÉTODOS DE PAGO ==================== */
+        .metodos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+        }
+
+        .metodo-item {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .metodo-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .metodo-item .icon {
+            font-size: 48px;
+            color: #0200AF;
+            margin-bottom: 12px;
+        }
+
+        .metodo-item h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .metodo-item p {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        /* ==================== INSTRUCCIONES ==================== */
+        .instrucciones {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .instrucciones ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instrucciones ol li {
+            font-size: 16px;
+            color: #444;
+            margin-bottom: 10px;
+            line-height: 1.7;
+        }
+
+        .instrucciones .destacado {
+            background: #f0f0ff;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border-left: 4px solid #0200AF;
+            font-size: 15px;
+            color: #333;
+            margin-top: 24px;
+        }
+
+        .instrucciones .destacado strong {
+            color: #0200AF;
+        }
+
+        /* ==================== FORMULARIO DE CONSULTA ==================== */
+        .consulta-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .consulta-info h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0200AF;
+        }
+
+        .consulta-info p {
+            color: #555555;
+            font-size: 17px;
+            margin-bottom: 20px;
+        }
+
+        .consulta-info ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .consulta-info ul li {
+            font-size: 15px;
+            color: #444;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .consulta-info ul li i {
+            color: #0200AF;
+            width: 20px;
+            font-size: 18px;
+        }
+
+        .consulta-formulario {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .consulta-formulario h3 {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .consulta-formulario .sub {
+            color: #666666;
+            margin-bottom: 24px;
+            font-size: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #1a1a1a;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #0200AF;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+            background: #ffffff;
+        }
+
+        .form-group .btn-submit {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: #0200AF;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .form-group .btn-submit:hover {
+            background: #0500d9;
+            transform: scale(1.01);
+        }
+
+        /* ==================== CTA ==================== */
+        .cta {
+            background: #0200AF;
+            color: #ffffff;
+            padding: 70px 0;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 28px;
+        }
+
+        .cta .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta .btn-primary {
+            background: #ffffff;
+            color: #0200AF;
+        }
+
+        .cta .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta .btn-outline-light {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .cta .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .metodos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .consulta-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .metodos-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .consulta-formulario {
+                padding: 24px 20px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            .section {
+                padding: 50px 0;
+            }
+            .cta h2 {
+                font-size: 28px;
+            }
+            .metodos-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html" class="active">Pagos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>Métodos de pago</h1>
+            <p>Realiza tus pagos de manera segura y consulta el estado de tus transacciones.</p>
+        </div>
+    </section>
+
+    <!-- ==================== MÉTODOS DE PAGO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Medios de pago disponibles</h2>
+                <p>Elige el método que más te convenga para realizar tu pago.</p>
+            </div>
+            <div class="metodos-grid">
+                <div class="metodo-item">
+                    <div class="icon"><i class="fas fa-university"></i></div>
+                    <h4>Transferencia bancaria</h4>
+                    <p>Bancolombia, Davivienda, BBVA y más.</p>
+                </div>
+                <div class="metodo-item">
+                    <div class="icon"><i class="fas fa-credit-card"></i></div>
+                    <h4>Tarjeta débito / crédito</h4>
+                    <p>Visa, Mastercard, American Express.</p>
+                </div>
+                <div class="metodo-item">
+                    <div class="icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h4>Nequi / Daviplata</h4>
+                    <p>Pago móvil desde tu celular.</p>
+                </div>
+                <div class="metodo-item">
+                    <div class="icon"><i class="fas fa-coins"></i></div>
+                    <h4>PSE</h4>
+                    <p>Pagos seguros en línea desde tu banco.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== INSTRUCCIONES ==================== -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Cómo realizar tu pago?</h2>
+                <p>Sigue estos pasos para completar tu transacción sin contratiempos.</p>
+            </div>
+            <div class="instrucciones">
+                <ol>
+                    <li><strong>Selecciona el método de pago</strong> que prefieras entre los disponibles.</li>
+                    <li><strong>Realiza el pago</strong> por el monto acordado en el servicio o cotización.</li>
+                    <li><strong>Guarda el comprobante</strong> de tu pago (captura de pantalla o número de transacción).</li>
+                    <li><strong>Envía el comprobante</strong> a nuestro correo o WhatsApp para confirmación.</li>
+                    <li><strong>Recibe la confirmación</strong> de nuestro equipo y la activación del servicio.</li>
+                </ol>
+                <div class="destacado">
+                    <strong>¡Importante!</strong> Para cualquier duda, contáctanos por <strong>WhatsApp</strong> o <strong>correo</strong>. Estamos aquí para ayudarte.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONSULTA DE PAGO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Consulta el estado de tu pago</h2>
+                <p>Si ya realizaste un pago, puedes consultar su estado aquí.</p>
+            </div>
+            <div class="consulta-grid">
+                <div class="consulta-info">
+                    <h3>Información importante</h3>
+                    <p>Para consultar el estado de tu pago, necesitas tener a mano el número de transacción o el correo electrónico con el que realizaste el pago.</p>
+                    <ul>
+                        <li><i class="fas fa-check-circle"></i> Los pagos se procesan en <strong>24 horas hábiles</strong>.</li>
+                        <li><i class="fas fa-check-circle"></i> Recibirás un correo de confirmación una vez procesado.</li>
+                        <li><i class="fas fa-check-circle"></i> Si tienes dudas, contáctanos directamente.</li>
+                    </ul>
+                </div>
+                <div class="consulta-formulario">
+                    <h3>Consultar estado</h3>
+                    <p class="sub">Completa los datos y te informaremos sobre tu transacción.</p>
+                    <form id="formConsulta">
+                        <div class="form-group">
+                            <label for="transaccion">Número de transacción</label>
+                            <input type="text" id="transaccion" placeholder="Ej: 123456789" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="correo-consulta">Correo electrónico</label>
+                            <input type="email" id="correo-consulta" placeholder="tucorreo@ejemplo.com" required />
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn-submit">Consultar estado</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta">
+        <div class="container">
+            <h2>¿Necesitas ayuda con tu pago?</h2>
+            <p>Escríbenos y te guiaremos en el proceso.</p>
+            <div class="btn-group">
+                <a href="https://wa.me/573026022017" target="_blank" class="btn btn-primary">Escribir por WhatsApp</a>
+                <a href="mailto:serviciomonetizacion.red@gmail.com" class="btn btn-outline-light">Enviar correo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="#">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="#">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+
+        // Formulario de consulta de pago (simulación)
+        const formConsulta = document.getElementById('formConsulta');
+        formConsulta.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const transaccion = document.getElementById('transaccion').value.trim();
+            const correo = document.getElementById('correo-consulta').value.trim();
+
+            if (!transaccion || !correo) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            if (!correo.includes('@') || !correo.includes('.')) {
+                alert('Por favor, ingresa un correo electrónico válido.');
+                return;
+            }
+
+            // Simulación de consulta
+            alert('Estado de tu pago: En proceso de verificación. Te contactaremos en las próximas horas.');
+            formConsulta.reset();
+        });
+    </script>
+
+</body>
+</html>

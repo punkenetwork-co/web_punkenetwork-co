@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ERTO Academia | Punke Network</title>
+    <meta name="description" content="ERTO es la unidad especializada de Punke Network enfocada en formación, investigación y consultoría para el desarrollo de conocimientos, habilidades y oportunidades." />
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon" />
+    <!-- Fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ==================== RESET Y BASE ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ==================== TOPBAR ==================== */
+        .topbar {
+            background-color: #0200AF;
+            color: #ffffff;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+
+        .topbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .topbar-social {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .topbar-social a {
+            color: #ffffff;
+            transition: opacity 0.2s;
+            font-size: 15px;
+        }
+
+        .topbar-social a:hover {
+            opacity: 0.7;
+        }
+
+        .topbar-user {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .topbar-user i {
+            font-size: 18px;
+        }
+
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            background-color: #ffffff;
+            padding: 14px 0;
+            border-bottom: 1px solid #ededed;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 44px;
+            width: auto;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .navbar-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .navbar-menu a:hover {
+            color: #0200AF;
+        }
+
+        .navbar-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Botón especial "Ir a Aula Virtual" */
+        .btn-aula {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0200AF;
+            color: #ffffff !important;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-aula:hover {
+            background: #0500d9;
+            transform: scale(1.03);
+            color: #ffffff !important;
+        }
+
+        .btn-aula i {
+            font-size: 16px;
+        }
+
+        .navbar-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px;
+        }
+
+        .navbar-toggle span {
+            display: block;
+            width: 26px;
+            height: 3px;
+            background-color: #1a1a1a;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        .navbar-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .navbar-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ==================== HERO ==================== */
+        .hero {
+            padding: 80px 0 100px;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero .slogan {
+            font-size: 22px;
+            font-weight: 500;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ==================== SECCIONES ==================== */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 720px;
+            margin: 0 auto 56px;
+        }
+
+        .section-header h2 {
+            font-size: 38px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            font-size: 18px;
+            color: #666666;
+        }
+
+        .bg-light {
+            background-color: #f8f8fc;
+        }
+
+        /* ==================== MENÚ SECUNDARIO (academia) ==================== */
+        .academia-menu {
+            background: #f8f8fc;
+            border-bottom: 1px solid #eaeaea;
+            padding: 12px 0;
+            margin-bottom: 40px;
+        }
+
+        .academia-menu .container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .academia-menu a {
+            font-weight: 500;
+            color: #1a1a1a;
+            font-size: 15px;
+            padding: 6px 0;
+            transition: color 0.2s;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .academia-menu a:hover {
+            color: #0200AF;
+        }
+
+        .academia-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #0200AF;
+            transition: width 0.3s;
+        }
+
+        .academia-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Menú desplegable de cursos */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #ffffff;
+            min-width: 180px;
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            padding: 8px 0;
+            z-index: 10;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 8px 20px;
+            font-size: 14px;
+            color: #1a1a1a;
+            transition: background 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background: #f0f0ff;
+            color: #0200AF;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown .arrow {
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        /* ==================== INFORMACIÓN DE ERTO ==================== */
+        .erto-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .erto-texto p {
+            font-size: 17px;
+            color: #555555;
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .erto-imagen {
+            width: 100%;
+            height: 280px;
+            background: #e8e8f0;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 16px;
+            font-weight: 500;
+            overflow: hidden;
+        }
+
+        .erto-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .erto-imagen .placeholder-text {
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* ==================== EQUIPO DIRECTIVO ==================== */
+        .equipo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .miembro-card {
+            background: #ffffff;
+            border: 1px solid #eaeaea;
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .miembro-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .miembro-foto {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e8e8f0;
+            margin: 0 auto 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .miembro-foto img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .miembro-card h3 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #0200AF;
+            margin-bottom: 4px;
+        }
+
+        .miembro-card .cargo {
+            font-weight: 600;
+            font-size: 15px;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+
+        .miembro-card p {
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.7;
+        }
+
+        /* ==================== CTA ==================== */
+        .cta {
+            background: #0200AF;
+            color: #ffffff;
+            padding: 70px 0;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 28px;
+        }
+
+        .cta .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .cta .btn-primary {
+            background: #ffffff;
+            color: #0200AF;
+        }
+
+        .cta .btn-primary:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta .btn-outline-light {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .cta .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            background-color: #111111;
+            color: #ffffff;
+            padding: 60px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand img {
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .footer-brand p {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-bottom: 14px;
+        }
+
+        .footer-brand .contacto-line {
+            font-size: 14px;
+            color: #cccccc;
+            margin-bottom: 4px;
+        }
+
+        .footer-brand .contacto-line i {
+            width: 24px;
+            color: #0200AF;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul a {
+            color: #aaaaaa;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-col ul a:hover {
+            color: #ffffff;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #888888;
+        }
+
+        .footer-bottom a {
+            color: #888888;
+            margin-left: 20px;
+            transition: color 0.2s;
+        }
+
+        .footer-bottom a:hover {
+            color: #ffffff;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 992px) {
+            .erto-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .erto-imagen {
+                height: 240px;
+                order: -1;
+            }
+            .equipo-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-toggle {
+                display: flex;
+            }
+
+            .navbar-menu {
+                display: none;
+                flex-direction: column;
+                background: #ffffff;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                padding: 20px 24px;
+                border-top: 1px solid #ededed;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+                gap: 14px;
+            }
+
+            .navbar-menu.open {
+                display: flex;
+            }
+
+            .navbar-menu a {
+                font-size: 17px;
+            }
+
+            .btn-aula {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+            .hero .slogan {
+                font-size: 18px;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .academia-menu .container {
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+            }
+
+            .academia-menu a {
+                font-size: 16px;
+            }
+
+            .dropdown-content {
+                position: static;
+                box-shadow: none;
+                border: none;
+                padding: 0;
+                margin-top: 4px;
+            }
+
+            .dropdown-content a {
+                padding: 6px 16px;
+                font-size: 15px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+            }
+            .footer-bottom a {
+                margin: 0 10px;
+            }
+
+            .miembro-card h3 {
+                font-size: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            .btn {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+            .section {
+                padding: 50px 0;
+            }
+            .cta h2 {
+                font-size: 28px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== TOPBAR ==================== -->
+    <header class="topbar">
+        <div class="container">
+            <div class="topbar-social">
+                <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <div class="topbar-user">
+                <i class="fas fa-user-circle"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== NAVBAR ==================== -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <a href="index.html" class="navbar-logo">
+                <img src="https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png" alt="Punke Network">
+            </a>
+            <button class="navbar-toggle" id="menuToggle" aria-label="Abrir menú">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="navbar-menu" id="navbarMenu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+                <li><a href="portafolio.html">Portafolio</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contacto.html">Contáctanos</a></li>
+                <li><a href="pagos.html">Pagos</a></li>
+                <li>
+                    <a href="#" class="btn-aula" id="btnAulaVirtual">
+                        <i class="fas fa-chalkboard-teacher"></i> Ir a Aula Virtual
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <div class="container">
+            <h1>ERTO Academia</h1>
+            <div class="slogan">Educación para el Rendimiento, la Transformación y las Oportunidades</div>
+            <p>Unidad especializada de <strong>Punke Network</strong>, fundada por <strong>José Miguel Landero Torres</strong>, para formar, investigar y asesorar en el desarrollo de conocimientos, habilidades y oportunidades.</p>
+        </div>
+    </section>
+
+    <!-- ==================== MENÚ SECUNDARIO ==================== -->
+    <div class="academia-menu">
+        <div class="container">
+            <a href="#"><i class="fas fa-home"></i> Inicio</a>
+            <div class="dropdown">
+                <a href="#"><i class="fas fa-book"></i> Cursos <span class="arrow">▼</span></a>
+                <div class="dropdown-content">
+                    <a href="#">Marketing Digital</a>
+                    <a href="#">Branding Personal</a>
+                    <a href="#">Producción de Contenido</a>
+                    <a href="#">Desarrollo Web</a>
+                    <a href="#">Redes Sociales</a>
+                </div>
+            </div>
+            <a href="#"><i class="fas fa-headset"></i> Soporte</a>
+            <a href="#"><i class="fas fa-certificate"></i> Certificados</a>
+        </div>
+    </div>
+
+    <!-- ==================== INFORMACIÓN DE ERTO ==================== -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Qué es ERTO?</h2>
+                <p>Conocimiento que transforma, oportunidades que crecen.</p>
+            </div>
+            <div class="erto-grid">
+                <div class="erto-texto">
+                    <p><strong>ERTO</strong> (Educación para el Rendimiento, la Transformación y las Oportunidades) es la unidad especializada de <strong>Punke Network</strong>, diseñada para formar, investigar y asesorar en áreas clave del desarrollo personal y profesional.</p>
+                    <p>Nuestro enfoque combina la experiencia práctica con la innovación académica, ofreciendo cursos, talleres y consultorías que permiten a las personas y organizaciones potenciar sus capacidades y alcanzar sus metas.</p>
+                    <p>ERTO nace con la misión de <strong>convertir el conocimiento en oportunidades</strong>, aportando soluciones reales y generando impacto a través de cada proyecto, idea y palabra.</p>
+                    <p>Fundada por <strong>José Miguel Landero Torres</strong>, ingeniero industrial y emprendedor social, ERTO es el brazo académico de Punke Network, liderado académicamente por <strong>Eliercer Rafael Torres Ochoa</strong>, ingeniero ambiental e investigador.</p>
+                </div>
+                <div class="erto-imagen">
+                    <!-- Coloca aquí una imagen representativa de ERTO -->
+                    <img src="img/proyectos/erto-portada.jpg" alt="ERTO Academia" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder-text\'><i class=\'fas fa-graduation-cap\' style=\'font-size:48px;color:#ccc;\'></i><br>Imagen de ERTO</div>'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EQUIPO DIRECTIVO ==================== -->
+    <section class="section bg-light">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nuestro equipo directivo</h2>
+                <p>Líderes que impulsan el conocimiento y la transformación.</p>
+            </div>
+            <div class="equipo-grid">
+                <!-- José Miguel Landero Torres -->
+                <div class="miembro-card">
+                    <div class="miembro-foto">
+                        <!-- Coloca aquí la foto de José Miguel -->
+                        <img src="img/equipo/jose-miguel.jpg" alt="José Miguel Landero Torres" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user-circle\' style=\'font-size:60px;color:#ccc;\'></i>'">
+                    </div>
+                    <h3>José Miguel Landero Torres</h3>
+                    <div class="cargo">Director General y Fundador de Punke Network</div>
+                    <p>Ingeniero industrial, emprendedor social y fundador de Punke Network. Lidera la visión estratégica de ERTO, impulsando la creación de oportunidades a través del conocimiento y la innovación.</p>
+                </div>
+                <!-- Eliercer Rafael Torres Ochoa -->
+                <div class="miembro-card">
+                    <div class="miembro-foto">
+                        <!-- Coloca aquí la foto de Eliercer -->
+                        <img src="img/equipo/eliercer-torres.jpg" alt="Eliercer Rafael Torres Ochoa" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-user-graduate\' style=\'font-size:60px;color:#ccc;\'></i>'">
+                    </div>
+                    <h3>Eliercer Rafael Torres Ochoa</h3>
+                    <div class="cargo">Director Académico de ERTO</div>
+                    <p>Ingeniero Ambiental, investigador y creador de proyectos con propósito. Desde sus raíces plateñas, Eliercer lidera la creación de contenidos formativos y la investigación aplicada, convirtiendo el conocimiento en oportunidades.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA ==================== -->
+    <section class="cta">
+        <div class="container">
+            <h2>¿Listo para aprender y transformarte?</h2>
+            <p>Explora nuestros cursos, talleres y programas de formación diseñados para impulsar tu crecimiento.</p>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary">Ver cursos</a>
+                <a href="contacto.html" class="btn btn-outline-light">Contactar a ERTO</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <p>Impulsando talento. Creando oportunidades.</p>
+                    <div class="contacto-line"><i class="fab fa-whatsapp"></i> +57 302 602 2017</div>
+                    <div class="contacto-line"><i class="far fa-envelope"></i> serviciomonetizacion.red@gmail.com</div>
+                </div>
+                <div class="footer-col">
+                    <h4>Servicios</h4>
+                    <ul>
+                        <li><a href="servicios.html">Manejo de Redes Sociales</a></li>
+                        <li><a href="servicios.html">Representación de Creadores</a></li>
+                        <li><a href="servicios.html">Branding e Identidad Visual</a></li>
+                        <li><a href="servicios.html">Diseño Gráfico</a></li>
+                        <li><a href="servicios.html">Producción de Contenido</a></li>
+                        <li><a href="servicios.html">Desarrollo Web</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Talleres</a></li>
+                        <li><a href="#">Plantillas</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Acerca de</h4>
+                    <ul>
+                        <li><a href="nosotros.html">Punke Network</a></li>
+                        <li><a href="nosotros.html">Agencia</a></li>
+                        <li><a href="recreaninez.html">Recreaniñez — Proyecto Social</a></li>
+                        <li><a href="erto_academia.html">ERTO — Unidad Especializada</a></li>
+                        <li><a href="nosotros.html">José Miguel Landero Torres — Fundador</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Punke Network. Todos los derechos reservados.</span>
+                <div>
+                    <a href="#">Política de Privacidad</a>
+                    <a href="#">Términos y Condiciones</a>
+                    <a href="#">Tratamiento de Datos Personales</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // Menú hamburguesa
+        const toggle = document.getElementById('menuToggle');
+        const menu = document.getElementById('navbarMenu');
+
+        toggle.addEventListener('click', function() {
+            this.classList.toggle('active');
+            menu.classList.toggle('open');
+        });
+
+        const menuLinks = menu.querySelectorAll('a:not(.btn-aula)');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = menu.contains(event.target) || toggle.contains(event.target);
+            if (!isClickInside && menu.classList.contains('open')) {
+                toggle.classList.remove('active');
+                menu.classList.remove('open');
+            }
+        });
+
+        // Botón "Ir a Aula Virtual" - simulación
+        document.getElementById('btnAulaVirtual').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert('Funcionalidad de Aula Virtual: próximamente disponible.');
+        });
+
+        // Enlaces del menú secundario - simulación
+        document.querySelectorAll('.academia-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    alert('Esta sección estará disponible próximamente.');
+                }
+            });
+        });
+
+        // Enlaces del dropdown de cursos - simulación
+        document.querySelectorAll('.dropdown-content a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Curso "' + this.textContent.trim() + '": próximamente disponible.');
+            });
+        });
+    </script>
+
+</body>
+</html>
