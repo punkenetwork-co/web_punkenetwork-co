@@ -931,28 +931,28 @@
         });
 
         // Botón "Ir a Aula Virtual" - simulación
-        document.getElementById('btnAulaVirtual').addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('Funcionalidad de Aula Virtual: próximamente disponible.');
-        });
+        //document.getElementById('btnAulaVirtual').addEventListener('click', function(e) {
+        //    e.preventDefault();
+        //    alert('Funcionalidad de Aula Virtual: próximamente disponible.');
+        //});
 
         // Enlaces del menú secundario - simulación
-        document.querySelectorAll('.academia-menu a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (this.getAttribute('href') === '#') {
-                    e.preventDefault();
-                    alert('Esta sección estará disponible próximamente.');
-                }
-            });
-        });
+        //document.querySelectorAll('.academia-menu a').forEach(link => {
+        //    link.addEventListener('click', function(e) {
+        //        if (this.getAttribute('href') === '#') {
+        //            e.preventDefault();
+        //            alert('Esta sección estará disponible próximamente.');
+        //        }
+        //    });
+        //});
 
         // Enlaces del dropdown de cursos - simulación
-        document.querySelectorAll('.dropdown-content a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                alert('Curso "' + this.textContent.trim() + '": próximamente disponible.');
-            });
-        });
+        //document.querySelectorAll('.dropdown-content a').forEach(link => {
+        //    link.addEventListener('click', function(e) {
+        //        e.preventDefault();
+        //        alert('Curso "' + this.textContent.trim() + '": próximamente disponible.');
+        //    });
+        //});
     </script>
 
 </body>
