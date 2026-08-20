@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Tutores | Punke Network</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fc;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== LOGIN ===== */
+        #loginScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0200AF 0%, #0500d9 100%);
+            padding: 20px;
+        }
+        #loginScreen .login-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px 32px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        #loginScreen .login-box img {
+            max-height: 60px;
+            margin: 0 auto 16px;
+        }
+        #loginScreen .login-box h2 {
+            font-size: 24px;
+            color: #0200AF;
+            margin-bottom: 4px;
+        }
+        #loginScreen .login-box p {
+            color: #666;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+        #loginScreen .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+        #loginScreen .form-group label {
+            font-weight: 500;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        #loginScreen .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 15px;
+            background: #fafafa;
+            transition: 0.2s;
+        }
+        #loginScreen .form-group input:focus {
+            border-color: #0200AF;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(2,0,175,0.08);
+        }
+        #loginScreen .btn-login {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: #0200AF;
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        #loginScreen .btn-login:hover {
+            background: #0500d9;
+        }
+        #loginScreen .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 12px;
+            display: none;
+        }
+
+        /* ===== PANEL PRINCIPAL ===== */
+        #panelContent {
+            display: none;
+        }
+        .panel-header {
+            background: #fff;
+            border-bottom: 1px solid #eaeaea;
+            padding: 16px 0;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .panel-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .panel-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .panel-header .logo img {
+            height: 40px;
+        }
+        .panel-header .logo span {
+            font-weight: 600;
+            font-size: 18px;
+            color: #0200AF;
+        }
+        .panel-header .user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+        }
+        .panel-header .user-info .btn-logout {
+            background: none;
+            border: 1px solid #ddd;
+            padding: 6px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .panel-header .user-info .btn-logout:hover {
+            background: #f0f0f0;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 2px solid #eaeaea;
+            flex-wrap: wrap;
+        }
+        .tabs .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: 0.2s;
+        }
+        .tabs .tab.active {
+            color: #0200AF;
+            border-bottom-color: #0200AF;
+        }
+        .tabs .tab:hover {
+            color: #0200AF;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tarjetas */
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #eaeaea;
+            margin-bottom: 20px;
+        }
+        .card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #0200AF;
+        }
+        .card .sub {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* Tablas */
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        table th {
+            background: #f0f0ff;
+            text-align: left;
+            padding: 10px 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        table tr:hover td {
+            background: #fafafa;
+        }
+        .badge {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .badge.success {
+            background: #e6f9ed;
+            color: #2ecc71;
+        }
+        .badge.danger {
+            background: #fde8e8;
+            color: #e74c3c;
+        }
+
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 30px 0;
+            font-size: 15px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .panel-header .container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .panel-header .user-info {
+                justify-content: space-between;
+            }
+            .tabs .tab {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            .card {
+                padding: 16px;
+            }
+        }
+        @media (max-width: 480px) {
+            #loginScreen .login-box {
+                padding: 28px 20px;
+            }
+        }
+
+        /* Bloqueo de inspección */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PANTALLA DE LOGIN ==================== -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <img src="img/logo/punke-network.png" alt="Punke Network">
+            <h2>Panel de Tutores</h2>
+            <p>Acceso restringido · ERTO Academia</p>
+            <div id="loginError" class="error">Usuario o contraseña incorrectos.</div>
+            <div class="form-group">
+                <label for="loginUser">Usuario</label>
+                <input type="text" id="loginUser" placeholder="Ingresa tu usuario" />
+            </div>
+            <div class="form-group">
+                <label for="loginPass">Contraseña</label>
+                <input type="password" id="loginPass" placeholder="Ingresa tu contraseña" />
+            </div>
+            <button class="btn-login" id="btnLogin">Acceder</button>
+        </div>
+    </div>
+
+    <!-- ==================== PANEL PRINCIPAL ==================== -->
+    <div id="panelContent">
+
+        <!-- HEADER -->
+        <header class="panel-header">
+            <div class="container">
+                <div class="logo">
+                    <img src="img/logo/punke-network.png" alt="Punke Network">
+                    <span>Panel de Tutores</span>
+                </div>
+                <div class="user-info">
+                    <span><i class="fas fa-user-shield"></i> <span id="userDisplay">Administrador</span></span>
+                    <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+
+            <!-- TABS -->
+            <div class="tabs" id="tabsContainer">
+                <div class="tab active" data-tab="usuarios"><i class="fas fa-users"></i> Usuarios</div>
+                <div class="tab" data-tab="modulos"><i class="fas fa-cubes"></i> Módulos</div>
+                <div class="tab" data-tab="respuestas"><i class="fas fa-table"></i> Respuestas Formulario</div>
+            </div>
+
+            <!-- ===== TAB 1: USUARIOS (solo lectura) ===== -->
+            <div class="tab-content active" id="tabUsuarios">
+                <div class="card">
+                    <h3>Usuarios Registrados</h3>
+                    <p class="sub">Lista de usuarios con acceso al aula virtual. <strong>Los cambios se realizan directamente en el código fuente.</strong></p>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaUsuarios"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB 2: MÓDULOS (solo lectura) ===== -->
+            <div class="tab-content" id="tabModulos">
+                <div class="card">
+                    <h3>Control de Módulos</h3>
+                    <p class="sub">Estado actual de los módulos del aula virtual. <strong>Los cambios se realizan directamente en el código fuente.</strong></p>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Módulo</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablaModulos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TAB 3: RESPUESTAS ===== -->
+            <div class="tab-content" id="tabRespuestas">
+                <div class="card">
+                    <h3>Respuestas de Formulario</h3>
+                    <p class="sub">
+                        <i class="fas fa-sync-alt"></i> Los datos se actualizan automáticamente desde la hoja de cálculo publicada.
+                        <br>
+                        <span style="font-size:13px; color:#888;">Configura la URL del CSV en el código (variable <strong>CSV_URL</strong>).</span>
+                    </p>
+                    <div id="respuestasContainer">
+                        <div class="empty"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // 1. BLOQUEO DE INSPECCIÓN (básico)
+        // ============================================================
+        document.addEventListener('contextmenu', e => { e.preventDefault(); alert('Inspección deshabilitada.'); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                alert('Acción no permitida.');
+                return false;
+            }
+        });
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+
+        // ============================================================
+        // 2. DATOS FIJOS (editables solo desde el código)
+        // ============================================================
+        // USUARIOS: { user, pass, nombre }
+        const USUARIOS = [
+            { user: 'admin', pass: 'admin123', nombre: 'Administrador' },
+            { user: 'jose', pass: 'jose2026', nombre: 'José Miguel Landero' },
+            { user: 'eliecer', pass: 'eliecer2026', nombre: 'Eliecer Torres' },
+            // Agrega más usuarios aquí
+        ];
+
+        // MÓDULOS: { id, nombre, disponible (true/false) }
+        const MODULOS = [
+            { id: 1, nombre: 'Fundamentos del Marketing Digital', disponible: true },
+            { id: 2, nombre: 'Estrategia de Contenidos', disponible: false },
+            { id: 3, nombre: 'Branding y Posicionamiento', disponible: false },
+            { id: 4, nombre: 'Analítica y Optimización', disponible: false },
+        ];
+
+        // ============================================================
+        // 3. LOGIN
+        // ============================================================
+        const loginScreen = document.getElementById('loginScreen');
+        const panelContent = document.getElementById('panelContent');
+        const loginUser = document.getElementById('loginUser');
+        const loginPass = document.getElementById('loginPass');
+        const btnLogin = document.getElementById('btnLogin');
+        const loginError = document.getElementById('loginError');
+        const userDisplay = document.getElementById('userDisplay');
+
+        function doLogin() {
+            const user = loginUser.value.trim();
+            const pass = loginPass.value.trim();
+            const encontrado = USUARIOS.find(u => u.user === user && u.pass === pass);
+            if (encontrado) {
+                loginError.style.display = 'none';
+                loginScreen.style.display = 'none';
+                panelContent.style.display = 'block';
+                userDisplay.textContent = encontrado.nombre;
+                cargarDatos();
+            } else {
+                loginError.style.display = 'block';
+                loginUser.value = '';
+                loginPass.value = '';
+                loginUser.focus();
+            }
+        }
+        btnLogin.addEventListener('click', doLogin);
+        loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+        loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') loginPass.focus(); });
+
+        document.getElementById('btnLogout').addEventListener('click', function() {
+            if (confirm('¿Cerrar sesión?')) {
+                panelContent.style.display = 'none';
+                loginScreen.style.display = 'flex';
+                loginUser.value = '';
+                loginPass.value = '';
+                loginError.style.display = 'none';
+            }
+        });
+
+        // ============================================================
+        // 4. FUNCIONES DEL PANEL
+        // ============================================================
+        function cargarDatos() {
+            // Usuarios
+            const tbodyUsuarios = document.getElementById('tablaUsuarios');
+            if (USUARIOS.length === 0) {
+                tbodyUsuarios.innerHTML = `<tr><td colspan="2" class="empty">No hay usuarios registrados.</td></tr>`;
+            } else {
+                tbodyUsuarios.innerHTML = USUARIOS.map(u => `
+                    <tr>
+                        <td><strong>${u.user}</strong></td>
+                        <td>${u.nombre}</td>
+                    </tr>
+                `).join('');
+            }
+
+            // Módulos
+            const tbodyModulos = document.getElementById('tablaModulos');
+            if (MODULOS.length === 0) {
+                tbodyModulos.innerHTML = `<tr><td colspan="2" class="empty">No hay módulos.</td></tr>`;
+            } else {
+                tbodyModulos.innerHTML = MODULOS.map(m => `
+                    <tr>
+                        <td><strong>Módulo ${m.id}</strong> – ${m.nombre}</td>
+                        <td>
+                            <span class="badge ${m.disponible ? 'success' : 'danger'}">
+                                ${m.disponible ? 'Disponible' : 'Bloqueado'}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Cargar respuestas
+            cargarRespuestas();
+
+            // Tabs
+            initTabs();
+        }
+
+        // ----- TABS -----
+        function initTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = {
+                usuarios: document.getElementById('tabUsuarios'),
+                modulos: document.getElementById('tabModulos'),
+                respuestas: document.getElementById('tabRespuestas'),
+            };
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const target = this.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    Object.keys(contents).forEach(key => {
+                        contents[key].classList.toggle('active', key === target);
+                    });
+                    if (target === 'respuestas') cargarRespuestas();
+                });
+            });
+        }
+
+        // ============================================================
+        // 5. RESPUESTAS DE FORMULARIO (Google Sheets CSV)
+        // ============================================================
+        // 🔧 CAMBIA ESTA URL POR LA DE TU HOJA PUBLICADA COMO CSV
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/1f3CQK0DQB1zV-j9b2bxTqjvayJOiIMfMpjyOo616Wis/export?format=csv&gid=589432299';
+
+
+
+        async function cargarRespuestas() {
+            const container = document.getElementById('respuestasContainer');
+            container.innerHTML = `<div class="empty"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div>`;
+
+            try {
+                const response = await fetch(CSV_URL);
+                if (!response.ok) throw new Error('No se pudo cargar el CSV.');
+                const csvText = await response.text();
+                const datos = parseCSV(csvText);
+                mostrarTablaRespuestas(datos);
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="empty">
+                        <i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i>
+                        No se pudieron cargar los datos.<br>
+                        <small>Verifica que la URL del CSV sea correcta y que la hoja esté publicada.</small>
+                        <br><br>
+                        <button class="btn-sm primary" onclick="cargarRespuestas()" style="padding:8px 20px; border:none; border-radius:30px; background:#0200AF; color:#fff; cursor:pointer;">
+                            <i class="fas fa-sync"></i> Reintentar
+                        </button>
+                    </div>
+                `;
+                console.error('Error al cargar CSV:', error);
+            }
+        }
+
+        function parseCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim() !== '');
+            if (lines.length === 0) return [];
+            const parseRow = (row) => {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+                for (let i = 0; i < row.length; i++) {
+                    const char = row[i];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                result.push(current.trim());
+                return result;
+            };
+
+            const headers = parseRow(lines[0]);
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseRow(lines[i]);
+                const obj = {};
+                headers.forEach((h, idx) => {
+                    obj[h] = values[idx] || '';
+                });
+                data.push(obj);
+            }
+            return data;
+        }
+
+        function mostrarTablaRespuestas(datos) {
+            const container = document.getElementById('respuestasContainer');
+            if (datos.length === 0) {
+                container.innerHTML = `<div class="empty"><i class="fas fa-inbox"></i> No hay respuestas registradas.</div>`;
+                return;
+            }
+
+            const headers = Object.keys(datos[0]);
+            let html = `<div class="table-responsive"><table>
+                <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
+                <tbody>`;
+            datos.forEach(row => {
+                html += `<tr>${headers.map(h => `<td>${row[h] || ''}</td>`).join('')}</tr>`;
+            });
+            html += `</tbody></table></div>
+                <p style="font-size:13px; color:#888; margin-top:12px;">
+                    <i class="fas fa-database"></i> Total: ${datos.length} registros.
+                    <button onclick="cargarRespuestas()" style="margin-left:12px; padding:4px 16px; border:none; border-radius:30px; background:#0200AF; color:#fff; cursor:pointer;">
+                        <i class="fas fa-sync"></i> Actualizar
+                    </button>
+                </p>`;
+            container.innerHTML = html;
+        }
+
+        // Exponer función para el botón "Reintentar"
+        window.cargarRespuestas = cargarRespuestas;
+    </script>
+
+</body>
+</html>
