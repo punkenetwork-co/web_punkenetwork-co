@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>Cotizador ERTO · Proyectos de Grado</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* =====================================================
+           VARIABLES GLOBALES (cambia aquí los colores)
+           ===================================================== */
+        :root {
+            --primary: #0200AF;
+            --primary-light: #3d3be8;
+            --primary-dark: #01007a;
+            --secondary: #f0f2ff;
+            --accent: #ffd700;
+            --bg: #f8f9fe;
+            --text: #1a1a2e;
+            --text-light: #555570;
+            --card-bg: #ffffff;
+            --shadow: 0 8px 30px rgba(2, 0, 175, 0.10);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.3s ease;
+            --font: 'Inter', sans-serif;
+        }
+
+        /* =====================================================
+           RESET Y BASE
+           ===================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 16px 40px;
+        }
+        .container {
+            max-width: 720px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* =====================================================
+           HEADER
+           ===================================================== */
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px 0 8px;
+        }
+        .logo-placeholder {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+        }
+        .logo-placeholder span {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-light);
+            letter-spacing: 0.3px;
+        }
+        .logo-placeholder small {
+            display: block;
+            font-size: 12px;
+            font-weight: 400;
+            color: #8888aa;
+            margin-top: 2px;
+            letter-spacing: 0.2px;
+        }
+        .logo-img {
+            max-height: 70px;
+            width: auto;
+            margin: 0 auto 4px;
+            display: none; /* se mostrará cuando se ponga la imagen real */
+        }
+        .logo-img.visible {
+            display: block;
+        }
+
+        /* =====================================================
+           CARD PRINCIPAL
+           ===================================================== */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 24px;
+            transition: var(--transition);
+            border: 1px solid rgba(2, 0, 175, 0.04);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .card-header .step-indicator {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            background: var(--secondary);
+            padding: 4px 14px;
+            border-radius: 30px;
+        }
+        .card-header .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0 6px;
+        }
+        .card-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .card-sub {
+            font-size: 15px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* =====================================================
+           BARRA DE PROGRESO
+           ===================================================== */
+        .progress-wrap {
+            margin-bottom: 24px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e9ecf5;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 6px;
+        }
+        .progress-label span:last-child {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* =====================================================
+           PASOS (contenedores)
+           ===================================================== */
+        .step {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .step.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        .step .help-text {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+            background: var(--secondary);
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* =====================================================
+           CAMPOS DE FORMULARIO
+           ===================================================== */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        .form-group .required {
+            color: #e74c3c;
+            margin-left: 2px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dde0ea;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: var(--font);
+            background: #fafbff;
+            transition: var(--transition);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+            background: #fff;
+        }
+        .form-group .input-error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.10);
+        }
+        .form-group .error-msg {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 4px;
+            display: none;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* =====================================================
+           OPCIONES (tarjetas / radios visuales)
+           ===================================================== */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .option-card {
+            background: #fafbff;
+            border: 2px solid #e9ecf5;
+            border-radius: var(--radius-sm);
+            padding: 14px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .option-card:hover {
+            border-color: var(--primary-light);
+            background: #f0f2ff;
+        }
+        .option-card.selected {
+            border-color: var(--primary);
+            background: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(2, 0, 175, 0.12);
+        }
+        .option-card i {
+            font-size: 22px;
+            color: var(--primary);
+        }
+        .option-card .label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        .option-card .desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+        .option-card input[type="radio"],
+        .option-card input[type="checkbox"] {
+            display: none;
+        }
+
+        /* =====================================================
+           BOTONES
+           ===================================================== */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            flex: 1 1 auto;
+            min-width: 100px;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(2, 0, 175, 0.20);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 0, 175, 0.25);
+        }
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+        .btn-secondary:hover {
+            background: #e4e7ff;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--secondary);
+        }
+        .btn-success {
+            background: #27ae60;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+        .btn-whatsapp {
+            background: #25D366;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.30);
+        }
+        .btn-whatsapp:hover {
+            background: #1da851;
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* =====================================================
+           RESULTADO
+           ===================================================== */
+        .result-box {
+            background: linear-gradient(145deg, #fafbff, #f0f2ff);
+            border-radius: var(--radius);
+            padding: 20px 18px;
+            margin: 12px 0 18px;
+            border: 1px solid rgba(2, 0, 175, 0.10);
+        }
+        .result-box .price {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1.2;
+            text-align: center;
+            margin: 8px 0 4px;
+        }
+        .result-box .price-label {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .result-box .price-note {
+            text-align: center;
+            font-size: 13px;
+            color: #8888aa;
+            margin-top: 6px;
+        }
+        .result-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 20px;
+            margin: 16px 0 8px;
+            font-size: 14px;
+        }
+        .result-detail .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px dashed #e9ecf5;
+        }
+        .result-detail .item .label {
+            color: var(--text-light);
+        }
+        .result-detail .item .value {
+            font-weight: 500;
+            color: var(--text);
+        }
+        .result-detail .item .badge-complex {
+            background: var(--primary);
+            color: #fff;
+            padding: 0 10px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .payment-suggest {
+            margin-top: 16px;
+            background: #fff;
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            border: 1px solid #e9ecf5;
+        }
+        .payment-suggest .title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+        }
+        .payment-suggest .schedule {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+        .payment-suggest .schedule span {
+            background: var(--secondary);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+        @media (max-width: 600px) {
+            body {
+                padding: 12px 10px 30px;
+            }
+            .card {
+                padding: 20px 16px;
+            }
+            .card-title {
+                font-size: 20px;
+            }
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .option-card {
+                padding: 12px 8px;
+            }
+            .option-card i {
+                font-size: 18px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            .result-detail {
+                grid-template-columns: 1fr;
+            }
+            .btn {
+                flex: 1 1 100%;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+            .result-box .price {
+                font-size: 30px;
+            }
+            .payment-suggest .schedule {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+        @media (max-width: 420px) {
+            .options-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .option-card .label {
+                font-size: 13px;
+            }
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+        .footer {
+            margin-top: 32px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+            border-top: 1px solid #e9ecf5;
+            padding-top: 20px;
+            width: 100%;
+            max-width: 720px;
+        }
+        .footer strong {
+            color: var(--primary);
+        }
+        .footer .legal {
+            font-size: 12px;
+            color: #9999bb;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        /* =====================================================
+           UTILIDADES
+           ===================================================== */
+        .hidden {
+            display: none !important;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .mt-16 {
+            margin-top: 16px;
+        }
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+        .gap-8 {
+            gap: 8px;
+        }
+
+        /* =====================================================
+           BLOQUEO DE INSPECCIÓN (básico)
+           ===================================================== */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ==================== HEADER ==================== -->
+        <header class="header">
+            <div class="logo-placeholder">
+                ERTO
+                <span>Investigación &amp; Consultoría</span>
+                <small>Una unidad especializada de <strong>Punke Network</strong></small>
+            </div>
+            <!-- Para usar logo real, descomenta y oculta el placeholder -->
+            <!-- <img src="img/logo/erto-logo.png" alt="ERTO" class="logo-img" id="logoImg" /> -->
+        </header>
+
+        <!-- ==================== CARD PRINCIPAL ==================== -->
+        <div class="card" id="appCard">
+
+            <!-- Barra de progreso -->
+            <div class="progress-wrap">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-label">
+                    <span id="stepLabel">Paso 1 de 8</span>
+                    <span id="percentLabel">0%</span>
+                </div>
+            </div>
+
+            <!-- ======================================================
+                   PASO 0 – DATOS PERSONALES
+                   ====================================================== -->
+            <div class="step active" data-step="0">
+                <div class="card-header">
+                    <span class="step-indicator">Datos iniciales</span>
+                </div>
+                <h2 class="card-title">Comencemos</h2>
+                <p class="card-sub">Para preparar tu cotización personalizada, necesitamos algunos datos básicos.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Primer nombre <span class="required">*</span></label>
+                        <input type="text" id="nombre1" placeholder="Ej: José" />
+                        <div class="error-msg" data-for="nombre1">Este campo es obligatorio.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Segundo nombre</label>
+                        <input type="text" id="nombre2" placeholder="Ej: Miguel" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Primer apellido <span class="required">*</span></label>
+                        <input type="text" id="apellido1" placeholder="Ej: Landero" />
+                        <div class="error-msg" data-for="apellido1">Este campo es obligatorio.</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Segundo apellido <span class="required">*</span></label>
+                        <input type="text" id="apellido2" placeholder="Ej: Torres" />
+                        <div class="error-msg" data-for="apellido2">Este campo es obligatorio.</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp <span class="required">*</span></label>
+                    <input type="tel" id="whatsapp" placeholder="Ej: 3001234567" />
+                    <div class="error-msg" data-for="whatsapp">Ingresa un número válido.</div>
+                </div>
+                <div class="form-group">
+                    <label>Correo electrónico <span class="required">*</span></label>
+                    <input type="email" id="email" placeholder="tucorreo@ejemplo.com" />
+                    <div class="error-msg" data-for="email">Ingresa un correo válido.</div>
+                </div>
+                <div class="form-group">
+                    <label>Universidad o institución <span class="required">*</span></label>
+                    <input type="text" id="universidad" placeholder="Ej: Universidad Nacional" />
+                    <div class="error-msg" data-for="universidad">Este campo es obligatorio.</div>
+                </div>
+                <div class="form-group">
+                    <label>Programa académico / carrera <span class="required">*</span></label>
+                    <input type="text" id="carrera" placeholder="Ej: Ingeniería Industrial" />
+                    <div class="error-msg" data-for="carrera">Este campo es obligatorio.</div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="btnIniciar">Comenzar diagnóstico <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- ======================================================
+                   PASOS 1–7 (preguntas)
+                   ====================================================== -->
+            <!-- PASO 1: Servicio -->
+            <div class="step" data-step="1">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 1 de 7</span>
+                </div>
+                <h3>¿Qué tipo de servicio necesitas?</h3>
+                <p class="help-text"><i class="fas fa-lightbulb"></i> Selecciona la opción que mejor describa lo que buscas. Puedes elegir una principal.</p>
+                <div class="options-grid" id="servicioOptions">
+                    <!-- generado por JS -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" data-next>Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 2: Estado del tema -->
+            <div class="step" data-step="2">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 2 de 7</span>
+                </div>
+                <h3>¿En qué situación te encuentras actualmente?</h3>
+                <p class="help-text"><i class="fas fa-info-circle"></i> Esto nos ayuda a conocer el punto de partida de tu proyecto.</p>
+                <div class="options-grid" id="estadoOptions">
+                    <!-- generado por JS -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" data-next>Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 3: Metodología -->
+            <div class="step" data-step="3">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 3 de 7</span>
+                </div>
+                <h3>¿Qué tipo de investigación necesitas realizar?</h3>
+                <p class="help-text"><i class="fas fa-lightbulb"></i> No te preocupes si aún no lo sabes, selecciona "No lo sé todavía".</p>
+                <div class="options-grid" id="metodologiaOptions">
+                    <!-- generado por JS -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" data-next>Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 4: Datos / trabajo de campo -->
+            <div class="step" data-step="4">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 4 de 7</span>
+                </div>
+                <h3>¿Tu proyecto requiere recolección o análisis de datos?</h3>
+                <p class="help-text"><i class="fas fa-database"></i> Selecciona las opciones que aplican (puedes elegir varias).</p>
+                <div class="options-grid" id="datosOptions">
+                    <!-- generado por JS -->
+                </div>
+                <div id="datosExtra" class="hidden" style="margin-top:12px;">
+                    <!-- campos dinámicos para encuestas/entrevistas -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" data-next>Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 5: Análisis -->
+            <div class="step" data-step="5">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 5 de 7</span>
+                </div>
+                <h3>¿Qué nivel de análisis necesitas?</h3>
+                <p class="help-text"><i class="fas fa-chart-line"></i> Selecciona el nivel que mejor se ajuste a tus necesidades.</p>
+                <div class="options-grid" id="analisisOptions">
+                    <!-- generado por JS -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" data-next>Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 6: APA, revisión, sustentación -->
+            <div class="step" data-step="6">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 6 de 7</span>
+                </div>
+                <h3>Servicios complementarios</h3>
+                <p class="help-text"><i class="fas fa-check-circle"></i> Indica si necesitas apoyo adicional.</p>
+
+                <div class="form-group">
+                    <label>¿Necesitas apoyo con normas APA 7.ª edición?</label>
+                    <div class="options-grid" id="apaOptions">
+                        <!-- generado por JS -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>¿Necesitas revisión de redacción y estructura académica?</label>
+                    <div class="options-grid" id="redaccionOptions">
+                        <!-- generado por JS -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>¿Necesitas revisión de referencias, citas, tablas y figuras?</label>
+                    <div class="options-grid" id="referenciasOptions">
+                        <!-- generado por JS -->
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>¿Necesitas preparación para la sustentación?</label>
+                    <div class="options-grid" id="sustentacionOptions">
+                        <!-- generado por JS -->
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" data-next>Siguiente <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- PASO 7: Tiempo -->
+            <div class="step" data-step="7">
+                <div class="card-header">
+                    <span class="step-indicator">Paso 7 de 7</span>
+                </div>
+                <h3>¿Cuándo necesitas tener listo tu proyecto?</h3>
+                <p class="help-text"><i class="fas fa-clock"></i> Esto nos ayuda a definir un plan de trabajo realista.</p>
+                <div class="options-grid" id="tiempoOptions">
+                    <!-- generado por JS -->
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-prev><i class="fas fa-arrow-left"></i> Atrás</button>
+                    <button class="btn btn-primary" id="btnCalcular">Calcular cotización <i class="fas fa-calculator"></i></button>
+                </div>
+            </div>
+
+            <!-- ======================================================
+                   RESULTADO
+                   ====================================================== -->
+            <div class="step" data-step="8">
+                <div class="card-header">
+                    <span class="step-indicator">Resultado</span>
+                </div>
+                <h2 class="card-title">🎓 Tu cotización estimada</h2>
+
+                <div id="resultadoCliente" class="result-box">
+                    <!-- se llena con JS -->
+                </div>
+
+                <div id="resultadoPrecio" class="result-box" style="background: linear-gradient(145deg, #eef1ff, #e4e7ff); border-color: var(--primary);">
+                    <div class="price-label">Valor estimado del servicio</div>
+                    <div class="price" id="precioFinal">$0 COP</div>
+                    <div class="price-note">* Cotización preliminar sujeta a validación</div>
+                </div>
+
+                <div id="resultadoDetalle" class="result-box">
+                    <!-- se llena con JS -->
+                </div>
+
+                <div class="payment-suggest" id="paymentSuggest">
+                    <div class="title">Forma de pago sugerida</div>
+                    <div class="schedule" id="paymentSchedule">
+                        <!-- se llena con JS -->
+                    </div>
+                </div>
+
+                <div class="btn-group" style="flex-direction:column; gap:10px;">
+                    <button class="btn btn-whatsapp" id="btnWhatsApp"><i class="fab fa-whatsapp"></i> Enviar mi cotización por WhatsApp</button>
+                    <button class="btn btn-secondary" id="btnReiniciar"><i class="fas fa-undo"></i> Realizar nueva cotización</button>
+                </div>
+
+                <div id="whatsappConfirm" class="hidden" style="margin-top:12px; padding:12px; background:#e6f9ed; border-radius:var(--radius-sm); text-align:center; font-weight:500; color:#1a7a3a;">
+                    <i class="fas fa-check-circle" style="color:#2ecc71;"></i> ¡Solicitud preparada! Tu información está lista para ser enviada a nuestro equipo por WhatsApp.
+                </div>
+            </div>
+
+        </div><!-- end card -->
+
+        <!-- ==================== FOOTER ==================== -->
+        <footer class="footer">
+            <p><strong>ERTO</strong> | Investigación &amp; Consultoría · <strong>Punke Network</strong></p>
+            <p style="font-size:12px; color:#9999bb; margin-top:4px;">
+                El valor generado por este formulario es una estimación inicial y está sujeto a validación según el alcance real del proyecto y los requisitos de la institución educativa.
+            </p>
+            <div class="legal">
+                Los servicios ofrecidos corresponden a acompañamiento, asesoría, investigación, análisis y orientación académica. El estudiante conserva la responsabilidad y autoría de su trabajo académico.
+            </div>
+        </footer>
+
+    </div><!-- end container -->
+
+
+    <!-- =====================================================
+    JAVASCRIPT – COTIZADOR
+    ===================================================== -->
+    <script>
+        // =====================================================
+        // PERSONALIZACIÓN DEL ADMINISTRADOR
+        // CAMBIA AQUÍ:
+        // 1. Número de WhatsApp
+        // 2. Precios
+        // 3. Porcentajes
+        // 4. Puntos de complejidad
+        // 5. Tiempo/urgencia
+        // =====================================================
+
+        // ========================================
+        // CONFIGURACIÓN DEL COTIZADOR
+        // ========================================
+
+        const WHATSAPP_AGENCIA = "573XXXXXXXXX"; // <-- CAMBIA por el número real
+
+        const CONFIG_PRECIOS = {
+            // Precios base por tipo de servicio (COP)
+            servicio: {
+                'Definir un tema de investigación': 400000,
+                'Anteproyecto': 600000,
+                'Proyecto de grado': 800000,
+                'Tesis': 1000000,
+                'Monografía': 700000,
+                'Investigación aplicada': 850000,
+                'Análisis de datos': 500000,
+                'Revisión y corrección académica': 350000,
+                'Preparación para sustentación': 300000,
+                'Acompañamiento metodológico': 450000,
+            },
+            // Complementos (se suman al precio base)
+            complementos: {
+                'APA 7': 80000,
+                'Revisión redacción': 100000,
+                'Revisión referencias': 80000,
+                'Sustentación': 120000,
+            },
+            // Factor de urgencia (multiplicador)
+            urgencia: {
+                'Más de 8 semanas': 1.0,
+                '6–8 semanas': 1.05,
+                '4–6 semanas': 1.12,
+                '2–4 semanas': 1.25,
+                'Menos de 2 semanas': 1.45,
+                'No tengo fecha definida': 1.0,
+            },
+            // Margen operativo / contingencia (porcentaje)
+            margen_contingencia: 0.15, // 15%
+            // Porcentajes de pago sugerido
+            pago_inicio: 40,
+            pago_avance: 30,
+            pago_final: 30,
+        };
+
+        const CONFIG_PUNTOS = {
+            // Puntos por estado del tema (complejidad)
+            estado: {
+                'No tengo tema todavía.': 5,
+                'Tengo algunas ideas, pero necesito ayuda para definirlas.': 4,
+                'Ya tengo un tema definido.': 3,
+                'Ya tengo tema y planteamiento del problema.': 2,
+                'Ya tengo un proyecto avanzado.': 1,
+                'Mi proyecto está prácticamente terminado y necesito revisión.': 0,
+            },
+            // Puntos por metodología
+            metodologia: {
+                'No lo sé todavía': 2,
+                'Cualitativa': 3,
+                'Cuantitativa': 3,
+                'Mixta': 4,
+            },
+            // Puntos por tipo de datos
+            datos: {
+                'No': 0,
+                'Encuestas': 3,
+                'Entrevistas': 3,
+                'Observación': 2,
+                'Bases de datos': 2,
+                'Experimentos': 4,
+                'Datos secundarios': 1,
+                'Otro': 2,
+            },
+            // Puntos por nivel de análisis
+            analisis: {
+                'Básico': 1,
+                'Intermedio': 3,
+                'Avanzado': 5,
+                'No estoy seguro': 2,
+            },
+            // Puntos por complementos (cada uno suma)
+            complementos_puntos: {
+                'APA 7': 1,
+                'Revisión redacción': 1,
+                'Revisión referencias': 1,
+                'Sustentación': 2,
+            },
+        };
+
+        // ========================================
+        // ESTADO DEL FORMULARIO
+        // ========================================
+
+        const state = {
+            // Datos personales
+            nombre1: '',
+            nombre2: '',
+            apellido1: '',
+            apellido2: '',
+            whatsapp: '',
+            email: '',
+            universidad: '',
+            carrera: '',
+            // Respuestas
+            servicio: null,
+            estado: null,
+            metodologia: null,
+            datos: [], // array de selecciones
+            datosCantidad: null, // para encuestas o entrevistas
+            analisis: null,
+            apa: null,
+            redaccion: null,
+            referencias: null,
+            sustentacion: null,
+            tiempo: null,
+        };
+
+        let currentStep = 0; // 0 = datos personales, 1–7 = preguntas, 8 = resultado
+        const totalSteps = 8; // 0 + 7 preguntas + resultado
+
+        // ========================================
+        // DOM REFERENCIAS
+        // ========================================
+
+        const steps = document.querySelectorAll('.step');
+        const progressFill = document.getElementById('progressFill');
+        const stepLabel = document.getElementById('stepLabel');
+        const percentLabel = document.getElementById('percentLabel');
+
+        // ========================================
+        // INICIALIZAR OPCIONES
+        // ========================================
+
+        const opcionesServicio = [
+            { value: 'Definir un tema de investigación', icon: 'fa-lightbulb' },
+            { value: 'Anteproyecto', icon: 'fa-file-alt' },
+            { value: 'Proyecto de grado', icon: 'fa-graduation-cap' },
+            { value: 'Tesis', icon: 'fa-book-open' },
+            { value: 'Monografía', icon: 'fa-pen-fancy' },
+            { value: 'Investigación aplicada', icon: 'fa-flask' },
+            { value: 'Análisis de datos', icon: 'fa-chart-bar' },
+            { value: 'Revisión y corrección académica', icon: 'fa-spell-check' },
+            { value: 'Preparación para sustentación', icon: 'fa-chalkboard-teacher' },
+            { value: 'Acompañamiento metodológico', icon: 'fa-hand-holding-heart' },
+        ];
+
+        const opcionesEstado = [
+            'No tengo tema todavía.',
+            'Tengo algunas ideas, pero necesito ayuda para definirlas.',
+            'Ya tengo un tema definido.',
+            'Ya tengo tema y planteamiento del problema.',
+            'Ya tengo un proyecto avanzado.',
+            'Mi proyecto está prácticamente terminado y necesito revisión.',
+        ];
+
+        const opcionesMetodologia = [
+            { value: 'No lo sé todavía', desc: 'El equipo te orientará.' },
+            { value: 'Cualitativa', desc: 'Interpretación de significados, experiencias.' },
+            { value: 'Cuantitativa', desc: 'Medición, estadística, números.' },
+            { value: 'Mixta', desc: 'Combinación de ambas.' },
+        ];
+
+        const opcionesDatos = [
+            'No', 'Encuestas', 'Entrevistas', 'Observación',
+            'Bases de datos', 'Experimentos', 'Datos secundarios', 'Otro'
+        ];
+
+        const opcionesAnalisis = [
+            { value: 'Básico', desc: 'Tablas, frecuencias y gráficos sencillos.' },
+            { value: 'Intermedio', desc: 'Cruces de variables, análisis descriptivo.' },
+            { value: 'Avanzado', desc: 'Análisis estadístico más complejo.' },
+            { value: 'No estoy seguro', desc: 'El equipo determinará el nivel.' },
+        ];
+
+        const opcionesSiNo = ['Sí', 'No', 'No estoy seguro'];
+
+        const opcionesTiempo = [
+            'Más de 8 semanas',
+            '6–8 semanas',
+            '4–6 semanas',
+            '2–4 semanas',
+            'Menos de 2 semanas',
+            'No tengo fecha definida',
+        ];
+
+        // ========================================
+        // FUNCIONES DE RENDERIZADO DE OPCIONES
+        // ========================================
+
+        function renderOptions(containerId, items, type, extra = {}) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            items.forEach((item, idx) => {
+                let value, label, icon, desc;
+                if (typeof item === 'string') {
+                    value = item;
+                    label = item;
+                    icon = 'fa-circle';
+                    desc = '';
+                } else {
+                    value = item.value;
+                    label = item.value;
+                    icon = item.icon || 'fa-circle';
+                    desc = item.desc || '';
+                }
+                const div = document.createElement('div');
+                div.className = 'option-card';
+                div.dataset.value = value;
+                if (type === 'radio') {
+                    div.innerHTML = `
+                        <i class="fas ${icon}"></i>
+                        <span class="label">${label}</span>
+                        ${desc ? `<span class="desc">${desc}</span>` : ''}
+                        <input type="radio" name="${containerId}" value="${value}" />
+                    `;
+                } else if (type === 'checkbox') {
+                    div.innerHTML = `
+                        <i class="fas ${icon}"></i>
+                        <span class="label">${label}</span>
+                        ${desc ? `<span class="desc">${desc}</span>` : ''}
+                        <input type="checkbox" name="${containerId}" value="${value}" />
+                    `;
+                }
+                div.addEventListener('click', function(e) {
+                    const input = this.querySelector('input');
+                    if (!input) return;
+                    if (input.type === 'radio') {
+                        // deseleccionar otros
+                        container.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                        input.checked = true;
+                        this.classList.add('selected');
+                        // actualizar estado
+                        handleOptionChange(containerId, value, 'radio');
+                    } else if (input.type === 'checkbox') {
+                        input.checked = !input.checked;
+                        this.classList.toggle('selected');
+                        handleOptionChange(containerId, value, 'checkbox');
+                    }
+                });
+                container.appendChild(div);
+            });
+            // Cargar estado previo si existe
+            loadStateToOptions(containerId, type);
+        }
+
+        function loadStateToOptions(containerId, type) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const cards = container.querySelectorAll('.option-card');
+            cards.forEach(card => {
+                const input = card.querySelector('input');
+                if (!input) return;
+                const val = input.value;
+                if (type === 'radio') {
+                    let stateValue = null;
+                    if (containerId === 'servicioOptions') stateValue = state.servicio;
+                    else if (containerId === 'estadoOptions') stateValue = state.estado;
+                    else if (containerId === 'metodologiaOptions') stateValue = state.metodologia;
+                    else if (containerId === 'analisisOptions') stateValue = state.analisis;
+                    else if (containerId === 'tiempoOptions') stateValue = state.tiempo;
+                    else if (containerId === 'apaOptions') stateValue = state.apa;
+                    else if (containerId === 'redaccionOptions') stateValue = state.redaccion;
+                    else if (containerId === 'referenciasOptions') stateValue = state.referencias;
+                    else if (containerId === 'sustentacionOptions') stateValue = state.sustentacion;
+                    if (stateValue === val) {
+                        input.checked = true;
+                        card.classList.add('selected');
+                    }
+                } else if (type === 'checkbox') {
+                    if (containerId === 'datosOptions') {
+                        if (state.datos.includes(val)) {
+                            input.checked = true;
+                            card.classList.add('selected');
+                        }
+                    }
+                }
+            });
+            // Manejar extra de datos
+            if (containerId === 'datosOptions') {
+                handleDatosExtra();
+            }
+        }
+
+        // ========================================
+        // MANEJO DE CAMBIOS EN OPCIONES
+        // ========================================
+
+        function handleOptionChange(containerId, value, type) {
+            if (containerId === 'servicioOptions') {
+                state.servicio = value;
+            } else if (containerId === 'estadoOptions') {
+                state.estado = value;
+            } else if (containerId === 'metodologiaOptions') {
+                state.metodologia = value;
+            } else if (containerId === 'analisisOptions') {
+                state.analisis = value;
+            } else if (containerId === 'tiempoOptions') {
+                state.tiempo = value;
+            } else if (containerId === 'apaOptions') {
+                state.apa = value;
+            } else if (containerId === 'redaccionOptions') {
+                state.redaccion = value;
+            } else if (containerId === 'referenciasOptions') {
+                state.referencias = value;
+            } else if (containerId === 'sustentacionOptions') {
+                state.sustentacion = value;
+            } else if (containerId === 'datosOptions' && type === 'checkbox') {
+                const container = document.getElementById('datosOptions');
+                const checked = container.querySelectorAll('.option-card.selected input[type="checkbox"]:checked');
+                state.datos = Array.from(checked).map(inp => inp.value);
+                handleDatosExtra();
+            }
+        }
+
+        // ========================================
+        // DATOS EXTRA (encuestas / entrevistas)
+        // ========================================
+
+        function handleDatosExtra() {
+            const extraDiv = document.getElementById('datosExtra');
+            const hasEncuestas = state.datos.includes('Encuestas');
+            const hasEntrevistas = state.datos.includes('Entrevistas');
+            if (!hasEncuestas && !hasEntrevistas) {
+                extraDiv.classList.add('hidden');
+                extraDiv.innerHTML = '';
+                state.datosCantidad = null;
+                return;
+            }
+            extraDiv.classList.remove('hidden');
+            let html = '';
+            if (hasEncuestas) {
+                html += `
+                    <div class="form-group">
+                        <label>¿Cuántas respuestas aproximadamente?</label>
+                        <select id="cantEncuestas">
+                            <option value="1-50">1–50</option>
+                            <option value="51-150">51–150</option>
+                            <option value="151-300">151–300</option>
+                            <option value="Más de 300">Más de 300</option>
+                        </select>
+                    </div>
+                `;
+            }
+            if (hasEntrevistas) {
+                html += `
+                    <div class="form-group">
+                        <label>¿Cuántas entrevistas aproximadamente?</label>
+                        <select id="cantEntrevistas">
+                            <option value="1-5">1–5</option>
+                            <option value="6-10">6–10</option>
+                            <option value="11-20">11–20</option>
+                            <option value="Más de 20">Más de 20</option>
+                        </select>
+                    </div>
+                `;
+            }
+            extraDiv.innerHTML = html;
+            // Guardar cantidad en estado (se usará en el cálculo)
+            const selectEnc = document.getElementById('cantEncuestas');
+            const selectEnt = document.getElementById('cantEntrevistas');
+            if (selectEnc) {
+                selectEnc.addEventListener('change', function() {
+                    state.datosCantidad = this.value;
+                });
+                state.datosCantidad = selectEnc.value;
+            } else if (selectEnt) {
+                selectEnt.addEventListener('change', function() {
+                    state.datosCantidad = this.value;
+                });
+                state.datosCantidad = selectEnt.value;
+            }
+        }
+
+        // ========================================
+        // NAVEGACIÓN
+        // ========================================
+
+        function goToStep(step) {
+            if (step < 0 || step > totalSteps) return;
+            // Validar paso actual antes de avanzar (solo para pasos 0–7)
+            if (step > currentStep && currentStep < 8) {
+                if (!validateStep(currentStep)) return;
+            }
+            currentStep = step;
+            steps.forEach((s, idx) => {
+                s.classList.toggle('active', idx === step);
+            });
+            updateProgress();
+            // Scroll al inicio del card
+            document.getElementById('appCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Si es resultado, calcular
+            if (step === 8) {
+                calcularCotizacion();
+            }
+        }
+
+        function updateProgress() {
+            const pct = Math.round((currentStep / (totalSteps - 1)) * 100);
+            progressFill.style.width = pct + '%';
+            percentLabel.textContent = pct + '%';
+            const stepNames = ['Datos', 'Servicio', 'Estado', 'Metodología', 'Datos', 'Análisis', 'Complementos', 'Tiempo',
+                'Resultado'
+            ];
+            stepLabel.textContent = `Paso ${currentStep + 1} de ${totalSteps}`;
+        }
+
+        // ========================================
+        // VALIDACIONES
+        // ========================================
+
+        function validateStep(step) {
+            if (step === 0) {
+                return validarDatosPersonales();
+            }
+            if (step >= 1 && step <= 7) {
+                return validarPreguntas(step);
+            }
+            return true;
+        }
+
+        function validarDatosPersonales() {
+            let valid = true;
+            const campos = ['nombre1', 'apellido1', 'apellido2', 'whatsapp', 'email', 'universidad', 'carrera'];
+            campos.forEach(id => {
+                const input = document.getElementById(id);
+                const error = document.querySelector(`.error-msg[data-for="${id}"]`);
+                if (!input || !error) return;
+                const val = input.value.trim();
+                if (!val) {
+                    input.classList.add('input-error');
+                    error.style.display = 'block';
+                    valid = false;
+                } else {
+                    input.classList.remove('input-error');
+                    error.style.display = 'none';
+                }
+                // Validación específica de email
+                if (id === 'email' && val && !val.includes('@')) {
+                    input.classList.add('input-error');
+                    error.style.display = 'block';
+                    valid = false;
+                }
+                // Validación de whatsapp (mínimo 7 dígitos)
+                if (id === 'whatsapp' && val && val.replace(/\D/g, '').length < 7) {
+                    input.classList.add('input-error');
+                    error.style.display = 'block';
+                    valid = false;
+                }
+            });
+            // Validar que el segundo nombre no sea obligatorio, pero si se llena que sea válido
+            return valid;
+        }
+
+        function validarPreguntas(step) {
+            // Cada paso tiene su propia validación
+            if (step === 1 && !state.servicio) { alert('Por favor, selecciona un servicio.'); return false; }
+            if (step === 2 && !state.estado) { alert('Por favor, selecciona el estado de tu tema.'); return false; }
+            if (step === 3 && !state.metodologia) { alert('Por favor, selecciona una metodología.'); return false; }
+            if (step === 4 && state.datos.length === 0) { alert('Por favor, selecciona al menos una opción de datos.'); return false; }
+            if (step === 5 && !state.analisis) { alert('Por favor, selecciona un nivel de análisis.'); return false; }
+            if (step === 6) {
+                if (!state.apa) { alert('Por favor, responde sobre el apoyo con APA.'); return false; }
+                if (!state.redaccion) { alert('Por favor, responde sobre revisión de redacción.'); return false; }
+                if (!state.referencias) { alert('Por favor, responde sobre revisión de referencias.'); return false; }
+                if (!state.sustentacion) { alert('Por favor, responde sobre preparación para sustentación.'); return false; }
+            }
+            if (step === 7 && !state.tiempo) { alert('Por favor, selecciona el plazo estimado.'); return false; }
+            return true;
+        }
+
+        // ========================================
+        // CÁLCULO DE COTIZACIÓN
+        // ========================================
+
+        function calcularCotizacion() {
+            // 1. Precio base por servicio
+            let precioBase = CONFIG_PRECIOS.servicio[state.servicio] || 500000;
+
+            // 2. Complementos
+            let complementos = 0;
+            let complementosList = [];
+            if (state.apa === 'Sí') { complementos += CONFIG_PRECIOS.complementos['APA 7'];
+                complementosList.push('APA 7'); }
+            if (state.redaccion === 'Sí') { complementos += CONFIG_PRECIOS.complementos['Revisión redacción'];
+                complementosList.push('Revisión redacción'); }
+            if (state.referencias === 'Sí') { complementos += CONFIG_PRECIOS.complementos['Revisión referencias'];
+                complementosList.push('Revisión referencias'); }
+            if (state.sustentacion === 'Sí') { complementos += CONFIG_PRECIOS.complementos['Sustentación'];
+                complementosList.push('Sustentación'); }
+
+            // 3. Puntos de complejidad
+            let puntos = 0;
+            puntos += CONFIG_PUNTOS.estado[state.estado] || 3;
+            puntos += CONFIG_PUNTOS.metodologia[state.metodologia] || 2;
+            // Datos: sumar puntos por cada selección
+            state.datos.forEach(d => {
+                puntos += CONFIG_PUNTOS.datos[d] || 0;
+            });
+            // Si hay encuestas, sumar según cantidad
+            if (state.datos.includes('Encuestas') && state.datosCantidad) {
+                const cant = state.datosCantidad;
+                if (cant === '51-150') puntos += 1;
+                else if (cant === '151-300') puntos += 2;
+                else if (cant === 'Más de 300') puntos += 3;
+            }
+            if (state.datos.includes('Entrevistas') && state.datosCantidad) {
+                const cant = state.datosCantidad;
+                if (cant === '6-10') puntos += 1;
+                else if (cant === '11-20') puntos += 2;
+                else if (cant === 'Más de 20') puntos += 3;
+            }
+            puntos += CONFIG_PUNTOS.analisis[state.analisis] || 2;
+            // Complementos puntos
+            complementosList.forEach(c => {
+                puntos += CONFIG_PUNTOS.complementos_puntos[c] || 0;
+            });
+
+            // Nivel de complejidad
+            let nivel = 'Básico';
+            if (puntos <= 5) nivel = 'Básico';
+            else if (puntos <= 10) nivel = 'Intermedio';
+            else if (puntos <= 18) nivel = 'Avanzado';
+            else nivel = 'Complejo';
+
+            // Factor de complejidad (multiplicador)
+            const factorComplejidad = {
+                'Básico': 1.0,
+                'Intermedio': 1.15,
+                'Avanzado': 1.35,
+                'Complejo': 1.60
+            };
+
+            // Factor de urgencia
+            const factorUrgencia = CONFIG_PRECIOS.urgencia[state.tiempo] || 1.0;
+
+            // Cálculo
+            let subtotal = (precioBase + complementos) * factorComplejidad[nivel] * factorUrgencia;
+            // Margen contingencia
+            const margen = CONFIG_PRECIOS.margen_contingencia;
+            let total = subtotal * (1 + margen);
+            // Redondear a múltiplos de 1000
+            total = Math.ceil(total / 1000) * 1000;
+
+            // Mostrar resultado
+            mostrarResultado({
+                nombre: `${state.nombre1} ${state.nombre2} ${state.apellido1} ${state.apellido2}`.trim(),
+                carrera: state.carrera,
+                universidad: state.universidad,
+                servicio: state.servicio,
+                estado: state.estado,
+                metodologia: state.metodologia,
+                datos: state.datos,
+                datosCantidad: state.datosCantidad,
+                analisis: state.analisis,
+                apa: state.apa,
+                redaccion: state.redaccion,
+                referencias: state.referencias,
+                sustentacion: state.sustentacion,
+                tiempo: state.tiempo,
+                precioBase,
+                complementos,
+                complementosList,
+                puntos,
+                nivel,
+                factorComplejidad: factorComplejidad[nivel],
+                factorUrgencia,
+                subtotal,
+                total,
+                margen,
+            });
+        }
+
+        // ========================================
+        // MOSTRAR RESULTADO
+        // ========================================
+
+        function mostrarResultado(data) {
+            // Cliente
+            const clienteDiv = document.getElementById('resultadoCliente');
+            clienteDiv.innerHTML = `
+                <div class="result-detail">
+                    <div class="item"><span class="label">Cliente</span><span class="value">${data.nombre}</span></div>
+                    <div class="item"><span class="label">Carrera</span><span class="value">${data.carrera}</span></div>
+                    <div class="item"><span class="label">Universidad</span><span class="value">${data.universidad}</span></div>
+                    <div class="item"><span class="label">Servicio</span><span class="value">${data.servicio}</span></div>
+                    <div class="item"><span class="label">Metodología</span><span class="value">${data.metodologia}</span></div>
+                    <div class="item"><span class="label">Nivel de complejidad</span><span class="value"><span class="badge-complex">${data.nivel.toUpperCase()}</span></span></div>
+                    <div class="item"><span class="label">Análisis requerido</span><span class="value">${data.analisis}</span></div>
+                    <div class="item"><span class="label">Trabajo de campo</span><span class="value">${data.datos.join(', ')} ${data.datosCantidad ? '· ' + data.datosCantidad : ''}</span></div>
+                    <div class="item"><span class="label">APA 7</span><span class="value">${data.apa}</span></div>
+                    <div class="item"><span class="label">Preparación sustentación</span><span class="value">${data.sustentacion}</span></div>
+                </div>
+            `;
+
+            // Precio
+            const precioFormateado = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(data.total);
+            document.getElementById('precioFinal').textContent = precioFormateado;
+
+            // Detalle (factores considerados)
+            const detalleDiv = document.getElementById('resultadoDetalle');
+            detalleDiv.innerHTML = `
+                <div style="font-weight:600; font-size:15px; margin-bottom:8px; color:var(--text);">Factores considerados</div>
+                <div class="result-detail">
+                    <div class="item"><span class="label">Servicio principal</span><span class="value">${data.servicio}</span></div>
+                    ${data.complementosList.length ? `<div class="item"><span class="label">Complementos</span><span class="value">${data.complementosList.join(', ')}</span></div>` : ''}
+                    <div class="item"><span class="label">Nivel de complejidad</span><span class="value">${data.nivel}</span></div>
+                    <div class="item"><span class="label">Factor de urgencia</span><span class="value">${data.factorUrgencia}x</span></div>
+                </div>
+                <div style="font-size:13px; color:var(--text-light); margin-top:8px; border-top:1px solid #e9ecf5; padding-top:8px;">
+                    <i class="fas fa-info-circle"></i> El valor incluye un margen operativo para garantizar la calidad del acompañamiento.
+                </div>
+            `;
+
+            // Forma de pago sugerida
+            const scheduleDiv = document.getElementById('paymentSchedule');
+            scheduleDiv.innerHTML = `
+                <span>${CONFIG_PRECIOS.pago_inicio}% — Inicio</span>
+                <span>${CONFIG_PRECIOS.pago_avance}% — Avance</span>
+                <span>${CONFIG_PRECIOS.pago_final}% — Finalización</span>
+            `;
+
+            // Ocultar mensaje de confirmación previo
+            document.getElementById('whatsappConfirm').classList.add('hidden');
+        }
+
+        // ========================================
+        // WHATSAPP
+        // ========================================
+
+        function generarMensajeWhatsApp() {
+            const nombre = `${state.nombre1} ${state.nombre2} ${state.apellido1} ${state.apellido2}`.trim();
+            const precioFinal = document.getElementById('precioFinal').textContent;
+
+            let mensaje = `Hola, ERTO. Quiero solicitar información sobre mi cotización de proyecto de grado.\n\n`;
+            mensaje += `DATOS DEL CLIENTE\n`;
+            mensaje += `Nombre: ${nombre}\n`;
+            mensaje += `WhatsApp: ${state.whatsapp}\n`;
+            mensaje += `Correo: ${state.email}\n\n`;
+            mensaje += `INFORMACIÓN ACADÉMICA\n`;
+            mensaje += `Universidad: ${state.universidad}\n`;
+            mensaje += `Carrera: ${state.carrera}\n\n`;
+            mensaje += `PROYECTO\n`;
+            mensaje += `Servicio: ${state.servicio}\n`;
+            mensaje += `Estado actual: ${state.estado}\n`;
+            mensaje += `Metodología: ${state.metodologia}\n`;
+            mensaje += `Trabajo de campo: ${state.datos.join(', ')} ${state.datosCantidad ? '· ' + state.datosCantidad : ''}\n`;
+            mensaje += `Nivel de análisis: ${state.analisis}\n`;
+            mensaje += `APA 7: ${state.apa}\n`;
+            mensaje += `Revisión académica: ${state.redaccion}\n`;
+            mensaje += `Sustentación: ${state.sustentacion}\n\n`;
+            mensaje += `RESULTADO\n`;
+            mensaje += `Nivel de complejidad: ${document.querySelector('.badge-complex')?.textContent || 'N/A'}\n`;
+            mensaje += `Valor estimado: ${precioFinal}\n\n`;
+            mensaje += `Quedo atento(a) para validar la cotización y conocer el proceso de trabajo.`;
+
+            return encodeURIComponent(mensaje);
+        }
+
+        document.getElementById('btnWhatsApp').addEventListener('click', function() {
+            const mensaje = generarMensajeWhatsApp();
+            const url = `https://wa.me/${WHATSAPP_AGENCIA}?text=${mensaje}`;
+            window.open(url, '_blank');
+            document.getElementById('whatsappConfirm').classList.remove('hidden');
+        });
+
+        // ========================================
+        // REINICIAR
+        // ========================================
+
+        document.getElementById('btnReiniciar').addEventListener('click', function() {
+            if (confirm('¿Seguro que quieres comenzar una nueva cotización? Se perderán los datos actuales.')) {
+                // Reiniciar estado
+                Object.keys(state).forEach(key => {
+                    if (Array.isArray(state[key])) state[key] = [];
+                    else if (typeof state[key] === 'string') state[key] = '';
+                    else state[key] = null;
+                });
+                // Limpiar campos de datos personales
+                document.querySelectorAll('#appCard input[type="text"], #appCard input[type="tel"], #appCard input[type="email"]')
+                    .forEach(inp => inp.value = '');
+                // Deseleccionar opciones
+                document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+                document.querySelectorAll('.option-card input').forEach(inp => inp.checked = false);
+                // Ocultar extras
+                document.getElementById('datosExtra').classList.add('hidden');
+                document.getElementById('datosExtra').innerHTML = '';
+                // Ir al paso 0
+                goToStep(0);
+            }
+        });
+
+        // ========================================
+        // EVENTOS DE NAVEGACIÓN (botones)
+        // ========================================
+
+        document.querySelectorAll('[data-next]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const next = currentStep + 1;
+                if (next <= 7) goToStep(next);
+            });
+        });
+
+        document.querySelectorAll('[data-prev]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const prev = currentStep - 1;
+                if (prev >= 0) goToStep(prev);
+            });
+        });
+
+        document.getElementById('btnIniciar').addEventListener('click', function() {
+            if (validarDatosPersonales()) {
+                // Guardar datos personales en estado
+                state.nombre1 = document.getElementById('nombre1').value.trim();
+                state.nombre2 = document.getElementById('nombre2').value.trim();
+                state.apellido1 = document.getElementById('apellido1').value.trim();
+                state.apellido2 = document.getElementById('apellido2').value.trim();
+                state.whatsapp = document.getElementById('whatsapp').value.trim();
+                state.email = document.getElementById('email').value.trim();
+                state.universidad = document.getElementById('universidad').value.trim();
+                state.carrera = document.getElementById('carrera').value.trim();
+                goToStep(1);
+            }
+        });
+
+        document.getElementById('btnCalcular').addEventListener('click', function() {
+            if (validateStep(7)) {
+                goToStep(8);
+            }
+        });
+
+        // ========================================
+        // INICIALIZACIÓN
+        // ========================================
+
+        function init() {
+            // Renderizar todas las opciones
+            renderOptions('servicioOptions', opcionesServicio, 'radio');
+            renderOptions('estadoOptions', opcionesEstado, 'radio');
+            renderOptions('metodologiaOptions', opcionesMetodologia, 'radio');
+            renderOptions('datosOptions', opcionesDatos, 'checkbox');
+            renderOptions('analisisOptions', opcionesAnalisis, 'radio');
+            renderOptions('apaOptions', opcionesSiNo, 'radio');
+            renderOptions('redaccionOptions', opcionesSiNo, 'radio');
+            renderOptions('referenciasOptions', opcionesSiNo, 'radio');
+            renderOptions('sustentacionOptions', opcionesSiNo, 'radio');
+            renderOptions('tiempoOptions', opcionesTiempo, 'radio');
+
+            // Paso inicial
+            goToStep(0);
+        }
+
+        init();
+
+        // ========================================
+        // BLOQUEO DE INSPECCIÓN (básico)
+        // ========================================
+        document.addEventListener('contextmenu', e => { e.preventDefault();
+            alert('Inspección deshabilitada.'); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key ===
+                    'U')) {
+                e.preventDefault();
+                alert('Acción no permitida.');
+                return false;
+            }
+        });
+        document.addEventListener('copy', e => e.preventDefault());
+        document.addEventListener('cut', e => e.preventDefault());
+        console.log('%c🔒 Cotizador ERTO cargado.', 'font-size:16px; color:#0200AF;');
+        console.log('%c📌 Personaliza: WHATSAPP_AGENCIA, CONFIG_PRECIOS, CONFIG_PUNTOS', 'font-size:13px; color:#555;');
+    </script>
+
+</body>
+</html>
