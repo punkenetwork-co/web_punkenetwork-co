@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Recuperar Credenciales | ERTO</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* =====================================================
+           VARIABLES
+           ===================================================== */
+        :root {
+            --primary: #0200AF;
+            --primary-light: #3d3be8;
+            --primary-dark: #01007a;
+            --secondary: #f0f2ff;
+            --bg: #f5f7fc;
+            --text: #1a1a2e;
+            --text-light: #555570;
+            --card-bg: #ffffff;
+            --shadow: 0 8px 30px rgba(2, 0, 175, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.3s ease;
+            --font: 'Inter', sans-serif;
+        }
+
+        /* =====================================================
+           RESET Y BASE
+           ===================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* =====================================================
+           LOGO / HEADER
+           ===================================================== */
+        .logo-area {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .logo-area img {
+            max-height: 60px;
+            margin: 0 auto 8px;
+        }
+        .logo-area h1 {
+            font-size: 28px;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .logo-area p {
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        /* =====================================================
+           CARD
+           ===================================================== */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(2, 0, 175, 0.06);
+        }
+        .card h2 {
+            font-size: 22px;
+            color: var(--primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card .sub {
+            color: var(--text-light);
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* =====================================================
+           FORMULARIO
+           ===================================================== */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--text);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dde0ea;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: #fafbff;
+            transition: var(--transition);
+            font-family: var(--font);
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+            background: #fff;
+        }
+        .form-group .input-error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.10);
+        }
+        .form-group .error-msg {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        /* =====================================================
+           BOTONES
+           ===================================================== */
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            font-family: var(--font);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            width: 100%;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(2, 0, 175, 0.20);
+        }
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(2, 0, 175, 0.25);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--primary);
+        }
+        .btn-secondary:hover {
+            background: #e4e7ff;
+        }
+
+        /* =====================================================
+           RESULTADO
+           ===================================================== */
+        #resultado {
+            margin-top: 24px;
+            padding: 16px 18px;
+            border-radius: var(--radius-sm);
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        #resultado.exito {
+            background: #e6f9ed;
+            border: 1px solid #2ecc71;
+            display: block;
+        }
+        #resultado.error {
+            background: #fde8e8;
+            border: 1px solid #e74c3c;
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        #resultado .credencial {
+            background: #fff;
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-top: 8px;
+            border: 1px solid #e9ecf5;
+        }
+        #resultado .credencial .label {
+            font-weight: 500;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+        #resultado .credencial .value {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 16px;
+            word-break: break-all;
+        }
+        #resultado .credencial .value.pass {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        /* =====================================================
+           FOOTER
+           ===================================================== */
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+            border-top: 1px solid #e9ecf5;
+            padding-top: 16px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .footer strong {
+            color: var(--primary);
+        }
+        .footer .back-link {
+            color: var(--primary);
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .footer .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+        @media (max-width: 480px) {
+            .card { padding: 24px 16px; }
+            .logo-area h1 { font-size: 24px; }
+            .btn { font-size: 15px; padding: 10px 20px; }
+        }
+
+        /* Bloqueo de inspección (básico) */
+        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ==================== HEADER ==================== -->
+    <div class="logo-area">
+        <img src="img/logo/erto-logo.png" alt="ERTO" onerror="this.style.display='none'">
+        <img src="img/logo/punke-network.png" alt="Punke Network" style="max-height:35px; margin-top:4px;" onerror="this.style.display='none'">
+        <h1>Recuperar credenciales</h1>
+        <p>Ingresa tu identificación o número de contacto para recuperar tu usuario y contraseña.</p>
+    </div>
+
+    <!-- ==================== CARD ==================== -->
+    <div class="card">
+
+        <h2><i class="fas fa-key" style="color:var(--primary);"></i> Recuperar</h2>
+        <p class="sub">Te enviaremos tus datos de acceso si coinciden con nuestros registros.</p>
+
+        <div class="form-group">
+            <label for="buscarInput">Cédula o número de contacto <span class="required" style="color:#e74c3c;">*</span></label>
+            <input type="text" id="buscarInput" placeholder="Ej: 123456789 o 3001234567" />
+            <div class="error-msg" id="buscarError">Ingresa un dato válido.</div>
+        </div>
+
+        <button class="btn btn-primary" id="btnBuscar"><i class="fas fa-search"></i> Buscar</button>
+
+        <!-- ==================== RESULTADO ==================== -->
+        <div id="resultado"></div>
+
+        <div style="margin-top:16px; text-align:center; font-size:14px; color:var(--text-light);">
+            <i class="fas fa-info-circle"></i> Si no encuentras tus datos, contacta con soporte.
+        </div>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <div class="footer">
+        <p><strong>ERTO</strong> · Investigación &amp; Consultoría · <strong>Punke Network</strong></p>
+        <p style="margin-top:4px;">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Volver al inicio</a>
+        </p>
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+JAVASCRIPT – RECUPERACIÓN DE CREDENCIALES
+===================================================== -->
+<script>
+    // =====================================================
+    // LISTA DE USUARIOS (PERSONALIZA AQUÍ)
+    // =====================================================
+    const usuarios = [
+    {
+        identificacion: 'Direc_eliecer',
+        contacto: '3003633839',
+        user: 'Eliercer_Tutor',
+        pass: 'tutor20262',
+        nombre: 'Eliecer Rafel Torres Ochoa'
+    },
+        {
+            identificacion: 'admin',
+            contacto: 'admin',
+            user: 'admin',
+            pass: '202520262027',
+            nombre: 'Acceso general, no podrás recibir tu Certificado con este acceso, solicita tus credenciales...'
+        },
+        {
+            identificacion: '1048204069',
+            contacto: '3234723508',
+            user: 'José.By',
+            pass: '1048204069',
+            nombre: 'José Esteban Barrios Yaya'
+        },
+        {
+            identificacion: '1048276787',
+            contacto: '3022145920',
+            user: 'Steffani Hernandez',
+            pass: 'Shm1048276787',
+            nombre: 'Steffani Del Carmen Hernandez Morales'
+        },
+        {
+            identificacion: '1042458080',
+            contacto: '3003712773',
+            user: 'Deimer montaño',
+            pass: '1042458080',
+            nombre: 'Deimer montaño ayala'
+        },
+        {
+            identificacion: '1143246934',
+            contacto: '3024325253',
+            user: 'aibarras',
+            pass: 'Ib#93061821722',
+            nombre: 'Anthony José Ibarra Suárez'
+        },
+        {
+            identificacion: '1082472294',
+            contacto: '2113770247',
+            user: 'Maya0708',
+            pass: 'Angel2010*',
+            nombre: 'Maida Patricia Murillo Mestra'
+        },
+        {
+            identificacion: '1044800445',
+            contacto: '3136874478',
+            user: '@luisag',
+            pass: 'Lugo2005',
+            nombre: 'Luisa Fernanda González salas'
+        },
+        {
+            identificacion: '1043870250',
+            contacto: '3014619529',
+            user: 'Estela Suárez',
+            pass: 'Gabriel2020',
+            nombre: 'Estela Suárez Rubio'
+        },
+        {
+            identificacion: '80505694',
+            contacto: '3043327385',
+            user: 'elkingomez',
+            pass: 'M0nd0ng01973',
+            nombre: 'Elkin Edgardo Gómez García'
+        },
+        {
+            identificacion: '1082064257',
+            contacto: '3245377759',
+            user: 'Leifer1',
+            pass: 'leifer123',
+            nombre: 'Leifer Eliecer Caceres Villa'
+        },
+        {
+            identificacion: '80871709',
+            contacto: '3125188436',
+            user: 'Josorio',
+            pass: 'Rufo2029+',
+            nombre: 'Josue Andres Osorio Beltran'
+        },
+        {
+            identificacion: '1129538919',
+            contacto: '3245052266',
+            user: 'Joherlis25',
+            pass: 'Joherlis12345',
+            nombre: 'Joherlis del Carmen Rojas Ramos'
+        }
+    ];
+
+    // =====================================================
+    // DOM REFERENCIAS
+    // =====================================================
+    const inputBuscar = document.getElementById('buscarInput');
+    const btnBuscar = document.getElementById('btnBuscar');
+    const resultadoDiv = document.getElementById('resultado');
+    const errorMsg = document.getElementById('buscarError');
+
+    // =====================================================
+    // FUNCIÓN DE BÚSQUEDA
+    // =====================================================
+    function buscarCredenciales() {
+        const valor = inputBuscar.value.trim();
+        // Limpiar resultado anterior
+        resultadoDiv.className = '';
+        resultadoDiv.style.display = 'none';
+        resultadoDiv.innerHTML = '';
+        errorMsg.style.display = 'none';
+        inputBuscar.classList.remove('input-error');
+
+        if (!valor) {
+            inputBuscar.classList.add('input-error');
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        // Buscar en la lista de usuarios
+        const encontrado = usuarios.find(u =>
+            u.identificacion === valor ||
+            u.contacto === valor
+        );
+
+        if (encontrado) {
+            // Mostrar credenciales
+            resultadoDiv.className = 'exito';
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `
+                <div style="margin-bottom:8px; font-weight:600; color:#1a7a3a;">
+                    <i class="fas fa-check-circle"></i> Credenciales encontradas
+                </div>
+                <div class="credencial">
+                    <div class="label">Usuario</div>
+                    <div class="value">${encontrado.user}</div>
+                </div>
+                <div class="credencial" style="margin-top:8px;">
+                    <div class="label">Contraseña</div>
+                    <div class="value pass">${encontrado.pass}</div>
+                </div>
+                <div class="credencial" style="margin-top:8px; background:#f8f9fe; border-color:#d0d3e0;">
+                    <div class="label">Nombre asociado</div>
+                    <div class="value" style="font-weight:400; font-size:15px;">${encontrado.nombre}</div>
+                </div>
+                <div style="margin-top:12px; font-size:14px; color:var(--text-light);">
+                    <i class="fas fa-info-circle"></i> Anota tus credenciales o inicia sesión ahora.
+                </div>
+            `;
+            // Mostrar opción para ir al login
+            resultadoDiv.innerHTML += `
+                <div style="margin-top:14px; text-align:center;">
+                    <a href="aula-virtual.html" class="btn btn-primary" style="display:inline-block; width:auto; padding:8px 24px; font-size:14px; text-decoration:none;">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                    </a>
+                </div>
+            `;
+        } else {
+            // No encontrado
+            resultadoDiv.className = 'error';
+            resultadoDiv.style.display = 'block';
+            resultadoDiv.innerHTML = `
+                <div style="display:flex; align-items:center; gap:10px; font-weight:600; color:#c0392b;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span>No se encontraron credenciales con ese dato.</span>
+                </div>
+                <div style="margin-top:8px; font-size:14px; color:#666;">
+                    Verifica que el número de identificación o contacto sea correcto.
+                </div>
+                <div style="margin-top:12px; font-size:14px; color:#666;">
+                    Si el problema persiste, contacta con soporte.
+                </div>
+            `;
+        }
+    }
+
+    // =====================================================
+    // EVENTOS
+    // =====================================================
+    btnBuscar.addEventListener('click', buscarCredenciales);
+    inputBuscar.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            buscarCredenciales();
+        }
+    });
+
+    // Limpiar error al escribir
+    inputBuscar.addEventListener('input', function() {
+        this.classList.remove('input-error');
+        errorMsg.style.display = 'none';
+    });
+
+    // =====================================================
+    // BLOQUEO DE INSPECCIÓN (básico)
+    // =====================================================
+    document.addEventListener('contextmenu', e => { e.preventDefault(); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            alert('Acción no permitida.');
+            return false;
+        }
+    });
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+
+    console.log('%c🔐 Página de recuperación de credenciales cargada.', 'font-size:16px; color:#0200AF;');
+    console.log('%c📌 Usuarios registrados: ' + usuarios.length, 'font-size:13px; color:#555;');
+</script>
+
+</body>
+</html>
