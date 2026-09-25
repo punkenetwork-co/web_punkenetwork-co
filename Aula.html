@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Aula Virtual | ERTO</title>
+    <link rel="icon" href="favicon/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* =====================================================
+           VARIABLES
+           ===================================================== */
+        :root {
+            --primary: #0200AF;
+            --primary-light: #3d3be8;
+            --primary-dark: #01007a;
+            --secondary: #f0f2ff;
+            --bg: #f5f7fc;
+            --text: #1a1a2e;
+            --text-light: #555570;
+            --card-bg: #ffffff;
+            --shadow: 0 8px 30px rgba(2, 0, 175, 0.08);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --transition: 0.3s ease;
+            --font: 'Inter', sans-serif;
+            --curso-primary: #0200AF;
+        }
+
+        /* =====================================================
+           RESET
+           ===================================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container { max-width: 1100px; width: 100%; margin: 0 auto; }
+
+        /* =====================================================
+           LOGIN GENERAL
+           ===================================================== */
+        #loginScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+        .login-box {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(2, 0, 175, 0.06);
+        }
+        .login-box .logo { text-align: center; margin-bottom: 16px; }
+        .login-box .logo img { max-height: 60px; }
+        .login-box h2 {
+            font-size: 24px;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .login-box p {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .login-box .form-group { margin-bottom: 14px; }
+        .login-box .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .login-box .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dde0ea;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: #fafbff;
+            transition: var(--transition);
+        }
+        .login-box .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+            background: #fff;
+        }
+        .login-box .btn-login {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            background: var(--primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .login-box .btn-login:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .login-box .error-msg {
+            color: #e74c3c;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* =====================================================
+           LOGIN DE CURSO (modal)
+           ===================================================== */
+        .curso-login-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .curso-login-overlay.active { display: flex; }
+        .curso-login-box {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            border-top: 6px solid var(--curso-primary);
+            animation: fadeIn 0.3s ease;
+        }
+        .curso-login-box .logo { text-align: center; margin-bottom: 12px; }
+        .curso-login-box .logo img { max-height: 50px; }
+        .curso-login-box h3 {
+            font-size: 20px;
+            color: var(--curso-primary);
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .curso-login-box p {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .curso-login-box .form-group { margin-bottom: 12px; }
+        .curso-login-box .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        .curso-login-box .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dde0ea;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: #fafbff;
+            transition: var(--transition);
+        }
+        .curso-login-box .form-group input:focus {
+            outline: none;
+            border-color: var(--curso-primary);
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+        }
+        .curso-login-box .btn-login-curso {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 50px;
+            background: var(--curso-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .curso-login-box .btn-login-curso:hover { opacity: 0.85; }
+        .curso-login-box .error-msg-curso {
+            color: #e74c3c;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        .curso-login-box .btn-cancel {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+            text-align: center;
+        }
+        .curso-login-box .btn-cancel:hover { color: var(--text); }
+
+        /* =====================================================
+           APP
+           ===================================================== */
+        #app { display: none; width: 100%; }
+
+        .app-header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 14px 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border: 1px solid rgba(2, 0, 175, 0.04);
+        }
+        .app-header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .app-header .logo-area img { max-height: 40px; }
+        .app-header .logo-area .brand {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        .app-header .logo-area .brand small {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--text-light);
+            display: block;
+        }
+        .app-header .user-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+        .app-header .user-area .role-badge {
+            background: var(--secondary);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-weight: 500;
+            color: var(--primary);
+            font-size: 12px;
+        }
+        .app-header .user-area .btn-logout {
+            background: none;
+            border: 1px solid #dde0ea;
+            padding: 6px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: var(--transition);
+        }
+        .app-header .user-area .btn-logout:hover { background: #f0f0f0; }
+
+        /* =====================================================
+           VISTAS
+           ===================================================== */
+        .view { display: none; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Panel admin */
+        .info-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(2, 0, 175, 0.06);
+            box-shadow: var(--shadow);
+        }
+        .info-panel h3 { color: var(--primary); margin-bottom: 8px; }
+        .info-panel .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .info-panel .info-card {
+            background: var(--secondary);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+        .info-panel .info-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+        .info-panel .info-card i {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .info-panel .info-card .label { font-weight: 600; font-size: 14px; }
+
+        .sala-virtual {
+            margin-top: 20px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: #000;
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+        }
+        .sala-virtual iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
+        }
+
+        /* Cursos */
+        .cursos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 16px;
+        }
+        .curso-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(2, 0, 175, 0.06);
+            transition: var(--transition);
+        }
+        .curso-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(2, 0, 175, 0.10);
+        }
+        .curso-card .imagen {
+            width: 100%;
+            height: 160px;
+            background: #e9ecf5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--text-light);
+            overflow: hidden;
+        }
+        .curso-card .imagen img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+        .curso-card .info { padding: 18px 20px 20px; }
+        .curso-card .info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .curso-card .info p {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+        .curso-card .info .btn-curso {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            width: 100%;
+        }
+        .curso-card .info .btn-curso:hover { opacity: 0.85; }
+
+        /* Curso */
+        .curso-header {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(2, 0, 175, 0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-left: 6px solid var(--curso-primary);
+        }
+        .curso-header .back-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            color: var(--curso-primary);
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .curso-header .curso-titulo-area h2 {
+            font-size: 22px;
+            color: var(--curso-primary);
+        }
+        .curso-header .curso-titulo-area .curso-desc {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        .curso-header .curso-badge {
+            background: var(--curso-primary);
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Módulos */
+        .modulo {
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            border: 1px solid rgba(2, 0, 175, 0.06);
+            overflow: hidden;
+        }
+        .modulo .modulo-header {
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: #fafbff;
+            transition: var(--transition);
+            user-select: none;
+        }
+        .modulo .modulo-header:hover { background: var(--secondary); }
+        .modulo .modulo-header .titulo {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modulo .modulo-header .titulo .candado { color: #999; font-size: 14px; }
+        .modulo .modulo-header .icono {
+            color: var(--curso-primary);
+            transition: transform 0.3s;
+        }
+        .modulo .modulo-header .icono.abierto { transform: rotate(180deg); }
+        .modulo .modulo-body { padding: 0 18px 18px; display: none; }
+        .modulo .modulo-body.abierto { display: block; }
+        .modulo .modulo-body .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-bottom: 12px;
+            background: #000;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+        .modulo .modulo-body .video-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
+        }
+        .modulo .modulo-body .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .modulo .modulo-body .acciones .btn-sec {
+            padding: 8px 18px;
+            border: 1px solid var(--curso-primary);
+            border-radius: 30px;
+            background: transparent;
+            color: var(--curso-primary);
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modulo .modulo-body .acciones .btn-sec:hover { background: var(--secondary); }
+        .modulo .modulo-body .btn-siguiente {
+            padding: 8px 24px;
+            border: none;
+            border-radius: 30px;
+            background: var(--curso-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .modulo .modulo-body .btn-siguiente:hover { opacity: 0.85; }
+        .modulo.bloqueado .modulo-header {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+        .modulo.bloqueado .modulo-header:hover { background: #fafbff; }
+
+        /* =====================================================
+           EXAMEN
+           ===================================================== */
+        #evaluacionView {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(2, 0, 175, 0.04);
+            margin-top: 16px;
+            border-left: 6px solid var(--curso-primary);
+        }
+        #evaluacionView h2 { color: var(--curso-primary); margin-bottom: 4px; }
+        #evaluacionView .sub { color: var(--text-light); margin-bottom: 20px; }
+        .campos-eval {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .campos-eval .full { grid-column: 1 / -1; }
+        .campos-eval label {
+            font-weight: 500;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .campos-eval input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #dde0ea;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            background: #fafbff;
+        }
+        .campos-eval input:focus {
+            outline: none;
+            border-color: var(--curso-primary);
+            box-shadow: 0 0 0 4px rgba(2, 0, 175, 0.08);
+        }
+        .pregunta {
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        .pregunta p { font-weight: 500; margin-bottom: 6px; }
+        .pregunta label {
+            display: block;
+            font-weight: 400;
+            font-size: 14px;
+            padding: 4px 0;
+            cursor: pointer;
+        }
+        .pregunta label input { margin-right: 8px; }
+        .btn-calificar {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 50px;
+            background: var(--curso-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .btn-calificar:hover { opacity: 0.85; }
+        #resultadoEval {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            display: none;
+        }
+        #resultadoEval.aprobado {
+            background: #e6f9ed;
+            border: 1px solid #2ecc71;
+            display: block;
+        }
+        #resultadoEval.reprobado {
+            background: #fde8e8;
+            border: 1px solid #e74c3c;
+            display: block;
+        }
+
+        /* =====================================================
+           MENSAJE FINAL (aprobación)
+           ===================================================== */
+        #mensajeFinalView {
+            display: none;
+            margin-top: 24px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(2, 0, 175, 0.04);
+            text-align: center;
+            border-left: 6px solid var(--curso-primary);
+        }
+        #mensajeFinalView .icon-success {
+            font-size: 64px;
+            color: #2ecc71;
+            margin-bottom: 16px;
+        }
+        #mensajeFinalView h2 {
+            color: var(--curso-primary);
+            margin-bottom: 12px;
+        }
+        #mensajeFinalView p {
+            color: var(--text-light);
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto 12px;
+        }
+        #mensajeFinalView .nota {
+            background: var(--secondary);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-light);
+            margin-top: 20px;
+        }
+        #mensajeFinalView .btn-volver {
+            margin-top: 24px;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 50px;
+            background: var(--curso-primary);
+            color: #fff;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        #mensajeFinalView .btn-volver:hover { opacity: 0.85; }
+
+        /* =====================================================
+           RESPONSIVE
+           ===================================================== */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .app-header { flex-direction: column; align-items: stretch; gap: 8px; }
+            .app-header .user-area { justify-content: space-between; }
+            .cursos-grid { grid-template-columns: 1fr; }
+            .info-panel .info-grid { grid-template-columns: 1fr; }
+            .campos-eval { grid-template-columns: 1fr; }
+            .campos-eval .full { grid-column: 1; }
+            .curso-header { flex-direction: column; align-items: stretch; }
+            .modulo .modulo-header .titulo { font-size: 15px; }
+            .curso-header .curso-titulo-area h2 { font-size: 20px; }
+            .curso-login-box { padding: 24px 16px; }
+        }
+        @media (max-width: 480px) {
+            .login-box { padding: 24px 16px; }
+            .modulo .modulo-body { padding: 0 12px 12px; }
+            .acciones .btn-sec { font-size: 12px; padding: 6px 14px; }
+        }
+
+        .hidden { display: none !important; }
+        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="rootContainer">
+
+    <!-- LOGIN GENERAL -->
+    <div id="loginScreen">
+        <div class="login-box">
+            <div class="logo">
+                <img src="img/logo/erto-logo.png" alt="ERTO" onerror="this.style.display='none'">
+                <h2>Aula Virtual</h2>
+                <p>ERTO · Investigación &amp; Consultoría</p>
+            </div>
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="loginUser" placeholder="Ingresa tu usuario">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="loginPass" placeholder="Ingresa tu contraseña">
+            </div>
+            <button class="btn-login" id="btnLogin">Ingresar</button>
+            <div class="error-msg" id="loginError">Usuario o contraseña incorrectos.</div>
+        </div>
+    </div>
+
+    <!-- LOGIN DE CURSO -->
+    <div class="curso-login-overlay" id="cursoLoginOverlay">
+        <div class="curso-login-box" id="cursoLoginBox">
+            <div class="logo">
+                <img src="img/logo/erto-logo.png" alt="ERTO" onerror="this.style.display='none'">
+                <img src="img/logo/punke-network.png" alt="Punke Network" style="max-height:35px; margin-left:8px;" onerror="this.style.display='none'">
+            </div>
+            <h3 id="cursoLoginTitulo">Acceso al curso</h3>
+            <p id="cursoLoginDesc">Ingresa tus credenciales para este curso.</p>
+            <div class="form-group">
+                <label>Usuario del curso</label>
+                <input type="text" id="cursoLoginUser" placeholder="Usuario específico del curso">
+            </div>
+            <div class="form-group">
+                <label>Contraseña del curso</label>
+                <input type="password" id="cursoLoginPass" placeholder="Contraseña del curso">
+            </div>
+            <button class="btn-login-curso" id="btnLoginCurso">Acceder al curso</button>
+            <div class="error-msg-curso" id="cursoLoginError">Usuario o contraseña incorrectos.</div>
+            <button class="btn-cancel" id="btnCancelCursoLogin"><i class="fas fa-times"></i> Cancelar</button>
+        </div>
+    </div>
+
+    <!-- APP -->
+    <div id="app">
+
+        <header class="app-header">
+            <div class="logo-area">
+                <img src="img/logo/punke-network.png" alt="Punke Network" onerror="this.style.display='none'">
+                <div class="brand">
+                    ERTO
+                    <small>Investigación &amp; Consultoría</small>
+                </div>
+            </div>
+            <div class="user-area">
+                <span id="userNameDisplay">Usuario</span>
+                <span class="role-badge" id="userRoleBadge">Estudiante</span>
+                <button class="btn-logout" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Salir</button>
+            </div>
+        </header>
+
+        <!-- VISTA INICIO -->
+        <div id="viewInicio" class="view active">
+            <div id="infoPanel" class="info-panel hidden">
+                <h3><i class="fas fa-cog"></i> Panel de Información</h3>
+                <p style="color:var(--text-light); font-size:14px;">Accede a recursos institucionales y sala virtual.</p>
+                <div class="info-grid">
+                    <div class="info-card" id="btnInfoAgencia">
+                        <i class="fas fa-building"></i>
+                        <div class="label">Información de Punke Network</div>
+                        <small style="color:var(--text-light);">Descargar PDF</small>
+                    </div>
+                    <div class="info-card" id="btnInfoERTO">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div class="label">Información de ERTO</div>
+                        <small style="color:var(--text-light);">Descargar PDF</small>
+                    </div>
+                    <div class="info-card" id="btnSalaVirtual">
+                        <i class="fas fa-video"></i>
+                        <div class="label">Sala Virtual (Google Meet)</div>
+                        <small style="color:var(--text-light);">Abrir sala</small>
+                    </div>
+                    <div class="info-card" id="btnAdminCursos">
+                        <i class="fas fa-edit"></i>
+                        <div class="label">Gestionar Cursos</div>
+                        <small style="color:var(--text-light);">(desde código fuente)</small>
+                    </div>
+                </div>
+                <div id="salaVirtualContainer" class="sala-virtual hidden">
+                    <iframe src="https://meet.google.com/xxx-xxxx-xxx" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <h2 style="font-size:24px; color:var(--primary); margin: 16px 0 4px;">Nuestros Cursos</h2>
+            <p style="color:var(--text-light); margin-bottom:16px;">Selecciona un curso para acceder a su aula virtual.</p>
+            <div class="cursos-grid" id="cursosGrid"></div>
+        </div>
+
+        <!-- VISTA CURSO -->
+        <div id="viewCurso" class="view">
+            <div class="curso-header" id="cursoHeader">
+                <button class="back-btn" id="btnVolverCursos"><i class="fas fa-arrow-left"></i> Volver a cursos</button>
+                <div class="curso-titulo-area">
+                    <h2 id="cursoTitulo">Curso</h2>
+                    <div class="curso-desc" id="cursoDescripcion">Descripción del curso</div>
+                </div>
+                <span class="curso-badge" id="cursoBadge">Aula virtual</span>
+            </div>
+            <div id="modulosContainer"></div>
+            <div id="btnIrEvaluacionWrapper" class="hidden" style="text-align:center; margin-top:20px;">
+                <button class="btn-calificar" id="btnIrEvaluacion" style="background:var(--curso-primary);"><i class="fas fa-check-circle"></i> Ir a evaluación final</button>
+            </div>
+        </div>
+
+        <!-- VISTA EVALUACIÓN -->
+        <div id="viewEvaluacion" class="view">
+            <div id="evaluacionView">
+                <button class="back-btn" id="btnVolverCursoEval" style="background:none; border:none; font-size:16px; color:var(--curso-primary); cursor:pointer; margin-bottom:12px;">
+                    <i class="fas fa-arrow-left"></i> Volver al curso
+                </button>
+                <h2>Evaluación Final</h2>
+                <p class="sub">Completa todos los campos y responde las 8 preguntas. Necesitas mínimo 7 correctas (87.5%) para aprobar.</p>
+                <div class="campos-eval">
+                    <div>
+                        <label>Primer nombre *</label>
+                        <input type="text" id="evalNombre1" placeholder="Ej: José">
+                    </div>
+                    <div>
+                        <label>Segundo nombre *</label>
+                        <input type="text" id="evalNombre2" placeholder="Ej: Miguel">
+                    </div>
+                    <div>
+                        <label>Primer apellido *</label>
+                        <input type="text" id="evalApellido1" placeholder="Ej: Landero">
+                    </div>
+                    <div>
+                        <label>Segundo apellido *</label>
+                        <input type="text" id="evalApellido2" placeholder="Ej: Torres">
+                    </div>
+                    <div class="full">
+                        <label>Cédula de ciudadanía / ID *</label>
+                        <input type="text" id="evalCedula" placeholder="Número de identificación">
+                    </div>
+                    <div class="full">
+                        <label>Correo electrónico *</label>
+                        <input type="email" id="evalEmail" placeholder="tucorreo@ejemplo.com">
+                    </div>
+                    <div class="full">
+                        <label>Curso *</label>
+                        <input type="text" id="evalCurso" readonly>
+                    </div>
+                </div>
+                <div id="preguntasContainer"></div>
+                <button class="btn-calificar" id="btnCalificarEval">Calificar examen</button>
+                <div id="resultadoEval"></div>
+            </div>
+        </div>
+
+        <!-- VISTA MENSAJE FINAL -->
+        <div id="mensajeFinalView" class="view">
+            <div class="icon-success"><i class="fas fa-check-circle"></i></div>
+            <h2>¡Felicidades, has aprobado!</h2>
+            <p id="mensajeAprobacionTexto">Tu examen ha sido registrado correctamente.</p>
+            <div class="nota">
+                <i class="fas fa-info-circle"></i> <strong>Importante:</strong> Nuestro equipo verificará tus datos y te enviará tu certificado digital al correo registrado en las próximas 24-48 horas hábiles.
+            </div>
+            <p id="mensajeDatosEnvio" style="font-size:13px; color:#999; margin-top:12px;"></p>
+            <button class="btn-volver" id="btnVolverInicioMensaje"><i class="fas fa-home"></i> Volver al inicio</button>
+        </div>
+
+    </div><!-- end app -->
+
+</div><!-- end container -->
+
+<script>
+    // =====================================================
+    // CONFIGURACIÓN - PERSONALIZA AQUÍ
+    // =====================================================
+
+    // Usuarios generales
+    const USUARIOS_GENERALES = [
+        { user: 'Eliecer', pass: 'E1004282484t', role: 'Director Académico', nombre: 'Eliecer Rafael Torres Ochoa' },
+        { user: 'admin', pass: 'admin2026', role: 'admin', nombre: 'Administrador' },
+        { user: 'estudiante', pass: 'estudiante2026', role: 'estudiante', nombre: 'Estudiante' },
+    ];
+
+    // URL de Google Apps Script (Web App) para guardar respuestas en Google Sheets
+    // Instrucciones al final del código para configurarlo
+    const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbza_HZhBnQjHE7GclOs-wLLZfJ9yi0oAkFi3b9jGWImGY7-6j2j3D09_-V0K1XK8Co/exec';
+
+    // URL de Google Meet
+    const MEET_URL = 'https://meet.google.com/xxx-xxxx-xxx';
+
+    // Colores por curso
+    const COLORES_CURSOS = {
+        1: '#0200AF',
+        2: '#E67E22',
+        3: '#27AE60',
+        4: '#8E44AD',
+        5: '#E74C3C',
+    };
+
+    // =====================================================
+    // CURSOS
+    // =====================================================
+    const CURSOS = [{
+        id: 1,
+        titulo: 'Normas APA 7ª Edición',
+        descripcion: 'Aprende a aplicar correctamente las normas APA en tus trabajos académicos.',
+        imagen: 'img/cursos/apa7.jpg',
+        color: COLORES_CURSOS[1],
+        usuarios: [
+            { user: '1004282484', pass: 'apa_eliecer' },
+            { user: 'apa_user2', pass: 'apa5678' },
+            { user: 'estudiante', pass: 'estudiante2026' },
+        ],
+        modulos: [{
+            titulo: 'Introducción a APA 7',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf1.pdf',
+            diapositivas: 'https://ejemplo.com/slides1.pdf',
+            bloqueado: false
+        }, {
+            titulo: 'Citas y Referencias',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf2.pdf',
+            diapositivas: 'https://ejemplo.com/slides2.pdf',
+            bloqueado: true
+        }, {
+            titulo: 'Lista de Referencias',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf3.pdf',
+            diapositivas: 'https://ejemplo.com/slides3.pdf',
+            bloqueado: true
+        }, {
+            titulo: 'Formato y Estilo',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf4.pdf',
+            diapositivas: 'https://ejemplo.com/slides4.pdf',
+            bloqueado: true
+        }],
+        preguntas: [{
+            pregunta: '¿Qué es una cita directa en APA?',
+            opciones: ['Reproducción textual de una fuente', 'Paráfrasis de una idea', 'Resumen de un texto', 'Referencia bibliográfica'],
+            correcta: 0
+        }, {
+            pregunta: '¿Cómo se formatea el título en APA 7?',
+            opciones: ['Centrado y en negrita', 'Alineado a la izquierda y cursiva', 'Centrado y subrayado', 'Alineado a la derecha'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué información lleva una cita parentética?',
+            opciones: ['Apellido y año', 'Apellido, año y página', 'Solo el año', 'Título y año'],
+            correcta: 0
+        }, {
+            pregunta: '¿Cuál es el espaciado recomendado en APA 7?',
+            opciones: ['Doble espacio', 'Espacio sencillo', '1.5', 'El que elija el autor'],
+            correcta: 0
+        }, {
+            pregunta: '¿Dónde va la lista de referencias?',
+            opciones: ['Al final del documento', 'Al inicio', 'En el anexo', 'Después de la introducción'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es una paráfrasis?',
+            opciones: ['Expresar una idea con tus propias palabras', 'Copiar textualmente', 'Traducir un texto', 'Citar una fuente'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué debe incluir una referencia de libro?',
+            opciones: ['Apellido, inicial del nombre, año, título, editorial', 'Título y año', 'Editorial y ciudad', 'ISBN'],
+            correcta: 0
+        }, {
+            pregunta: '¿Cuántos espacios después del punto en APA 7?',
+            opciones: ['Uno', 'Dos', 'Tres', 'Ninguno'],
+            correcta: 0
+        }]
+    }, {
+        id: 2,
+        titulo: 'Metodología de Investigación',
+        descripcion: 'Aprende los fundamentos de la investigación científica y académica.',
+        imagen: 'img/cursos/metodologia.jpg',
+        color: COLORES_CURSOS[2],
+        usuarios: [
+            { user: 'met_user1', pass: 'met1234' },
+            { user: 'met_user2', pass: 'met5678' },
+            { user: 'estudiante', pass: 'estudiante2026' },
+        ],
+        modulos: [{
+            titulo: 'Introducción a la Investigación',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf_met1.pdf',
+            diapositivas: 'https://ejemplo.com/slides_met1.pdf',
+            bloqueado: false
+        }, {
+            titulo: 'Diseños de Investigación',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf_met2.pdf',
+            diapositivas: 'https://ejemplo.com/slides_met2.pdf',
+            bloqueado: true
+        }, {
+            titulo: 'Técnicas de Recolección',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf_met3.pdf',
+            diapositivas: 'https://ejemplo.com/slides_met3.pdf',
+            bloqueado: true
+        }, {
+            titulo: 'Análisis de Datos',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/pdf_met4.pdf',
+            diapositivas: 'https://ejemplo.com/slides_met4.pdf',
+            bloqueado: true
+        }],
+        preguntas: [{
+            pregunta: '¿Qué es la investigación cuantitativa?',
+            opciones: ['Medición numérica y estadística', 'Interpretación de significados', 'Observación participante', 'Análisis de discurso'],
+            correcta: 0
+        }, {
+            pregunta: '¿Cuál es el objetivo de un marco teórico?',
+            opciones: ['Sustentar el problema de investigación', 'Describir la metodología', 'Presentar los resultados', 'Concluir el estudio'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es una hipótesis?',
+            opciones: ['Una suposición fundamentada', 'Un hecho comprobado', 'Una conclusión final', 'Una pregunta de investigación'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué tipo de investigación busca causas y efectos?',
+            opciones: ['Explicativa', 'Descriptiva', 'Exploratoria', 'Correlacional'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es la validez en investigación?',
+            opciones: ['Grado en que se mide lo que se pretende medir', 'Consistencia de los resultados', 'Representatividad de la muestra', 'Objetividad del investigador'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es una muestra en investigación?',
+            opciones: ['Subconjunto de la población', 'El total de la población', 'Un caso de estudio', 'Una variable de control'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es la triangulación?',
+            opciones: ['Uso de múltiples fuentes o métodos', 'Análisis estadístico', 'Entrevista a profundidad', 'Observación directa'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es el muestreo aleatorio?',
+            opciones: ['Selección al azar de la muestra', 'Selección por conveniencia', 'Selección intencionada', 'Muestra por cuotas'],
+            correcta: 0
+        }]
+    }, {
+        id: 3,
+        titulo: 'Análisis de Datos con Excel',
+        descripcion: 'Domina las herramientas de análisis de datos en Excel para investigación.',
+        imagen: 'img/cursos/excel.jpg',
+        color: COLORES_CURSOS[3],
+        usuarios: [
+            { user: 'excel_user1', pass: 'exc1234' },
+            { user: 'excel_user2', pass: 'exc5678' },
+            { user: 'estudiante', pass: 'estudiante2026' },
+        ],
+        modulos: [{
+            titulo: 'Introducción a Excel para investigación',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/excel1.pdf',
+            diapositivas: 'https://ejemplo.com/excel1_slides.pdf',
+            bloqueado: false
+        }, {
+            titulo: 'Tablas dinámicas y gráficos',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/excel2.pdf',
+            diapositivas: 'https://ejemplo.com/excel2_slides.pdf',
+            bloqueado: true
+        }, {
+            titulo: 'Análisis estadístico básico',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/excel3.pdf',
+            diapositivas: 'https://ejemplo.com/excel3_slides.pdf',
+            bloqueado: true
+        }, {
+            titulo: 'Visualización de datos',
+            video: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+            pdf: 'https://ejemplo.com/excel4.pdf',
+            diapositivas: 'https://ejemplo.com/excel4_slides.pdf',
+            bloqueado: true
+        }],
+        preguntas: [{
+            pregunta: '¿Qué es una tabla dinámica?',
+            opciones: ['Una herramienta para resumir datos', 'Un gráfico de barras', 'Una función matemática', 'Un filtro avanzado'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué función calcula el promedio en Excel?',
+            opciones: ['=PROMEDIO', '=MEDIA', '=SUMA', '=CONTAR'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es un gráfico de dispersión?',
+            opciones: ['Relación entre dos variables', 'Comparación de categorías', 'Distribución de datos', 'Tendencia temporal'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué herramienta permite ordenar datos?',
+            opciones: ['Ordenar y filtrar', 'Tabla dinámica', 'Gráficos', 'Funciones'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es un rango de datos?',
+            opciones: ['Un conjunto de celdas seleccionadas', 'Una tabla', 'Un gráfico', 'Una función'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué función cuenta celdas con datos?',
+            opciones: ['=CONTAR', '=SUMA', '=PROMEDIO', '=MAX'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es un filtro en Excel?',
+            opciones: ['Mostrar solo datos que cumplen una condición', 'Ordenar datos', 'Sumar datos', 'Promediar datos'],
+            correcta: 0
+        }, {
+            pregunta: '¿Qué es un gráfico de barras?',
+            opciones: ['Comparación de categorías', 'Relación de variables', 'Distribución de datos', 'Serie temporal'],
+            correcta: 0
+        }]
+    }];
+
+    // =====================================================
+    // ESTADO
+    // =====================================================
+    let usuarioActual = null;
+    let cursoActual = null;
+    let respuestasUsuario = [];
+    let intentosExamen = 0;
+
+    // =====================================================
+    // DOM
+    // =====================================================
+    const loginScreen = document.getElementById('loginScreen');
+    const app = document.getElementById('app');
+    const loginUser = document.getElementById('loginUser');
+    const loginPass = document.getElementById('loginPass');
+    const btnLogin = document.getElementById('btnLogin');
+    const loginError = document.getElementById('loginError');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+    const userRoleBadge = document.getElementById('userRoleBadge');
+    const btnLogout = document.getElementById('btnLogout');
+    const viewInicio = document.getElementById('viewInicio');
+    const viewCurso = document.getElementById('viewCurso');
+    const viewEvaluacion = document.getElementById('viewEvaluacion');
+    const viewMensajeFinal = document.getElementById('mensajeFinalView');
+    const cursosGrid = document.getElementById('cursosGrid');
+    const infoPanel = document.getElementById('infoPanel');
+    const salaVirtualContainer = document.getElementById('salaVirtualContainer');
+    const btnSalaVirtual = document.getElementById('btnSalaVirtual');
+    const btnInfoAgencia = document.getElementById('btnInfoAgencia');
+    const btnInfoERTO = document.getElementById('btnInfoERTO');
+    const btnAdminCursos = document.getElementById('btnAdminCursos');
+    const btnVolverCursos = document.getElementById('btnVolverCursos');
+    const btnVolverCursoEval = document.getElementById('btnVolverCursoEval');
+    const btnIrEvaluacion = document.getElementById('btnIrEvaluacion');
+    const btnIrEvaluacionWrapper = document.getElementById('btnIrEvaluacionWrapper');
+    const btnCalificarEval = document.getElementById('btnCalificarEval');
+    const btnVolverInicioMensaje = document.getElementById('btnVolverInicioMensaje');
+
+    // Login de curso
+    const cursoLoginOverlay = document.getElementById('cursoLoginOverlay');
+    const cursoLoginBox = document.getElementById('cursoLoginBox');
+    const cursoLoginTitulo = document.getElementById('cursoLoginTitulo');
+    const cursoLoginDesc = document.getElementById('cursoLoginDesc');
+    const cursoLoginUser = document.getElementById('cursoLoginUser');
+    const cursoLoginPass = document.getElementById('cursoLoginPass');
+    const btnLoginCurso = document.getElementById('btnLoginCurso');
+    const cursoLoginError = document.getElementById('cursoLoginError');
+    const btnCancelCursoLogin = document.getElementById('btnCancelCursoLogin');
+
+    // =====================================================
+    // NAVEGACIÓN
+    // =====================================================
+    function showView(viewId) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(viewId).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function volverInicio() {
+        showView('viewInicio');
+        renderCursos();
+        salaVirtualContainer.classList.add('hidden');
+        cursoActual = null;
+    }
+
+    // =====================================================
+    // LOGIN GENERAL
+    // =====================================================
+    function doLogin() {
+        const user = loginUser.value.trim();
+        const pass = loginPass.value.trim();
+        const encontrado = USUARIOS_GENERALES.find(u => u.user === user && u.pass === pass);
+        if (encontrado) {
+            usuarioActual = encontrado;
+            loginError.style.display = 'none';
+            loginScreen.style.display = 'none';
+            app.style.display = 'block';
+            userNameDisplay.textContent = encontrado.nombre;
+            userRoleBadge.textContent = encontrado.role === 'director' ? 'Director' :
+                encontrado.role === 'admin' ? 'Admin' : 'Estudiante';
+            if (encontrado.role === 'director' || encontrado.role === 'admin') {
+                infoPanel.classList.remove('hidden');
+            } else {
+                infoPanel.classList.add('hidden');
+            }
+            renderCursos();
+            showView('viewInicio');
+        } else {
+            loginError.style.display = 'block';
+            loginUser.value = '';
+            loginPass.value = '';
+            loginUser.focus();
+        }
+    }
+
+    btnLogin.addEventListener('click', doLogin);
+    loginPass.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    loginUser.addEventListener('keydown', e => { if (e.key === 'Enter') loginPass.focus(); });
+
+    btnLogout.addEventListener('click', function() {
+        if (confirm('¿Seguro que quieres cerrar sesión?')) location.reload();
+    });
+
+    // =====================================================
+    // LOGIN DE CURSO
+    // =====================================================
+    let cursoPendienteLogin = null;
+
+    function abrirLoginCurso(curso) {
+        cursoPendienteLogin = curso;
+        const color = curso.color || '#0200AF';
+        cursoLoginBox.style.borderTopColor = color;
+        cursoLoginBox.style.setProperty('--curso-primary', color);
+        cursoLoginTitulo.textContent = `Acceso a: ${curso.titulo}`;
+        cursoLoginTitulo.style.color = color;
+        cursoLoginDesc.textContent = 'Ingresa tus credenciales específicas para este curso.';
+        cursoLoginUser.value = '';
+        cursoLoginPass.value = '';
+        cursoLoginError.style.display = 'none';
+        cursoLoginOverlay.classList.add('active');
+        cursoLoginUser.focus();
+    }
+
+    function cerrarLoginCurso() {
+        cursoLoginOverlay.classList.remove('active');
+        cursoPendienteLogin = null;
+    }
+
+    function validarLoginCurso() {
+        // ⚠️ BUG CORREGIDO: guardar la referencia ANTES de cerrar el modal
+        const curso = cursoPendienteLogin;
+        if (!curso) return;
+
+        const user = cursoLoginUser.value.trim();
+        const pass = cursoLoginPass.value.trim();
+        const usuariosCurso = curso.usuarios || [];
+        const encontrado = usuariosCurso.find(u => u.user === user && u.pass === pass);
+
+        if (encontrado) {
+            cursoLoginError.style.display = 'none';
+            cursoLoginOverlay.classList.remove('active');
+            cursoPendienteLogin = null;
+            // Ahora sí abrir el curso con la referencia correcta
+            abrirCursoDirecto(curso);
+        } else {
+            cursoLoginError.style.display = 'block';
+            cursoLoginUser.value = '';
+            cursoLoginPass.value = '';
+            cursoLoginUser.focus();
+        }
+    }
+
+    btnLoginCurso.addEventListener('click', validarLoginCurso);
+    cursoLoginPass.addEventListener('keydown', e => { if (e.key === 'Enter') validarLoginCurso(); });
+    btnCancelCursoLogin.addEventListener('click', cerrarLoginCurso);
+    cursoLoginOverlay.addEventListener('click', function(e) {
+        if (e.target === this) cerrarLoginCurso();
+    });
+
+    // =====================================================
+    // RENDERIZAR CURSOS
+    // =====================================================
+    function renderCursos() {
+        cursosGrid.innerHTML = '';
+        CURSOS.forEach(curso => {
+            const color = curso.color || '#0200AF';
+            const card = document.createElement('div');
+            card.className = 'curso-card';
+            card.style.borderTop = `4px solid ${color}`;
+            card.innerHTML = `
+                <div class="imagen">
+                    ${curso.imagen ? `<img src="${curso.imagen}" alt="${curso.titulo}" onerror="this.style.display='none'">` : `<i class="fas fa-book" style="font-size:40px; color:#ccc;"></i>`}
+                </div>
+                <div class="info">
+                    <h3 style="color:${color};">${curso.titulo}</h3>
+                    <p>${curso.descripcion}</p>
+                    <button class="btn-curso" data-id="${curso.id}" style="background:${color};">Ingresar al aula</button>
+                </div>
+            `;
+            cursosGrid.appendChild(card);
+        });
+        document.querySelectorAll('.btn-curso').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const id = parseInt(this.dataset.id);
+                const curso = CURSOS.find(c => c.id === id);
+                if (curso) abrirLoginCurso(curso);
+            });
+        });
+    }
+
+    // =====================================================
+    // ABRIR CURSO
+    // =====================================================
+    function abrirCursoDirecto(curso) {
+        cursoActual = curso;
+        intentosExamen = 0;
+
+        const color = curso.color || '#0200AF';
+        document.documentElement.style.setProperty('--curso-primary', color);
+
+        document.getElementById('cursoTitulo').textContent = curso.titulo;
+        document.getElementById('cursoDescripcion').textContent = curso.descripcion;
+        document.getElementById('cursoBadge').textContent = 'Aula virtual · ' + curso.titulo;
+        document.getElementById('cursoHeader').style.borderLeftColor = color;
+
+        renderModulos(curso);
+        showView('viewCurso');
+        btnIrEvaluacionWrapper.classList.add('hidden');
+    }
+
+    // =====================================================
+    // MÓDULOS
+    // =====================================================
+    function renderModulos(curso) {
+        const container = document.getElementById('modulosContainer');
+        container.innerHTML = '';
+        const color = curso.color || '#0200AF';
+
+        curso.modulos.forEach((mod, index) => {
+            const div = document.createElement('div');
+            div.className = `modulo ${mod.bloqueado ? 'bloqueado' : ''}`;
+            div.dataset.index = index;
+            div.dataset.bloqueado = mod.bloqueado ? 'true' : 'false';
+            const candadoIcon = mod.bloqueado ? '<i class="fas fa-lock candado"></i>' : '';
+            div.innerHTML = `
+                <div class="modulo-header">
+                    <div class="titulo">
+                        <span class="badge" style="background:${color}; color:#fff; padding:2px 10px; border-radius:30px; font-size:12px;">Módulo ${index+1}</span>
+                        ${mod.titulo}
+                        ${candadoIcon}
+                    </div>
+                    <i class="fas fa-chevron-down icono" style="color:${color};"></i>
+                </div>
+                <div class="modulo-body">
+                    <div class="video-container">
+                        <iframe src="${mod.video}" allowfullscreen></iframe>
+                    </div>
+                    <div class="acciones">
+                        <button class="btn-sec" data-pdf="${mod.pdf}"><i class="fas fa-file-pdf"></i> Ver PDF</button>
+                        <button class="btn-sec" data-slides="${mod.diapositivas}"><i class="fas fa-file-powerpoint"></i> Diapositivas</button>
+                    </div>
+                    <button class="btn-siguiente" data-next="${index+1}" ${index === curso.modulos.length-1 ? 'data-fin="true"' : ''} style="background:${color};">
+                        ${index === curso.modulos.length-1 ? 'Finalizar módulos' : 'Siguiente módulo →'}
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        // Headers
+        container.querySelectorAll('.modulo').forEach(mod => {
+            const header = mod.querySelector('.modulo-header');
+            const body = mod.querySelector('.modulo-body');
+            const icon = mod.querySelector('.icono');
+            header.addEventListener('click', function() {
+                if (mod.dataset.bloqueado === 'true') {
+                    alert('Este módulo está bloqueado. Espera a que el administrador lo habilite.');
+                    return;
+                }
+                const abierto = body.classList.contains('abierto');
+                container.querySelectorAll('.modulo-body').forEach(b => b.classList.remove('abierto'));
+                container.querySelectorAll('.icono').forEach(i => i.classList.remove('abierto'));
+                if (!abierto) {
+                    body.classList.add('abierto');
+                    icon.classList.add('abierto');
+                }
+            });
+        });
+
+        // Siguiente
+        container.querySelectorAll('.btn-siguiente').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const modActual = this.closest('.modulo');
+                if (modActual.dataset.bloqueado === 'true') {
+                    alert('Este módulo está bloqueado. No puedes avanzar.');
+                    return;
+                }
+                const nextIndex = parseInt(this.dataset.next);
+                const fin = this.dataset.fin === 'true';
+                if (fin) {
+                    btnIrEvaluacionWrapper.classList.remove('hidden');
+                    document.getElementById('btnIrEvaluacion').style.background = color;
+                    btnIrEvaluacionWrapper.scrollIntoView({ behavior: 'smooth' });
+                    return;
+                }
+                const nextMod = container.querySelector(`.modulo[data-index="${nextIndex}"]`);
+                if (nextMod) {
+                    nextMod.dataset.bloqueado = 'false';
+                    nextMod.classList.remove('bloqueado');
+                    const candado = nextMod.querySelector('.modulo-header .titulo .candado');
+                    if (candado) candado.remove();
+                    const body = nextMod.querySelector('.modulo-body');
+                    const icon = nextMod.querySelector('.icono');
+                    container.querySelectorAll('.modulo-body').forEach(b => b.classList.remove('abierto'));
+                    container.querySelectorAll('.icono').forEach(i => i.classList.remove('abierto'));
+                    body.classList.add('abierto');
+                    icon.classList.add('abierto');
+                    nextMod.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // PDF y diapositivas
+        container.querySelectorAll('.btn-sec').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const url = this.dataset.pdf || this.dataset.slides;
+                if (url && url !== '#') window.open(url, '_blank');
+                else alert('El recurso aún no está disponible.');
+            });
+        });
+    }
+
+    // =====================================================
+    // IR A EVALUACIÓN
+    // =====================================================
+    btnIrEvaluacion.addEventListener('click', function() {
+        cargarEvaluacion(cursoActual);
+        showView('viewEvaluacion');
+        const color = cursoActual.color || '#0200AF';
+        document.getElementById('evaluacionView').style.borderLeftColor = color;
+        document.querySelector('#evaluacionView h2').style.color = color;
+        document.querySelector('#evaluacionView .btn-calificar').style.background = color;
+        btnIrEvaluacionWrapper.classList.add('hidden');
+    });
+
+    // =====================================================
+    // EVALUACIÓN
+    // =====================================================
+    function cargarEvaluacion(curso) {
+        document.getElementById('evalCurso').value = curso.titulo;
+        // Limpiar campos personales (excepto curso)
+        ['evalNombre1','evalNombre2','evalApellido1','evalApellido2','evalCedula','evalEmail'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        const container = document.getElementById('preguntasContainer');
+        container.innerHTML = '';
+        respuestasUsuario = new Array(curso.preguntas.length).fill(null);
+
+        curso.preguntas.forEach((p, idx) => {
+            const div = document.createElement('div');
+            div.className = 'pregunta';
+            div.innerHTML = `<p>${idx+1}. ${p.pregunta}</p>`;
+            p.opciones.forEach((opc, j) => {
+                const label = document.createElement('label');
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `pregunta${idx}`;
+                input.value = j;
+                input.addEventListener('change', function() {
+                    respuestasUsuario[idx] = parseInt(this.value);
+                });
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(' ' + opc));
+                div.appendChild(label);
+            });
+            container.appendChild(div);
+        });
+        // Ocultar resultado previo
+        const resultadoDiv = document.getElementById('resultadoEval');
+        resultadoDiv.style.display = 'none';
+        resultadoDiv.className = '';
+        resultadoDiv.innerHTML = '';
+    }
+
+    btnCalificarEval.addEventListener('click', async function() {
+        const n1 = document.getElementById('evalNombre1').value.trim();
+        const n2 = document.getElementById('evalNombre2').value.trim();
+        const a1 = document.getElementById('evalApellido1').value.trim();
+        const a2 = document.getElementById('evalApellido2').value.trim();
+        const cedula = document.getElementById('evalCedula').value.trim();
+        const email = document.getElementById('evalEmail').value.trim();
+        const curso = document.getElementById('evalCurso').value.trim();
+
+        if (!n1 || !n2 || !a1 || !a2 || !cedula || !email || !curso) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+        if (!email.includes('@') || !email.includes('.')) {
+            alert('Por favor, ingresa un correo electrónico válido.');
+            return;
+        }
+
+        const todasRespondidas = respuestasUsuario.every(r => r !== null);
+        if (!todasRespondidas) {
+            alert('Debes responder todas las 8 preguntas.');
+            return;
+        }
+
+        let aciertos = 0;
+        // Construir el detalle de respuestas del estudiante
+        const detalleRespuestas = cursoActual.preguntas.map((p, idx) => {
+           const seleccionada = respuestasUsuario[idx];
+           const esCorrecta = seleccionada === p.correcta;
+           if (esCorrecta) aciertos++;
+           return {
+        numero: idx + 1,
+        pregunta: p.pregunta,
+        opciones: p.opciones,
+        respuestaSeleccionada: p.opciones[seleccionada] || '(sin responder)',
+        respuestaCorrecta: p.opciones[p.correcta],
+        esCorrecta: esCorrecta ? 'SÍ' : 'NO'
+    };
+});
+        const porcentaje = Math.round((aciertos / 8) * 100);
+        const aprobado = aciertos >= 7;
+
+        const resultadoDiv = document.getElementById('resultadoEval');
+        resultadoDiv.style.display = 'block';
+
+        if (aprobado) {
+            resultadoDiv.className = 'aprobado';
+            resultadoDiv.innerHTML = `<strong>✅ ¡Aprobado!</strong> Obtuviste ${aciertos} de 8 correctas (${porcentaje}%). Enviando datos a nuestro sistema...`;
+
+            // Enviar datos a Google Sheets
+            const exito = await enviarAGoogleSheets({
+                nombres: `${n1} ${n2}`,
+                apellidos: `${a1} ${a2}`,
+                cedula: cedula,
+                email: email,
+                curso: curso,
+                aciertos: aciertos,
+                total: 8,
+                porcentaje: porcentaje,
+                aprobado: 'SÍ',
+                certificado: 'SÍ',
+                intento: intentosExamen + 1,
+                detalleRespuestas: detalleRespuestas  // ← NUEVO
+            });
+
+            if (exito) {
+                document.getElementById('mensajeDatosEnvio').textContent = 'Datos enviados correctamente a nuestro sistema.';
+            } else {
+                document.getElementById('mensajeDatosEnvio').textContent = '(Los datos se enviarán cuando se configure la URL de Google Sheets).';
+            }
+
+            // Mostrar pantalla de mensaje final
+            document.getElementById('mensajeAprobacionTexto').textContent =
+                `${n1} ${n2} ${a1} ${a2}, has aprobado "${curso}" con ${aciertos}/8 (${porcentaje}%).`;
+            showView('mensajeFinalView');
+        } else {
+            resultadoDiv.className = 'reprobado';
+            resultadoDiv.innerHTML = `
+                <strong>❌ No aprobado.</strong> Obtuviste ${aciertos} de 8 correctas (${porcentaje}%). 
+                Necesitas mínimo 7 correctas (87.5%) para aprobar.<br><br>
+                <button class="btn-calificar" id="btnReintentar" style="margin-top:10px; font-size:14px; padding:8px 20px;">
+                    <i class="fas fa-redo"></i> Reintentar examen
+                </button>
+            `;
+            intentosExamen++;
+            // También enviar registro de intento fallido (opcional)
+            enviarAGoogleSheets({
+                nombres: `${n1} ${n2}`,
+                apellidos: `${a1} ${a2}`,
+                cedula: cedula,
+                email: email,
+                curso: curso,
+                aciertos: aciertos,
+                total: 8,
+                porcentaje: porcentaje,
+                aprobado: 'NO',
+                certificado: 'NO',
+                intento: intentosExamen,
+                detalleRespuestas: detalleRespuestas  // ← NUEVO
+            });
+
+            // Botón reintentar
+            setTimeout(() => {
+                const btnReintentar = document.getElementById('btnReintentar');
+                if (btnReintentar) {
+                    btnReintentar.addEventListener('click', function() {
+                        cargarEvaluacion(cursoActual);
+                        resultadoDiv.style.display = 'none';
+                        resultadoDiv.className = '';
+                        resultadoDiv.innerHTML = '';
+                    });
+                }
+            }, 100);
+        }
+    });
+
+    // =====================================================
+    // ENVÍO A GOOGLE SHEETS (Excel)
+    // =====================================================
+    async function enviarAGoogleSheets(datos) {
+        if (!GOOGLE_SHEETS_URL || GOOGLE_SHEETS_URL.includes('XXXX')) {
+            console.warn('⚠️ URL de Google Sheets no configurada.');
+            return false;
+        }
+        try {
+            await fetch(GOOGLE_SHEETS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(datos)
+            });
+            return true;
+        } catch (error) {
+            console.error('Error al enviar a Google Sheets:', error);
+            return false;
+        }
+    }
+
+    // =====================================================
+    // VOLVER AL INICIO DESDE MENSAJE FINAL
+    // =====================================================
+    btnVolverInicioMensaje.addEventListener('click', function() {
+        volverInicio();
+    });
+
+    // =====================================================
+    // BOTONES VOLVER
+    // =====================================================
+    btnVolverCursos.addEventListener('click', volverInicio);
+
+    btnVolverCursoEval.addEventListener('click', function() {
+        showView('viewCurso');
+        if (cursoActual) renderModulos(cursoActual);
+    });
+
+    // =====================================================
+    // PANEL INFO
+    // =====================================================
+    btnSalaVirtual.addEventListener('click', function() {
+        salaVirtualContainer.classList.toggle('hidden');
+        if (!salaVirtualContainer.classList.contains('hidden')) {
+            const iframe = salaVirtualContainer.querySelector('iframe');
+            if (iframe) iframe.src = MEET_URL;
+        }
+    });
+
+    btnInfoAgencia.addEventListener('click', function() {
+        generarPDFInstitucional('Punke Network',
+            'Punke Network es una agencia digital colombiana especializada en representación de creadores, manejo de redes sociales, branding, diseño gráfico, producción de contenido y desarrollo web. Nuestra misión es impulsar el talento y crear oportunidades para marcas, emprendedores y proyectos digitales.',
+            'img/logo/punke-network.png');
+    });
+
+    btnInfoERTO.addEventListener('click', function() {
+        generarPDFInstitucional('ERTO · Investigación & Consultoría',
+            'ERTO es la unidad especializada de Punke Network enfocada en formación, investigación y consultoría. Ofrecemos acompañamiento académico, asesoría metodológica, análisis de datos, preparación para sustentación y desarrollo de proyectos de investigación. Nuestro objetivo es convertir el conocimiento en oportunidades.',
+            'img/logo/erto-logo.png');
+    });
+
+    function generarPDFInstitucional(titulo, texto, logoUrl) {
+        const div = document.createElement('div');
+        div.style.cssText = 'width:700px; padding:40px; background:white; font-family:Inter, sans-serif;';
+        div.innerHTML = `
+            <div style="text-align:center; margin-bottom:20px;">
+                <img src="${logoUrl}" style="max-height:60px;" onerror="this.style.display='none'">
+                <h1 style="color:#0200AF; font-size:28px; margin-top:10px;">${titulo}</h1>
+            </div>
+            <div style="font-size:16px; line-height:1.8; color:#333;">
+                ${texto.replace(/\n/g, '<br>')}
+            </div>
+            <div style="margin-top:30px; border-top:1px solid #ddd; padding-top:20px; text-align:center; font-size:14px; color:#888;">
+                <p>ERTO · Investigación & Consultoría</p>
+                <p>Una unidad especializada de Punke Network</p>
+                <p style="margin-top:8px;">www.punkenetwork.com</p>
+            </div>
+        `;
+        document.body.appendChild(div);
+        html2canvas(div, {
+            scale: 2, backgroundColor: '#ffffff', allowTaint: false, useCORS: true, logging: false
+        }).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`${titulo.replace(/\s/g, '_')}.pdf`);
+            document.body.removeChild(div);
+        });
+    }
+
+    btnAdminCursos.addEventListener('click', function() {
+        alert('La gestión de cursos y usuarios se realiza en el código fuente (array CURSOS).');
+    });
+
+    // =====================================================
+    // BLOQUEO DE INSPECCIÓN
+    // =====================================================
+    document.addEventListener('contextmenu', e => { e.preventDefault(); alert('Inspección deshabilitada.'); });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
+            e.preventDefault();
+            alert('Acción no permitida.');
+            return false;
+        }
+    });
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+
+    console.log('%c🔒 Aula Virtual ERTO', 'font-size:16px; color:#0200AF;');
+    console.log('%c📌 Configura GOOGLE_SHEETS_URL para guardar respuestas.', 'font-size:13px; color:#E67E22;');
+</script>
+
+</body>
+</html>
