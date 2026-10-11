@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Recuperar contraseña · ERTO</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body style="background:linear-gradient(135deg,#0200AF,#01007a);min-height:100vh">
+<div style="padding-top:40px;text-align:center">
+  <a href="index.html" class="brand" style="color:#fff;justify-content:center;display:inline-flex">
+    <span style="color:#fff">ERTO<span style="color:#00c2ff">.</span></span>
+  </a>
+</div>
+
+<div class="form-card fade-in">
+  <h2>Recuperar contraseña</h2>
+  <p class="sub">Te enviaremos un token para restablecerla</p>
+
+  <form id="formRec">
+    <div class="field">
+      <label><i class="fa-solid fa-envelope"></i> Correo electrónico</label>
+      <input type="email" name="email" required placeholder="tu@email.com">
+    </div>
+    <button type="submit" class="btn btn-primary btn-full btn-lg" id="btnRec">
+      <i class="fa-solid fa-paper-plane"></i> Enviar
+    </button>
+  </form>
+
+  <div id="resultado" style="margin-top:20px"></div>
+
+  <div style="text-align:center;margin-top:22px;font-size:.9rem">
+    <a href="login.html" style="color:var(--erto-primary)">Volver al login</a>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+document.getElementById('formRec').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = e.target.email.value.trim();
+  if (!validarEmail(email)) return alerta('Correo inválido','error');
+  const btn = document.getElementById('btnRec');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando...';
+  const r = await API.recuperar(email);
+  btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar';
+  if (r.success) {
+    document.getElementById('resultado').innerHTML =
+      `<div class="card" style="background:var(--erto-primary-light);border:none">
+        <strong>Token generado:</strong><br><code style="word-break:break-all">${r.token}</code>
+        <p style="margin-top:10px;font-size:.85rem">Cópialo y guárdalo (en producción se envía por correo).</p>
+      </div>`;
+  } else {
+    alerta(r.message || 'Error', 'error');
+  }
+});
+</script>
+</body>
+</html>

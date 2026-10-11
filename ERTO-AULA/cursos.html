@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cursos · ERTO</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div id="header"></div>
+
+<header class="hero" style="padding:60px 0 70px">
+  <div class="container hero-inner">
+    <h1>Catálogo de cursos</h1>
+    <p>Explora todos nuestros cursos disponibles y comienza tu formación profesional.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="container">
+    <div class="grid grid-3" id="gridCursos"></div>
+  </div>
+</section>
+
+<footer class="footer"><div class="container"><div class="footer-bottom">© 2026 ERTO · Punke Network</div></div></footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+(async function(){
+  const u = usuarioActual();
+  const r = await API.cursos();
+  const cursos = r.success ? r.cursos : [];
+  const cont = document.getElementById('gridCursos');
+
+  if (!cursos.length) { cont.innerHTML = '<div class="card"><p>No hay cursos disponibles.</p></div>'; return; }
+
+  cont.innerHTML = cursos.map(c => `
+    <div class="card">
+      <img class="card-img" src="${c.imagen||''}" alt="" onerror="this.style.display='none'">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span class="badge badge-primary">${c.nivel || 'Básico'}</span>
+        <span style="font-size:.8rem;color:var(--erto-gray)"><i class="fa-solid fa-clock"></i> ${c.duracion_horas||0}h</span>
+      </div>
+      <h3>${c.titulo}</h3>
+      <p>${c.descripcion||''}</p>
+      ${u
+        ? `<a href="aula-virtual.html?id=${c.id}" class="btn btn-primary btn-full btn-sm"><i class="fa-solid fa-play"></i> Ver curso</a>`
+        : `<a href="login.html" class="btn btn-outline btn-full btn-sm"><i class="fa-solid fa-lock"></i> Inicia sesión para acceder</a>`}
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

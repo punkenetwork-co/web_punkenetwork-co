@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel Estudiante · ERTO</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container dashboard">
+  <h1>Mi Panel</h1>
+  <p class="welcome">Bienvenido de nuevo a tu Aula Virtual</p>
+
+  <div class="stats" id="stats"></div>
+
+  <h2 style="margin-bottom:20px">Mis cursos</h2>
+  <div class="grid grid-3" id="misCursos"></div>
+
+  <h2 style="margin:40px 0 20px">Historial de exámenes</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Curso</th><th>Aciertos</th><th>Nota</th><th>Estado</th><th>Fecha</th></tr></thead>
+      <tbody id="tablaExamenes"><tr><td colspan="5">Cargando...</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2 style="margin:40px 0 20px">Mis certificados</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Código</th><th>Curso</th><th>Nota</th><th>Fecha</th><th>Estado</th><th>Acción</th></tr></thead>
+      <tbody id="tablaCerts"><tr><td colspan="6">Cargando...</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+(async function init(){
+  protegerPagina();
+  const u = await requiereSesion(['estudiante','tutor','admin']);
+  if (!u) return;
+  pintarHeader('header', 'Panel', { texto:'Estudiante', color:'primary' });
+
+  const [cursosR, certsR] = await Promise.all([
+    API.cursos(),
+    API.certificadosUsuario(u.id)
+  ]);
+  const cursos = cursosR.success ? cursosR.cursos : [];
+  const certs  = certsR.success ? certsR.certificados : [];
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><i class="fa-solid fa-book"></i><div class="value">${cursos.length}</div><div class="label">Cursos disponibles</div></div>
+    <div class="stat"><i class="fa-solid fa-chart-line"></i><div class="value">0%</div><div class="label">Progreso general</div></div>
+    <div class="stat"><i class="fa-solid fa-certificate"></i><div class="value">${certs.length}</div><div class="label">Certificados</div></div>
+    <div class="stat"><i class="fa-solid fa-hourglass"></i><div class="value">0h</div><div class="label">Horas estudiadas</div></div>`;
+
+  document.getElementById('misCursos').innerHTML = cursos.length ? cursos.map(c => `
+    <div class="card">
+      <img class="card-img" src="${c.imagen || ''}" alt="" onerror="this.style.display='none'">
+      <h3>${c.titulo}</h3>
+      <p>${(c.descripcion||'').slice(0,100)}...</p>
+      <a href="aula-virtual.html?id=${c.id}" class="btn btn-primary btn-sm btn-full"><i class="fa-solid fa-play"></i> Comenzar</a>
+    </div>`).join('') : '<div class="card"><p>No hay cursos aún.</p></div>';
+
+  document.getElementById('tablaExamenes').innerHTML = '<tr><td colspan="5">Sin exámenes presentados</td></tr>';
+
+  document.getElementById('tablaCerts').innerHTML = certs.length ? certs.map(c => `
+    <tr>
+      <td><code>${c.codigo}</code></td>
+      <td>${c.curso_id}</td>
+      <td>${c.nota_final}%</td>
+      <td>${formatearFecha(c.fecha_emision)}</td>
+      <td><span class="badge badge-${c.enviado === 'Enviado' ? 'success':'warning'}">${c.enviado}</span></td>
+      <td><a class="btn btn-outline btn-sm" href="certificado.html?codigo=${c.codigo}"><i class="fa-solid fa-download"></i> Ver</a></td>
+    </tr>`).join('') : '<tr><td colspan="6">Aún no tienes certificados</td></tr>';
+})();
+</script>
+</body>
+</html>

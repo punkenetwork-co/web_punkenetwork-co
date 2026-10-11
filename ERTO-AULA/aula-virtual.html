@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aula Virtual · ERTO</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="padding:40px 0">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:30px">
+    <div>
+      <a href="cursos.html" class="btn btn-outline btn-sm" style="margin-bottom:10px"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+      <h1 id="tituloCurso" style="font-size:1.7rem">Cargando curso...</h1>
+    </div>
+    <div class="circle-progress" id="circuloProg">
+      <svg width="70" height="70">
+        <circle class="bg" cx="35" cy="35" r="30" fill="none" stroke-width="6"/>
+        <circle class="fg" cx="35" cy="35" r="30" fill="none" stroke-width="6"
+                stroke-dasharray="0 200" id="progressArc"/>
+      </svg>
+      <div class="val" id="progressVal">0%</div>
+    </div>
+  </div>
+
+  <div id="listaModulos"></div>
+
+  <div id="btnExamen" style="text-align:center;margin-top:30px"></div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+const cursoId = getParam('id');
+let usuario, curso;
+
+(async function init(){
+  protegerPagina();
+  usuario = await requiereSesion();
+  if (!usuario || !cursoId) return;
+  pintarHeader('header','Aula',{texto:'Estudiante',color:'primary'});
+
+  const r = await API.cursoDetalle(cursoId);
+  if (!r.success) { alerta('No se pudo cargar el curso','error'); return; }
+
+  document.getElementById('tituloCurso').textContent = 'Aula Virtual';
+  actualizarProgreso(r.progreso);
+  renderModulos(r.modulos, r.total, r.completados);
+})();
+
+function actualizarProgreso(pct) {
+  const c = 2 * Math.PI * 30;
+  document.getElementById('progressArc').setAttribute('stroke-dasharray', `${(pct/100)*c} ${c}`);
+  document.getElementById('progressVal').textContent = pct + '%';
+}
+
+function renderModulos(mods, total, completados) {
+  const cont = document.getElementById('listaModulos');
+  cont.innerHTML = mods.map((m,i) => {
+    const estado = m.completado === 'SI' ? {texto:'Completado', color:'success'}
+                 : m.desbloqueado ? {texto:'Disponible', color:'primary'}
+                 : {texto:'Bloqueado', color:'secondary'};
+    const videoId = extraerYoutubeId(m.video_url);
+    return `
+      <div class="module ${m.completado==='SI'?'':''} ${!m.desbloqueado?'blocked':''}" data-idx="${i}">
+        <div class="module-head" onclick="toggleModulo(this)">
+          <div class="num">${m.numero_modulo}</div>
+          <div class="info">
+            <h4>${m.titulo} <span class="badge badge-${estado.color}">${estado.texto}</span></h4>
+            <p>${m.descripcion||''}</p>
+          </div>
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+        <div class="module-body">
+          ${videoId ? `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${videoId}" allowfullscreen></iframe></div>` : ''}
+          <div class="module-actions">
+            ${m.pdf_url ? `<a class="btn btn-outline btn-sm" href="${m.pdf_url}" target="_blank"><i class="fa-solid fa-file-pdf"></i> PDF</a>` : ''}
+            ${m.diapositivas_url ? `<a class="btn btn-outline btn-sm" href="${m.diapositivas_url}" target="_blank"><i class="fa-solid fa-file-powerpoint"></i> Diapositivas</a>` : ''}
+            ${m.completado!=='SI' && m.desbloqueado ? `<button class="btn btn-success btn-sm" onclick="marcar(${m.id})"><i class="fa-solid fa-check"></i> Marcar como completado</button>` : ''}
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const btnEx = document.getElementById('btnExamen');
+  if (completados >= total && total > 0) {
+    btnEx.innerHTML = `<a href="examen.html?id=${cursoId}" class="btn btn-primary btn-lg"><i class="fa-solid fa-file-pen"></i> Presentar examen final</a>`;
+  } else {
+    btnEx.innerHTML = `<p style="color:var(--erto-gray)">Completa los ${total} módulos para desbloquear el examen final.</p>`;
+  }
+}
+
+function toggleModulo(el) { el.parentElement.classList.toggle('open'); }
+
+function extraerYoutubeId(url) {
+  if (!url) return '';
+  const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=))([^&?\s]+)/);
+  return m ? m[1] : url;
+}
+
+async function marcar(moduloId) {
+  const r = await API.marcarModulo(moduloId);
+  if (r.success) { alerta('Módulo completado','success'); setTimeout(()=>location.reload(),700); }
+  else alerta(r.message || 'Error','error');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ERTO · Aula Virtual — Punke Network</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="container topbar-inner">
+    <span><i class="fa-solid fa-phone"></i> +57 300 000 0000 · <i class="fa-solid fa-envelope"></i> info@punke.network</span>
+    <span>
+      <a href="#"><i class="fa-brands fa-facebook"></i></a>
+      <a href="#"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+      <a href="login.html"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</a>
+      <a href="registro.html"><i class="fa-solid fa-user-plus"></i> Registrarse</a>
+    </span>
+  </div>
+</div>
+
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a href="index.html" class="brand">
+      <img src="assets/img/logo/logo.png" alt="ERTO" onerror="this.style.display='none'">
+      <span>ERTO<span class="brand-dot">.</span></span>
+    </a>
+    <i class="fa-solid fa-bars menu-toggle" onclick="document.querySelector('.menu').classList.toggle('open')"></i>
+    <div class="menu">
+      <a href="index.html">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#nosotros">Nosotros</a>
+      <a href="cursos.html">Cursos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="nav-right">
+      <a href="login.html" class="btn btn-outline btn-sm"><i class="fa-solid fa-right-to-bracket"></i> Ingresar</a>
+      <a href="registro.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-user-plus"></i> Registrarse</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container hero-inner fade-in">
+    <h1>Aprende sin límites con el Aula Virtual de ERTO</h1>
+    <p>Formación profesional en tecnología, innovación y habilidades digitales. Cursos certificados, evaluaciones en línea y seguimiento personalizado.</p>
+    <div class="hero-cta">
+      <a href="cursos.html" class="btn btn-white btn-lg"><i class="fa-solid fa-graduation-cap"></i> Ver cursos</a>
+      <a href="registro.html" class="btn btn-outline-white btn-lg"><i class="fa-solid fa-rocket"></i> Comenzar gratis</a>
+    </div>
+  </div>
+</header>
+
+<section id="servicios" class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2>Servicios destacados</h2>
+      <p>Todo lo que necesitas para aprender y certificarte desde cualquier lugar.</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card"><i class="fa-solid fa-laptop-code" style="font-size:30px;color:var(--erto-primary)"></i><h3>Cursos en línea</h3><p>Contenido actualizado con videos, PDFs y diapositivas interactivas.</p></div>
+      <div class="card"><i class="fa-solid fa-certificate" style="font-size:30px;color:var(--erto-primary)"></i><h3>Certificación</h3><p>Obtén tu certificado digital automáticamente al aprobar el examen final.</p></div>
+      <div class="card"><i class="fa-solid fa-user-tie" style="font-size:30px;color:var(--erto-primary)"></i><h3>Tutoría personalizada</h3><p>Acompañamiento constante de tutores expertos en cada módulo.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--erto-light)">
+  <div class="container">
+    <div class="section-head">
+      <h2>Cursos destacados</h2>
+      <p>Explora nuestros cursos más populares y comienza hoy mismo.</p>
+    </div>
+    <div class="grid grid-3" id="cursosDestacados">
+      <div class="card"><p>Cargando cursos...</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <h2>¿Listo para dar el siguiente paso?</h2>
+  <p>Regístrate gratis y accede a todo el catálogo de cursos de ERTO.</p>
+  <a href="registro.html" class="btn btn-white btn-lg"><i class="fa-solid fa-user-plus"></i> Crear cuenta</a>
+</section>
+
+<footer class="footer" id="contacto">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>ERTO · Punke Network</h4>
+        <p style="color:#94a3b8;font-size:.9rem">Plataforma educativa virtual con certificación digital. Aprende a tu ritmo, desde cualquier lugar.</p>
+      </div>
+      <div>
+        <h4>Plataforma</h4>
+        <a href="cursos.html">Cursos</a>
+        <a href="login.html">Ingresar</a>
+        <a href="registro.html">Registrarse</a>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <a href="mailto:info@punke.network">info@punke.network</a>
+        <a href="tel:+573000000000">+57 300 000 0000</a>
+      </div>
+      <div>
+        <h4>Redes</h4>
+        <a href="#"><i class="fa-brands fa-facebook"></i> Facebook</a>
+        <a href="#"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="#"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 ERTO · Punke Network. Todos los derechos reservados.</div>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+(async function cargarCursos(){
+  const r = await API.cursos();
+  const cont = document.getElementById('cursosDestacados');
+  if (!r.success || !r.cursos.length) {
+    cont.innerHTML = '<div class="card"><p>No hay cursos disponibles por ahora.</p></div>';
+    return;
+  }
+  cont.innerHTML = r.cursos.slice(0,3).map(c => `
+    <div class="card">
+      <img class="card-img" src="${c.imagen || 'assets/img/cursos/default.jpg'}" alt="${c.titulo}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 300 170%22><rect fill=%22%23e8e8ff%22 width=%22300%22 height=%22170%22/></svg>'">
+      <h3>${c.titulo}</h3>
+      <p>${(c.descripcion||'').slice(0,120)}...</p>
+      <div class="card-meta">
+        <span><i class="fa-solid fa-clock"></i> ${c.duracion_horas || 0}h</span>
+        <span><i class="fa-solid fa-signal"></i> ${c.nivel || 'Básico'}</span>
+      </div>
+      <a href="cursos.html" class="btn btn-primary btn-sm btn-full">Ver curso</a>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

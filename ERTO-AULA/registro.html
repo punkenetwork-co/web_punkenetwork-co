@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registro · ERTO</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body style="background:linear-gradient(135deg,#0200AF,#01007a);min-height:100vh">
+
+<div style="padding-top:40px;text-align:center">
+  <a href="index.html" class="brand" style="color:#fff;justify-content:center;display:inline-flex">
+    <img src="assets/img/logo/logo.png" alt="ERTO" onerror="this.style.display='none'">
+    <span style="color:#fff">ERTO<span style="color:#00c2ff">.</span></span>
+  </a>
+</div>
+
+<div class="form-card fade-in" style="max-width:640px">
+  <h2>Crear cuenta</h2>
+  <p class="sub">Regístrate y empieza a aprender hoy</p>
+
+  <form id="formReg" novalidate>
+    <div class="form-row">
+      <div class="field"><label>Nombres</label><input name="nombres" required placeholder="Ej: Ana María"></div>
+      <div class="field"><label>Apellidos</label><input name="apellidos" required placeholder="Ej: Pérez Gómez"></div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Tipo documento</label>
+        <select name="tipo_documento">
+          <option value="CC">Cédula de Ciudadanía</option>
+          <option value="CE">Cédula de Extranjería</option>
+          <option value="TI">Tarjeta de Identidad</option>
+          <option value="PP">Pasaporte</option>
+        </select>
+      </div>
+      <div class="field"><label>Número documento</label><input name="numero_documento" required placeholder="1234567890"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Correo</label><input type="email" name="email" required placeholder="tu@email.com"></div>
+      <div class="field"><label>Teléfono</label><input name="telefono" placeholder="+57 300 000 0000"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Universidad</label><input name="universidad" placeholder="Ej: UdeA"></div>
+      <div class="field"><label>Programa</label><input name="programa" placeholder="Ej: Ingeniería de Sistemas"></div>
+    </div>
+    <div class="form-row">
+      <div class="field"><label>Contraseña</label><input type="password" name="password" required minlength="8" placeholder="Mínimo 8 caracteres"></div>
+      <div class="field"><label>Confirmar contraseña</label><input type="password" name="password_confirm" required placeholder="Repite la contraseña"></div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-full btn-lg" id="btnReg">
+      <i class="fa-solid fa-user-plus"></i> Registrarme
+    </button>
+  </form>
+
+  <div style="text-align:center;margin-top:22px;font-size:.9rem;color:var(--erto-gray)">
+    ¿Ya tienes cuenta? <a href="login.html" style="color:var(--erto-primary);font-weight:600">Inicia sesión</a>
+  </div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+const form = document.getElementById('formReg');
+const btn  = document.getElementById('btnReg');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(form).entries());
+
+  if (d.nombres.trim().length < 2) return alerta('Nombres: mínimo 2 caracteres','error');
+  if (d.apellidos.trim().length < 2) return alerta('Apellidos: mínimo 2 caracteres','error');
+  if (d.numero_documento.trim().length < 6) return alerta('Documento: mínimo 6 dígitos','error');
+  if (!validarEmail(d.email)) return alerta('Correo inválido','error');
+  if (d.password.length < 8) return alerta('Contraseña: mínimo 8 caracteres','error');
+  if (d.password !== d.password_confirm) return alerta('Las contraseñas no coinciden','error');
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creando cuenta...';
+
+  const r = await hacerRegistro(d);
+  if (r.success) {
+    alerta('Registro exitoso. Redirigiendo al login...', 'success');
+    setTimeout(() => location.href = 'login.html', 1500);
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Registrarme';
+    alerta(r.message || 'Error al registrar', 'error');
+  }
+});
+</script>
+</body>
+</html>

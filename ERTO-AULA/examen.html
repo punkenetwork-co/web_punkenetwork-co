@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Examen Final · ERTO</title>
+<link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<div id="header"></div>
+
+<div class="container" style="padding:40px 0;max-width:900px">
+  <h1 style="margin-bottom:10px">Examen Final</h1>
+  <p style="color:var(--erto-gray);margin-bottom:30px">Responde todas las preguntas. Necesitas 80% o más para aprobar.</p>
+
+  <form id="formExamen">
+    <div id="listaPreguntas"></div>
+    <button type="submit" class="btn btn-primary btn-lg btn-full" id="btnEnviar" style="margin-top:20px">
+      <i class="fa-solid fa-paper-plane"></i> Enviar examen
+    </button>
+  </form>
+
+  <div id="resultado" style="margin-top:30px"></div>
+</div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/utils.js"></script>
+<script>
+const cursoId = getParam('id');
+let preguntas = [];
+
+(async function init(){
+  protegerPagina();
+  const u = await requiereSesion();
+  if (!u || !cursoId) return;
+  pintarHeader('header','Examen',{texto:'Estudiante',color:'primary'});
+
+  const r = await API.preguntas(cursoId);
+  if (!r.success || !r.preguntas.length) {
+    document.getElementById('listaPreguntas').innerHTML = '<div class="card"><p>No hay preguntas para este curso.</p></div>';
+    document.getElementById('btnEnviar').style.display = 'none';
+    return;
+  }
+  preguntas = r.preguntas;
+  document.getElementById('listaPreguntas').innerHTML = preguntas.map((p,i) => `
+    <div class="question">
+      <h4><span class="num">${i+1}.</span>${p.pregunta}</h4>
+      ${['a','b','c','d'].map(op => `
+        <label class="opt" onclick="selOpt(this)">
+          <input type="radio" name="p_${p.id}" value="${op}">
+          <span>${p['opcion_'+op]}</span>
+        </label>`).join('')}
+    </div>`).join('');
+})();
+
+function selOpt(el) {
+  el.parentElement.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+document.getElementById('formExamen').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const respuestas = {};
+  let faltan = 0;
+  preguntas.forEach(p => {
+    const sel = document.querySelector(`input[name="p_${p.id}"]:checked`);
+    if (sel) respuestas[p.id] = sel.value;
+    else faltan++;
+  });
+  if (faltan) return alerta(`Faltan ${faltan} preguntas por responder`,'error');
+
+  const btn = document.getElementById('btnEnviar');
+  btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Calificando...';
+
+  const r = await API.guardarExamen({ curso_id: cursoId, respuestas });
+  if (!r.success) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Enviar examen'; return alerta(r.message||'Error','error'); }
+
+  const res = document.getElementById('resultado');
+  if (r.aprobado) {
+    res.innerHTML = `
+      <div class="card" style="border-left:5px solid var(--erto-success);text-align:center">
+        <i class="fa-solid fa-circle-check" style="font-size:48px;color:var(--erto-success)"></i>
+        <h2 style="margin:14px 0">¡Felicitaciones!</h2>
+        <p>Obtuviste <strong>${r.aciertos}/${r.total} (${r.porcentaje}%)</strong></p>
+        <p style="margin-top:10px">Tu certificado ha sido generado con el código:</p>
+        <p style="font-size:1.2rem;font-weight:800;color:var(--erto-primary);margin:10px 0">${r.certificado.codigo}</p>
+        <a href="certificado.html?codigo=${r.certificado.codigo}" class="btn btn-primary btn-lg" style="margin-top:12px">
+          <i class="fa-solid fa-certificate"></i> Ver certificado
+        </a>
+      </div>`;
+  } else {
+    res.innerHTML = `
+      <div class="card" style="border-left:5px solid var(--erto-danger);text-align:center">
+        <i class="fa-solid fa-circle-xmark" style="font-size:48px;color:var(--erto-danger)"></i>
+        <h2 style="margin:14px 0">No aprobaste</h2>
+        <p>Obtuviste <strong>${r.aciertos}/${r.total} (${r.porcentaje}%)</strong>. Necesitas 80%.</p>
+        <a href="examen.html?id=${cursoId}" class="btn btn-primary" style="margin-top:12px">
+          <i class="fa-solid fa-rotate-right"></i> Intentar de nuevo
+        </a>
+      </div>`;
+  }
+  document.getElementById('formExamen').style.display = 'none';
+});
+</script>
+</body>
+</html>

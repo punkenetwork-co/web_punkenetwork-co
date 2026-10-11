@@ -1,0 +1,241 @@
+/* ============================================================
+   ERTO AULA VIRTUAL — DISEÑO GLOBAL
+   ============================================================ */
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+   :root{
+     --erto-primary:#0200AF;
+     --erto-primary-dark:#01007a;
+     --erto-primary-light:#e8e8ff;
+     --erto-accent:#00c2ff;
+     --erto-success:#10b981;
+     --erto-warning:#f59e0b;
+     --erto-danger:#ef4444;
+     --erto-dark:#0b0b1a;
+     --erto-gray:#64748b;
+     --erto-light:#f8fafc;
+     --erto-border:#e2e8f0;
+     --erto-radius:14px;
+     --erto-radius-sm:8px;
+     --erto-shadow:0 4px 20px rgba(2,0,175,.08);
+     --erto-shadow-lg:0 12px 40px rgba(2,0,175,.15);
+     --erto-transition:.25s ease;
+   }
+   
+   *{box-sizing:border-box;margin:0;padding:0}
+   html{scroll-behavior:smooth}
+   body{font-family:'Inter',system-ui,sans-serif;color:var(--erto-dark);background:#fff;line-height:1.6;font-size:15px}
+   img{max-width:100%;display:block}
+   a{text-decoration:none;color:inherit}
+   button{font-family:inherit;cursor:pointer;border:none;background:none}
+   
+   /* ============================ LAYOUT ============================ */
+   .container{width:min(1200px,92%);margin:0 auto}
+   
+   /* ============================ TOPBAR ============================ */
+   .topbar{background:var(--erto-dark);color:#fff;font-size:12.5px;padding:8px 0}
+   .topbar-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+   .topbar a{margin-right:14px;opacity:.85;transition:var(--erto-transition)}
+   .topbar a:hover{opacity:1;color:var(--erto-accent)}
+   
+   /* ============================ NAVBAR ============================ */
+   .navbar{background:#fff;box-shadow:var(--erto-shadow);position:sticky;top:0;z-index:50}
+   .navbar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:20px}
+   .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:var(--erto-primary)}
+   .brand img{height:38px}
+   .brand-dot{color:var(--erto-accent)}
+   .nav-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+   .menu{display:flex;gap:22px;align-items:center}
+   .menu a{font-weight:500;color:var(--erto-dark);transition:var(--erto-transition);font-size:14.5px}
+   .menu a:hover{color:var(--erto-primary)}
+   .menu-toggle{display:none;font-size:22px;color:var(--erto-primary)}
+   
+   /* ============================ BOTONES ============================ */
+   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:var(--erto-radius-sm);font-weight:600;font-size:14px;transition:var(--erto-transition);border:2px solid transparent;white-space:nowrap}
+   .btn-primary{background:var(--erto-primary);color:#fff}
+   .btn-primary:hover{background:var(--erto-primary-dark);transform:translateY(-1px);box-shadow:var(--erto-shadow)}
+   .btn-outline{border-color:var(--erto-primary);color:var(--erto-primary)}
+   .btn-outline:hover{background:var(--erto-primary);color:#fff}
+   .btn-white{background:#fff;color:var(--erto-primary)}
+   .btn-white:hover{background:var(--erto-primary-light)}
+   .btn-outline-white{border-color:#fff;color:#fff}
+   .btn-outline-white:hover{background:#fff;color:var(--erto-primary)}
+   .btn-danger{background:var(--erto-danger);color:#fff}
+   .btn-success{background:var(--erto-success);color:#fff}
+   .btn-sm{padding:7px 14px;font-size:13px}
+   .btn-lg{padding:15px 32px;font-size:16px}
+   .btn-full{width:100%}
+   .btn:disabled{opacity:.5;cursor:not-allowed;transform:none!important}
+   
+   /* ============================ HERO ============================ */
+   .hero{background:linear-gradient(135deg,var(--erto-primary) 0%,var(--erto-primary-dark) 60%,var(--erto-dark) 100%);color:#fff;padding:90px 0 110px;position:relative;overflow:hidden}
+   .hero::before{content:'';position:absolute;top:-50%;right:-10%;width:600px;height:600px;background:radial-gradient(circle,rgba(0,194,255,.25) 0%,transparent 70%);border-radius:50%}
+   .hero-inner{position:relative;z-index:1;max-width:760px}
+   .hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;line-height:1.15;margin-bottom:18px}
+   .hero p{font-size:1.1rem;opacity:.92;margin-bottom:30px;max-width:620px}
+   .hero-cta{display:flex;gap:14px;flex-wrap:wrap}
+   
+   /* ============================ SECCIONES ============================ */
+   .section{padding:80px 0}
+   .section-head{text-align:center;max-width:720px;margin:0 auto 50px}
+   .section-head h2{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:14px;color:var(--erto-dark)}
+   .section-head p{color:var(--erto-gray);font-size:1.02rem}
+   
+   /* ============================ CARDS ============================ */
+   .card{background:#fff;border-radius:var(--erto-radius);box-shadow:var(--erto-shadow);padding:26px;border:1px solid var(--erto-border);transition:var(--erto-transition)}
+   .card:hover{transform:translateY(-4px);box-shadow:var(--erto-shadow-lg)}
+   .card-img{width:100%;height:170px;object-fit:cover;border-radius:var(--erto-radius-sm);margin-bottom:16px;background:var(--erto-primary-light)}
+   .card h3{font-size:1.15rem;margin-bottom:8px;color:var(--erto-dark)}
+   .card p{color:var(--erto-gray);font-size:.92rem;margin-bottom:16px}
+   .card-meta{display:flex;gap:16px;flex-wrap:wrap;font-size:.82rem;color:var(--erto-gray);margin-bottom:14px}
+   .card-meta i{color:var(--erto-primary);margin-right:4px}
+   
+   /* ============================ GRIDS ============================ */
+   .grid{display:grid;gap:24px}
+   .grid-2{grid-template-columns:repeat(2,1fr)}
+   .grid-3{grid-template-columns:repeat(3,1fr)}
+   .grid-4{grid-template-columns:repeat(4,1fr)}
+   
+   /* ============================ CTA ============================ */
+   .cta{background:linear-gradient(135deg,var(--erto-primary),var(--erto-primary-dark));color:#fff;padding:70px 0;text-align:center;border-radius:var(--erto-radius);margin:60px auto;width:min(1200px,92%)}
+   .cta h2{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:14px}
+   .cta p{opacity:.9;margin-bottom:26px;max-width:640px;margin-left:auto;margin-right:auto}
+   
+   /* ============================ FOOTER ============================ */
+   .footer{background:var(--erto-dark);color:#cbd5e1;padding:60px 0 20px;margin-top:60px}
+   .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+   .footer h4{color:#fff;margin-bottom:16px;font-size:1rem}
+   .footer a{display:block;color:#94a3b8;font-size:.9rem;margin-bottom:8px;transition:var(--erto-transition)}
+   .footer a:hover{color:var(--erto-accent)}
+   .footer-bottom{border-top:1px solid #1e293b;padding-top:20px;text-align:center;font-size:.85rem;color:#64748b}
+   
+   /* ============================ FORMULARIOS ============================ */
+   .form-card{max-width:520px;margin:60px auto;padding:40px;background:#fff;border-radius:var(--erto-radius);box-shadow:var(--erto-shadow-lg)}
+   .form-card h2{text-align:center;margin-bottom:8px;color:var(--erto-primary)}
+   .form-card .sub{text-align:center;color:var(--erto-gray);margin-bottom:30px;font-size:.92rem}
+   .field{margin-bottom:18px}
+   .field label{display:block;font-weight:600;font-size:.88rem;margin-bottom:6px;color:var(--erto-dark)}
+   .field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--erto-border);border-radius:var(--erto-radius-sm);font-size:14.5px;font-family:inherit;transition:var(--erto-transition);background:#fff}
+   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--erto-primary);box-shadow:0 0 0 3px rgba(2,0,175,.1)}
+   .field .error{color:var(--erto-danger);font-size:.8rem;margin-top:4px;display:none}
+   .field.invalid input{border-color:var(--erto-danger)}
+   .field.invalid .error{display:block}
+   .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+   
+   /* ============================ TABLAS ============================ */
+   .table-wrap{overflow-x:auto;background:#fff;border-radius:var(--erto-radius);box-shadow:var(--erto-shadow);border:1px solid var(--erto-border)}
+   table{width:100%;border-collapse:collapse;font-size:14px}
+   th{background:var(--erto-primary-light);color:var(--erto-primary);text-align:left;padding:14px 16px;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.5px}
+   td{padding:14px 16px;border-top:1px solid var(--erto-border)}
+   tbody tr:hover{background:#fafbff}
+   
+   /* ============================ DASHBOARD ============================ */
+   .dashboard{padding:40px 0}
+   .dashboard h1{font-size:1.8rem;margin-bottom:6px}
+   .dashboard .welcome{color:var(--erto-gray);margin-bottom:30px}
+   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:40px}
+   .stat{background:#fff;padding:22px;border-radius:var(--erto-radius);box-shadow:var(--erto-shadow);border-left:4px solid var(--erto-primary);display:flex;flex-direction:column;gap:6px}
+   .stat i{font-size:22px;color:var(--erto-primary);margin-bottom:6px}
+   .stat .value{font-size:1.9rem;font-weight:800;color:var(--erto-dark)}
+   .stat .label{font-size:.85rem;color:var(--erto-gray)}
+   
+   /* ============================ TABS ============================ */
+   .tabs{display:flex;gap:6px;border-bottom:2px solid var(--erto-border);margin-bottom:24px;overflow-x:auto}
+   .tab{padding:12px 20px;font-weight:600;color:var(--erto-gray);border-bottom:3px solid transparent;transition:var(--erto-transition);white-space:nowrap;font-size:14px}
+   .tab.active{color:var(--erto-primary);border-color:var(--erto-primary)}
+   .tab-panel{display:none}
+   .tab-panel.active{display:block;animation:fadeIn .3s ease}
+   
+   /* ============================ BADGES ============================ */
+   .badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+   .badge-primary{background:var(--erto-primary-light);color:var(--erto-primary)}
+   .badge-success{background:#d1fae5;color:#065f46}
+   .badge-warning{background:#fef3c7;color:#92400e}
+   .badge-danger{background:#fee2e2;color:#991b1b}
+   .badge-info{background:#dbeafe;color:#1e40af}
+   .badge-secondary{background:#f1f5f9;color:#475569}
+   
+   /* ============================ USER CHIP ============================ */
+   .user-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--erto-light);border-radius:999px;font-size:13.5px;font-weight:500}
+   .user-chip i{color:var(--erto-primary)}
+   
+   /* ============================ TOAST ============================ */
+   .toast{position:fixed;bottom:30px;right:30px;background:#fff;padding:14px 22px;border-radius:var(--erto-radius-sm);box-shadow:var(--erto-shadow-lg);border-left:4px solid var(--erto-primary);transform:translateY(120%);transition:.3s ease;z-index:999;font-size:14px;font-weight:500;max-width:340px}
+   .toast.show{transform:translateY(0)}
+   .toast-success{border-color:var(--erto-success)}
+   .toast-error{border-color:var(--erto-danger)}
+   
+   /* ============================ MÓDULOS (aula) ============================ */
+   .module{border:1px solid var(--erto-border);border-radius:var(--erto-radius);margin-bottom:14px;background:#fff;overflow:hidden;box-shadow:var(--erto-shadow)}
+   .module-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:18px 22px;cursor:pointer;transition:var(--erto-transition)}
+   .module-head:hover{background:var(--erto-light)}
+   .module-head .num{width:40px;height:40px;border-radius:50%;background:var(--erto-primary-light);color:var(--erto-primary);display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+   .module-head .info{flex:1}
+   .module-head h4{font-size:1rem;margin-bottom:2px}
+   .module-head p{font-size:.85rem;color:var(--erto-gray)}
+   .module-body{padding:0 22px 22px;display:none;border-top:1px solid var(--erto-border)}
+   .module.open .module-body{display:block;padding-top:20px}
+   .module.blocked{opacity:.55;pointer-events:none}
+   .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:var(--erto-radius-sm);margin-bottom:16px;background:#000}
+   .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+   .module-actions{display:flex;gap:10px;flex-wrap:wrap}
+   
+   /* ============================ PROGRESO CIRCULAR ============================ */
+   .circle-progress{position:relative;width:70px;height:70px}
+   .circle-progress svg{transform:rotate(-90deg)}
+   .circle-progress .bg{stroke:var(--erto-border)}
+   .circle-progress .fg{stroke:var(--erto-primary);stroke-linecap:round;transition:stroke-dasharray .5s}
+   .circle-progress .val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--erto-primary);font-size:15px}
+   
+   /* ============================ EXAMEN ============================ */
+   .question{background:#fff;border-radius:var(--erto-radius);padding:24px;margin-bottom:18px;box-shadow:var(--erto-shadow);border:1px solid var(--erto-border)}
+   .question h4{font-size:1rem;margin-bottom:16px;line-height:1.5}
+   .question .num{color:var(--erto-primary);font-weight:800;margin-right:8px}
+   .opt{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1.5px solid var(--erto-border);border-radius:var(--erto-radius-sm);margin-bottom:10px;cursor:pointer;transition:var(--erto-transition)}
+   .opt:hover{border-color:var(--erto-primary);background:var(--erto-primary-light)}
+   .opt input{accent-color:var(--erto-primary);width:18px;height:18px}
+   .opt.selected{border-color:var(--erto-primary);background:var(--erto-primary-light);font-weight:600}
+   
+   /* ============================ CERTIFICADO ============================ */
+   .cert-wrap{padding:60px 0}
+   .cert{width:min(900px,100%);margin:0 auto;background:#fff;border:12px solid var(--erto-primary);border-radius:var(--erto-radius);padding:60px 50px;text-align:center;box-shadow:var(--erto-shadow-lg);position:relative}
+   .cert::before{content:'';position:absolute;inset:14px;border:2px solid var(--erto-primary);border-radius:var(--erto-radius-sm);pointer-events:none}
+   .cert-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:36px}
+   .cert-head img{height:60px;object-fit:contain}
+   .cert h1{font-size:2rem;color:var(--erto-primary);font-weight:800;letter-spacing:2px;margin-bottom:6px}
+   .cert .sub{text-transform:uppercase;letter-spacing:4px;color:var(--erto-gray);font-size:.85rem;margin-bottom:34px}
+   .cert .otorga{font-size:.9rem;color:var(--erto-gray);margin-bottom:8px}
+   .cert .nombre{font-size:2.2rem;font-weight:800;color:var(--erto-dark);margin:12px 0 6px;border-bottom:2px dashed var(--erto-border);display:inline-block;padding-bottom:8px}
+   .cert .doc{font-size:.9rem;color:var(--erto-gray);margin-bottom:30px}
+   .cert .curso{font-size:1.2rem;color:var(--erto-primary);font-weight:700;margin:20px 0}
+   .cert .nota{font-size:.95rem;color:var(--erto-gray);margin-bottom:34px}
+   .cert-foot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:40px;padding-top:20px;border-top:1px solid var(--erto-border);font-size:.82rem;color:var(--erto-gray)}
+   .cert-foot .firma{text-align:center}
+   .cert-foot .firma .linea{width:180px;border-top:1.5px solid var(--erto-dark);margin-bottom:6px}
+   
+   /* ============================ ANIMACIONES ============================ */
+   @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+   .fade-in{animation:fadeIn .4s ease}
+   
+   /* ============================ RESPONSIVE ============================ */
+   @media (max-width:960px){
+     .grid-4{grid-template-columns:repeat(2,1fr)}
+     .grid-3{grid-template-columns:repeat(2,1fr)}
+     .stats{grid-template-columns:repeat(2,1fr)}
+     .footer-grid{grid-template-columns:1fr 1fr}
+     .menu{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;flex-direction:column;padding:20px;box-shadow:var(--erto-shadow)}
+     .menu.open{display:flex}
+     .menu-toggle{display:block}
+   }
+   @media (max-width:640px){
+     .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+     .stats{grid-template-columns:1fr 1fr}
+     .footer-grid{grid-template-columns:1fr}
+     .form-row{grid-template-columns:1fr}
+     .hero{padding:60px 0 80px}
+     .section{padding:50px 0}
+     .cert{padding:40px 20px}
+     .cert .nombre{font-size:1.5rem}
+     .cert h1{font-size:1.4rem}
+     .toast{left:20px;right:20px;bottom:20px;max-width:none}
+   }
