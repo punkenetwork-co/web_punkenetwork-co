@@ -16,9 +16,9 @@
 <div class="panel-layout">
   <aside class="panel-side">
     <div class="panel-user">
-      <div class="panel-avatar" id="avatarEst">ES</div>
+      <div class="panel-avatar" id="avatarEst">--</div>
       <div class="panel-user-info">
-        <strong id="nombreEst">—</strong>
+        <strong id="nombreEst">Cargando...</strong>
         <span>Estudiante</span>
       </div>
     </div>
@@ -33,32 +33,28 @@
 
   <section class="panel-content">
 
-    <!-- INICIO -->
     <div data-sec="inicio">
       <div class="panel-header">
-        <h1>Hola, <span id="nombreHero">—</span></h1>
+        <h1>Hola, <span id="nombreHero">...</span></h1>
         <p>Este es tu espacio de aprendizaje. Continúa donde lo dejaste.</p>
       </div>
       <div class="stats-grid" id="statsEstudiante"></div>
       <div class="panel-card">
         <div class="panel-card-head"><h3><i class="fa-solid fa-book-open"></i> Mis cursos activos</h3></div>
-        <div id="cursosActivos"></div>
+        <div id="cursosActivos"><p style="color:#888;">Cargando cursos...</p></div>
       </div>
     </div>
 
-    <!-- CURSOS -->
     <div data-sec="cursos" class="hidden">
       <div class="panel-header"><h1>Mis cursos</h1><p>Todos los cursos en los que estás inscrito.</p></div>
       <div class="panel-card"><div id="listaCursos"></div></div>
     </div>
 
-    <!-- CERTIFICADOS -->
     <div data-sec="certificados" class="hidden">
       <div class="panel-header"><h1>Certificados</h1><p>Descarga tus certificados de cursos completados.</p></div>
       <div class="panel-card"><div id="listaCertificados"></div></div>
     </div>
 
-    <!-- PERFIL -->
     <div data-sec="perfil" class="hidden">
       <div class="panel-header"><h1>Mi perfil</h1><p>Actualiza tu información personal.</p></div>
       <div class="panel-card">
@@ -88,46 +84,61 @@
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/ui.js"></script>
 <script>
-let SESION = null;
-let MIS_CURSOS = [];
-let PERFIL = null;
+var SESION = null;
+var MIS_CURSOS = [];
+var PERFIL = null;
 
-(async function init() {
-  SESION = await AUTH.protegerPagina('estudiante');
-  if (!SESION) return;
+async function init() {
+  console.log('🚀 init() arrancando...');
+
+  var ok = await AUTH.validar();
+  if (!ok) {
+    console.warn('Sesión inválida, redirigiendo...');
+    window.location.href = 'login.html';
+    return;
+  }
+
+  SESION = AUTH.sesion();
+  console.log('✅ SESION:', SESION);
+
   initLayout('panel');
   AUTH.bloquearInspeccion();
 
   document.getElementById('nombreEst').textContent = SESION.nombres + ' ' + SESION.apellidos;
   document.getElementById('nombreHero').textContent = SESION.nombres;
-  document.getElementById('avatarEst').textContent = iniciales(SESION.nombres, SESION.apellidos);
+  document.getElementById('avatarEst').textContent =
+    ((SESION.nombres || ' ')[0] + (SESION.apellidos || ' ')[0]).toUpperCase();
 
   await Promise.all([cargarMisCursos(), cargarPerfil()]);
-})();
+}
 
 async function cargarMisCursos() {
   try {
-    const r = await API.misCursos(SESION.token);
+    console.log('📚 Cargando mis cursos...');
+    var r = await API.misCursos(SESION.token);
+    console.log('📚 Respuesta:', r);
     if (!r.success) throw new Error(r.message);
     MIS_CURSOS = r.cursos || [];
     renderStats();
     renderCursos();
     renderCertificados();
   } catch (e) {
-    document.getElementById('cursosActivos').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+    console.error('Error misCursos:', e);
+    document.getElementById('cursosActivos').innerHTML =
+      '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
   }
 }
 
 function renderStats() {
-  const total = MIS_CURSOS.length;
-  const completados = MIS_CURSOS.filter(function (c) { return c.estado === 'completado'; }).length;
-  const activos = total - completados;
-  const promedio = total ? Math.round(MIS_CURSOS.reduce(function (a, c) { return a + (c.progreso || 0); }, 0) / total) : 0;
+  var total = MIS_CURSOS.length;
+  var completados = MIS_CURSOS.filter(function (c) { return c.estado === 'completado'; }).length;
+  var activos = total - completados;
+  var promedio = total ? Math.round(MIS_CURSOS.reduce(function (a, c) { return a + (c.progreso || 0); }, 0) / total) : 0;
   document.getElementById('statsEstudiante').innerHTML =
     stat('blue', 'fa-book-open', total, 'Cursos inscritos') +
     stat('green', 'fa-circle-check', completados, 'Completados') +
     stat('gold', 'fa-spinner', activos, 'En progreso') +
-    stat('purple', 'fa-percent', promedio + '%', 'Progreso promedio');
+    stat('purple', 'fa-percent', promedio + '%', 'Progreso');
 }
 
 function stat(color, icon, valor, label) {
@@ -136,19 +147,16 @@ function stat(color, icon, valor, label) {
 }
 
 function cursoItemHTML(c, mostrarAcciones) {
-  const color = c.color || '#0200AF';
-  const pct = c.progreso || 0;
-  const estado = c.estado || 'activo';
-  const chipClass = estado === 'completado' ? 'green' : estado === 'cancelado' ? 'red' : '';
-  const chipText = estado.charAt(0).toUpperCase() + estado.slice(1);
+  var color = c.color || '#0200AF';
+  var pct = c.progreso || 0;
+  var estado = c.estado || 'activo';
   return (
     '<div class="curso-item">' +
       '<div class="curso-item-cover" style="background:linear-gradient(135deg,' + color + ',' + color + 'dd);"><i class="fa-solid fa-graduation-cap"></i></div>' +
       '<div class="curso-item-info">' +
         '<h4>' + esc(c.titulo) + '</h4>' +
-        '<p><i class="fa-solid fa-chalkboard-user"></i> ' + esc(c.tutor || '—') + ' · <span class="chip ' + chipClass + '">' + chipText + '</span></p>' +
+        '<p><i class="fa-solid fa-chalkboard-user"></i> ' + esc(c.tutor || '—') + ' · ' + estado + '</p>' +
         '<div class="progress-bar mt-1"><span style="width:' + pct + '%"></span></div>' +
-        '<p class="mt-1" style="font-size:.75rem;">Progreso: ' + pct + '%</p>' +
       '</div>' +
       (mostrarAcciones ? '<div class="curso-item-actions"><a href="curso.html?id=' + c.id + '" class="btn btn-primary btn-sm"><i class="fa-solid fa-play"></i> ' + (pct > 0 ? 'Continuar' : 'Empezar') + '</a></div>' : '') +
     '</div>'
@@ -157,38 +165,35 @@ function cursoItemHTML(c, mostrarAcciones) {
 
 function renderCursos() {
   if (!MIS_CURSOS.length) {
-    const empty = '<div class="empty"><i class="fa-solid fa-book"></i><h3>Sin cursos aún</h3><p>Inscríbete en tu primer curso para empezar.</p><a href="inscripcion.html" class="btn btn-primary mt-2"><i class="fa-solid fa-plus"></i> Inscribirme</a></div>';
+    var empty = '<div class="empty"><i class="fa-solid fa-book"></i><h3>Sin cursos aún</h3><p>Inscríbete en tu primer curso.</p><a href="inscripcion.html" class="btn btn-primary mt-2"><i class="fa-solid fa-plus"></i> Inscribirme</a></div>';
     document.getElementById('cursosActivos').innerHTML = empty;
     document.getElementById('listaCursos').innerHTML = empty;
     return;
   }
-  const activos = MIS_CURSOS.filter(function (c) { return c.estado !== 'completado' && c.estado !== 'cancelado'; });
+  var activos = MIS_CURSOS.filter(function (c) { return c.estado !== 'completado' && c.estado !== 'cancelado'; });
   document.getElementById('cursosActivos').innerHTML = activos.length
     ? activos.map(function (c) { return cursoItemHTML(c, true); }).join('')
-    : '<div class="empty"><i class="fa-solid fa-circle-check"></i><h3>¡Todos al día!</h3><p>No tienes cursos activos en este momento.</p></div>';
+    : '<div class="empty"><i class="fa-solid fa-circle-check"></i><h3>¡Todo al día!</h3></div>';
   document.getElementById('listaCursos').innerHTML = MIS_CURSOS.map(function (c) { return cursoItemHTML(c, true); }).join('');
 }
 
 function renderCertificados() {
-  const completados = MIS_CURSOS.filter(function (c) { return c.estado === 'completado'; });
+  var completados = MIS_CURSOS.filter(function (c) { return c.estado === 'completado'; });
   if (!completados.length) {
-    document.getElementById('listaCertificados').innerHTML = '<div class="empty"><i class="fa-solid fa-certificate"></i><h3>Sin certificados aún</h3><p>Completa un curso para obtener tu certificado.</p></div>';
+    document.getElementById('listaCertificados').innerHTML = '<div class="empty"><i class="fa-solid fa-certificate"></i><h3>Sin certificados aún</h3></div>';
     return;
   }
   document.getElementById('listaCertificados').innerHTML = completados.map(function (c) {
-    return (
-      '<div class="curso-item">' +
-        '<div class="curso-item-cover" style="background:linear-gradient(135deg,#2ecc71,#27ae60);"><i class="fa-solid fa-certificate"></i></div>' +
-        '<div class="curso-item-info"><h4>' + esc(c.titulo) + '</h4><p>Completado · ' + esc(c.tutor || '—') + '</p></div>' +
-        '<div class="curso-item-actions"><button class="btn btn-outline btn-sm" onclick="alert(\'La generación de certificado PDF se integra con el módulo de certificados.\');"><i class="fa-solid fa-download"></i> Descargar</button></div>' +
-      '</div>'
-    );
+    return '<div class="curso-item"><div class="curso-item-cover" style="background:linear-gradient(135deg,#2ecc71,#27ae60);"><i class="fa-solid fa-certificate"></i></div>' +
+      '<div class="curso-item-info"><h4>' + esc(c.titulo) + '</h4><p>Completado</p></div></div>';
   }).join('');
 }
 
 async function cargarPerfil() {
   try {
-    const r = await API.perfil(SESION.token);
+    console.log('👤 Cargando perfil...');
+    var r = await API.perfil(SESION.token);
+    console.log('👤 Respuesta:', r);
     if (!r.success) return;
     PERFIL = r.usuario;
     document.getElementById('p_nombres').value = PERFIL.nombres || '';
@@ -197,16 +202,16 @@ async function cargarPerfil() {
     document.getElementById('p_ciudad').value = PERFIL.ciudad || '';
     document.getElementById('p_universidad').value = PERFIL.universidad || '';
     document.getElementById('p_programa').value = PERFIL.programa || '';
-  } catch (e) { /* silencioso */ }
+  } catch (e) { console.error('Error perfil:', e); }
 }
 
 document.getElementById('formPerfil').addEventListener('submit', async function (e) {
   e.preventDefault();
-  const btn = document.getElementById('btnGuardarPerfil');
+  var btn = document.getElementById('btnGuardarPerfil');
   btnLoading(btn, true, 'Guardando...');
   ocultarAlerta('alertaPerfil');
   try {
-    const r = await API.actualizarPerfil(SESION.token, {
+    var r = await API.actualizarPerfil(SESION.token, {
       nombres: document.getElementById('p_nombres').value.trim(),
       apellidos: document.getElementById('p_apellidos').value.trim(),
       telefono: document.getElementById('p_telefono').value.trim(),
@@ -215,24 +220,25 @@ document.getElementById('formPerfil').addEventListener('submit', async function 
       programa: document.getElementById('p_programa').value.trim()
     });
     if (!r.success) throw new Error(r.message);
-    mostrarAlerta('alertaPerfil', 'success', 'Perfil actualizado correctamente.');
-    localStorage.setItem(CONFIG.STORAGE.NOMBRES, document.getElementById('p_nombres').value.trim());
-    localStorage.setItem(CONFIG.STORAGE.APELLIDOS, document.getElementById('p_apellidos').value.trim());
+    mostrarAlerta('alertaPerfil', 'success', 'Perfil actualizado.');
   } catch (err) {
     mostrarAlerta('alertaPerfil', 'error', err.message);
   } finally { btnLoading(btn, false); }
 });
 
-/* Navegación entre secciones */
 document.querySelectorAll('.panel-menu a[data-seccion]').forEach(function (a) {
   a.addEventListener('click', function (e) {
     e.preventDefault();
     document.querySelectorAll('.panel-menu a').forEach(function (x) { x.classList.remove('active'); });
     a.classList.add('active');
     document.querySelectorAll('[data-sec]').forEach(function (s) { s.classList.add('hidden'); });
-    document.querySelector('[data-sec="' + a.dataset.seccion + '"]').classList.remove('hidden');
+    var sec = document.querySelector('[data-sec="' + a.dataset.seccion + '"]');
+    if (sec) sec.classList.remove('hidden');
   });
 });
+
+// 🔥 ARRANCAR
+init();
 </script>
 </body>
 </html>
