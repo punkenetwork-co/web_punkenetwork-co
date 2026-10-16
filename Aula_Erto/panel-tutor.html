@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi panel · Tutor · Aula Virtual ERTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<nav data-navbar></nav>
+
+<div class="panel-layout">
+  <aside class="panel-side">
+    <div class="panel-user">
+      <div class="panel-avatar" id="avatarTut">TU</div>
+      <div class="panel-user-info"><strong id="nombreTut">—</strong><span>Tutor</span></div>
+    </div>
+    <ul class="panel-menu">
+      <li><a href="#" class="active" data-seccion="inicio"><i class="fa-solid fa-house"></i> Inicio</a></li>
+      <li><a href="#" data-seccion="cursos"><i class="fa-solid fa-chalkboard-user"></i> Mis cursos</a></li>
+      <li><a href="#" onclick="AUTH.logoutUI(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a></li>
+    </ul>
+  </aside>
+
+  <section class="panel-content">
+
+    <div data-sec="inicio">
+      <div class="panel-header"><h1>Hola, <span id="nombreHero">—</span></h1><p>Panel de tutor. Consulta tus cursos y estudiantes inscritos.</p></div>
+      <div class="stats-grid" id="statsTutor"></div>
+      <div class="panel-card">
+        <div class="panel-card-head"><h3><i class="fa-solid fa-chalkboard-user"></i> Mis cursos</h3></div>
+        <div id="cursosTutorHome"></div>
+      </div>
+    </div>
+
+    <div data-sec="cursos" class="hidden">
+      <div class="panel-header"><h1>Mis cursos</h1><p>Selecciona un curso para ver sus estudiantes.</p></div>
+      <div class="panel-card"><div id="listaCursosTutor"></div></div>
+    </div>
+
+  </section>
+</div>
+
+<!-- Modal estudiantes -->
+<div class="modal-overlay" id="modalEstudiantes">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitulo"><i class="fa-solid fa-users"></i> Estudiantes</h3>
+      <button class="modal-close" onclick="cerrarModal()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<footer data-footer></footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+let SESION = null, CURSOS = [];
+
+(async function init() {
+  SESION = await AUTH.protegerPagina('tutor');
+  if (!SESION) return;
+  initLayout('panel');
+  AUTH.bloquearInspeccion();
+  document.getElementById('nombreTut').textContent = SESION.nombres + ' ' + SESION.apellidos;
+  document.getElementById('nombreHero').textContent = SESION.nombres;
+  document.getElementById('avatarTut').textContent = iniciales(SESION.nombres, SESION.apellidos);
+  await cargarCursos();
+})();
+
+async function cargarCursos() {
+  try {
+    const r = await API.cursosTutor(SESION.token);
+    if (!r.success) throw new Error(r.message);
+    CURSOS = r.cursos || [];
+    renderTodo();
+  } catch (e) {
+    document.getElementById('cursosTutorHome').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+  }
+}
+
+function renderTodo() {
+  const totalEst = CURSOS.reduce(function (a, c) { return a + (c.total_estudiantes || 0); }, 0);
+  document.getElementById('statsTutor').innerHTML =
+    stat('blue', 'fa-chalkboard-user', CURSOS.length, 'Cursos a cargo') +
+    stat('green', 'fa-users', totalEst, 'Estudiantes totales') +
+    stat('gold', 'fa-circle-check', CURSOS.filter(function (c) { return c.activo === 'SÍ'; }).length, 'Cursos activos');
+
+  const html = CURSOS.length ? CURSOS.map(function (c) {
+    const color = c.color || '#0200AF';
+    return (
+      '<div class="curso-item">' +
+        '<div class="curso-item-cover" style="background:linear-gradient(135deg,' + color + ',' + color + 'dd);"><i class="fa-solid fa-graduation-cap"></i></div>' +
+        '<div class="curso-item-info">' +
+          '<h4>' + esc(c.titulo) + '</h4>' +
+          '<p>' + (c.duracion_horas || '—') + ' h · Nivel ' + esc(c.nivel || '—') + ' · <span class="chip">' + (c.total_estudiantes || 0) + ' estudiantes</span></p>' +
+        '</div>' +
+        '<div class="curso-item-actions">' +
+          '<button class="btn btn-outline btn-sm" onclick="verEstudiantes(' + c.id + ', \'' + esc(c.titulo).replace(/'/g, "\\'") + '\')"><i class="fa-solid fa-users"></i> Ver estudiantes</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('') : '<div class="empty"><i class="fa-solid fa-chalkboard-user"></i><h3>Sin cursos asignados</h3><p>Contacta al administrador.</p></div>';
+
+  document.getElementById('cursosTutorHome').innerHTML = html;
+  document.getElementById('listaCursosTutor').innerHTML = html;
+}
+
+function stat(color, icon, valor, label) {
+  return '<div class="stat-card"><div class="stat-icon ' + color + '"><i class="fa-solid ' + icon + '"></i></div>' +
+    '<div class="stat-info"><strong>' + valor + '</strong><span>' + label + '</span></div></div>';
+}
+
+async function verEstudiantes(cursoId, titulo) {
+  document.getElementById('modalTitulo').innerHTML = '<i class="fa-solid fa-users"></i> ' + titulo;
+  document.getElementById('modalBody').innerHTML = '<div class="text-center" style="padding:1.5rem;"><div class="loader-spin" style="margin:0 auto;"></div></div>';
+  document.getElementById('modalEstudiantes').classList.add('show');
+  try {
+    const r = await API.estudiantesCurso(SESION.token, cursoId);
+    if (!r.success) throw new Error(r.message);
+    const est = r.estudiantes || [];
+    if (!est.length) {
+      document.getElementById('modalBody').innerHTML = '<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>Sin estudiantes</h3><p>Aún no hay inscritos en este curso.</p></div>';
+      return;
+    }
+    document.getElementById('modalBody').innerHTML =
+      '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
+        '<th>Estudiante</th><th>Correo</th><th>Documento</th><th>Estado</th>' +
+      '</tr></thead><tbody>' +
+      est.map(function (e) {
+        return '<tr><td><strong>' + esc(e.nombres) + ' ' + esc(e.apellidos) + '</strong></td>' +
+          '<td>' + esc(e.email) + '</td>' +
+          '<td>' + esc(e.tipo_documento) + ' ' + esc(e.numero_documento) + '</td>' +
+          '<td><span class="chip ' + (e.estado === 'completado' ? 'green' : '') + '">' + esc(e.estado) + '</span></td></tr>';
+      }).join('') +
+      '</tbody></table></div>';
+  } catch (e) {
+    document.getElementById('modalBody').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+  }
+}
+
+function cerrarModal() { document.getElementById('modalEstudiantes').classList.remove('show'); }
+document.getElementById('modalEstudiantes').addEventListener('click', function (e) {
+  if (e.target === this) cerrarModal();
+});
+
+document.querySelectorAll('.panel-menu a[data-seccion]').forEach(function (a) {
+  a.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelectorAll('.panel-menu a').forEach(function (x) { x.classList.remove('active'); });
+    a.classList.add('active');
+    document.querySelectorAll('[data-sec]').forEach(function (s) { s.classList.add('hidden'); });
+    document.querySelector('[data-sec="' + a.dataset.seccion + '"]').classList.remove('hidden');
+  });
+});
+</script>
+</body>
+</html>

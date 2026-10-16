@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscripción · Aula Virtual ERTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<div data-topbar></div>
+<nav data-navbar></nav>
+
+<header class="page-hero">
+  <div class="container">
+    <span class="badge"><i class="fa-solid fa-star"></i> Formación certificada</span>
+    <h1>Inscríbete en tu curso</h1>
+    <p>Completa el formulario en 4 pasos. Con una sola acción creas tu cuenta, quedas inscrito y listo para iniciar sesión.</p>
+  </div>
+</header>
+
+<main>
+  <div class="container container-mid main-overlap">
+    <div class="card">
+
+      <div class="stepper" id="stepper">
+        <div class="stepper-progress" id="stepperProgress"></div>
+        <div class="step active" data-step="1"><div class="step-circle"><i class="fa-solid fa-book-open"></i></div><div class="step-label">Curso</div></div>
+        <div class="step" data-step="2"><div class="step-circle"><i class="fa-solid fa-user"></i></div><div class="step-label">Datos</div></div>
+        <div class="step" data-step="3"><div class="step-circle"><i class="fa-solid fa-lock"></i></div><div class="step-label">Contraseña</div></div>
+        <div class="step" data-step="4"><div class="step-circle"><i class="fa-solid fa-check"></i></div><div class="step-label">Confirmar</div></div>
+      </div>
+
+      <div class="alert" id="alertaGlobal"></div>
+
+      <section class="form-step active" id="step1">
+        <h2 class="section-title">Selecciona tu curso</h2>
+        <p class="section-sub">Elige el curso en el que deseas inscribirte.</p>
+        <div id="cursosLoader" class="text-center" style="padding:2rem 0;"><div class="loader-spin" style="margin:0 auto;"></div></div>
+        <div class="cursos-grid" id="cursosGrid"></div>
+        <div class="btn-row">
+          <button class="btn btn-outline" disabled style="visibility:hidden;"></button>
+          <button class="btn btn-primary" id="btnStep1Next" disabled>Continuar <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </section>
+
+      <section class="form-step" id="step2">
+        <h2 class="section-title">Tus datos personales</h2>
+        <p class="section-sub">Esta información aparecerá en tu certificado.</p>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="nombres">Nombres completos <span class="req">*</span></label>
+            <div class="input-icon"><i class="fa-solid fa-user prefix"></i><input type="text" class="form-control" id="nombres" placeholder="Ej: María Fernanda" autocomplete="given-name"></div>
+            <div class="form-error" id="err-nombres"><i class="fa-solid fa-circle-exclamation"></i> Ingresa tus nombres.</div>
+          </div>
+          <div class="form-group">
+            <label for="apellidos">Apellidos completos <span class="req">*</span></label>
+            <div class="input-icon"><i class="fa-solid fa-user prefix"></i><input type="text" class="form-control" id="apellidos" placeholder="Ej: Torres Ochoa" autocomplete="family-name"></div>
+            <div class="form-error" id="err-apellidos"><i class="fa-solid fa-circle-exclamation"></i> Ingresa tus apellidos.</div>
+          </div>
+          <div class="form-group">
+            <label for="tipo_documento">Tipo de documento <span class="req">*</span></label>
+            <select class="form-control" id="tipo_documento"><option value="">— Selecciona —</option></select>
+            <div class="form-error" id="err-tipo_documento"><i class="fa-solid fa-circle-exclamation"></i> Selecciona el tipo de documento.</div>
+          </div>
+          <div class="form-group">
+            <label for="numero_documento">Número de documento <span class="req">*</span></label>
+            <div class="input-icon"><i class="fa-solid fa-id-card prefix"></i><input type="text" class="form-control" id="numero_documento" placeholder="Ej: 1234567890" inputmode="numeric"></div>
+            <div class="form-error" id="err-numero_documento"><i class="fa-solid fa-circle-exclamation"></i> Mínimo 6 caracteres.</div>
+          </div>
+          <div class="form-group">
+            <label for="email">Correo electrónico <span class="req">*</span></label>
+            <div class="input-icon"><i class="fa-solid fa-envelope prefix"></i><input type="email" class="form-control" id="email" placeholder="tucorreo@ejemplo.com" autocomplete="email"></div>
+            <div class="form-error" id="err-email"><i class="fa-solid fa-circle-exclamation"></i> Ingresa un correo válido.</div>
+          </div>
+          <div class="form-group">
+            <label for="telefono">Teléfono / WhatsApp</label>
+            <div class="input-icon"><i class="fa-solid fa-phone prefix"></i><input type="tel" class="form-control" id="telefono" placeholder="Ej: 3001234567" autocomplete="tel"></div>
+          </div>
+          <div class="form-group">
+            <label for="universidad">Universidad o institución</label>
+            <div class="input-icon"><i class="fa-solid fa-building-columns prefix"></i><input type="text" class="form-control" id="universidad" placeholder="Ej: Universidad Nacional"></div>
+          </div>
+          <div class="form-group">
+            <label for="programa">Programa académico</label>
+            <div class="input-icon"><i class="fa-solid fa-book prefix"></i><input type="text" class="form-control" id="programa" placeholder="Ej: Ingeniería Ambiental"></div>
+          </div>
+          <div class="form-group">
+            <label for="ciudad">Ciudad</label>
+            <div class="input-icon"><i class="fa-solid fa-location-dot prefix"></i><input type="text" class="form-control" id="ciudad" placeholder="Ej: Sincelejo"></div>
+          </div>
+          <div class="form-group">
+            <label for="como_nos_conocio">¿Cómo nos conociste?</label>
+            <select class="form-control" id="como_nos_conocio"><option value="">— Selecciona —</option></select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnStep2Back"><i class="fa-solid fa-arrow-left"></i> Atrás</button>
+          <button class="btn btn-primary" id="btnStep2Next">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </section>
+
+      <section class="form-step" id="step3">
+        <h2 class="section-title">Crea tu contraseña</h2>
+        <p class="section-sub">Con esta contraseña ingresarás al aula virtual.</p>
+
+        <div class="form-group">
+          <label for="password">Contraseña <span class="req">*</span></label>
+          <div class="input-icon">
+            <i class="fa-solid fa-lock prefix"></i>
+            <input type="password" class="form-control" id="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+            <i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('password', this)"></i>
+          </div>
+          <div class="form-hint">Mínimo 8 caracteres. Se almacena cifrada con SHA-256.</div>
+          <div class="form-error" id="err-password"><i class="fa-solid fa-circle-exclamation"></i> Mínimo 8 caracteres.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirmar contraseña <span class="req">*</span></label>
+          <div class="input-icon">
+            <i class="fa-solid fa-lock prefix"></i>
+            <input type="password" class="form-control" id="password2" placeholder="Repite tu contraseña" autocomplete="new-password">
+            <i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('password2', this)"></i>
+          </div>
+          <div class="form-error" id="err-password2"><i class="fa-solid fa-circle-exclamation"></i> Las contraseñas no coinciden.</div>
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" id="acepto">
+          <span>Acepto la <a href="#" target="_blank">política de privacidad</a> y autorizo el tratamiento de mis datos. <span class="req">*</span></span>
+        </label>
+        <div class="form-error" id="err-acepto"><i class="fa-solid fa-circle-exclamation"></i> Debes aceptar la política.</div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnStep3Back"><i class="fa-solid fa-arrow-left"></i> Atrás</button>
+          <button class="btn btn-primary" id="btnStep3Next">Revisar <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+      </section>
+
+      <section class="form-step" id="step4">
+        <h2 class="section-title">Confirma tu inscripción</h2>
+        <p class="section-sub">Revisa que todos los datos sean correctos.</p>
+
+        <div class="resumen-box">
+          <h4><i class="fa-solid fa-book-open"></i> Curso seleccionado</h4>
+          <div class="resumen-list" id="resumenCurso"></div>
+        </div>
+
+        <div class="resumen-box">
+          <h4><i class="fa-solid fa-user"></i> Datos personales</h4>
+          <div class="resumen-list" id="resumenDatos"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-ghost" id="btnStep4Back"><i class="fa-solid fa-arrow-left"></i> Atrás</button>
+          <button class="btn btn-primary btn-lg" id="btnConfirmar"><i class="fa-solid fa-circle-check"></i> Confirmar inscripción</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<footer data-footer></footer>
+<div class="loader-overlay" id="loaderOverlay"><div class="loader-spin"></div></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+initLayout('inscripcion');
+
+const STATE = { paso: 1, cursos: [], cursoSeleccionado: null };
+
+CONFIG.TIPOS_DOCUMENTO.forEach(function (t) {
+  const o = document.createElement('option'); o.value = t; o.textContent = t;
+  document.getElementById('tipo_documento').appendChild(o);
+});
+CONFIG.COMO_NOS_CONOCIO.forEach(function (t) {
+  const o = document.createElement('option'); o.value = t; o.textContent = t;
+  document.getElementById('como_nos_conocio').appendChild(o);
+});
+
+async function cargarCursos() {
+  const grid = document.getElementById('cursosGrid');
+  const loader = document.getElementById('cursosLoader');
+  try {
+    const r = await API.cursos();
+    if (!r.success || !r.cursos.length) throw new Error(r.message || 'No hay cursos disponibles.');
+    STATE.cursos = r.cursos;
+    grid.innerHTML = r.cursos.map(function (c) {
+      const color = c.color || '#0200AF';
+      const desc = (c.descripcion || '').substring(0, 130) + ((c.descripcion || '').length > 130 ? '…' : '');
+      return (
+        '<article class="curso-card" data-id="' + c.id + '">' +
+          '<div class="curso-cover" style="background:linear-gradient(135deg,' + color + ',' + color + 'dd);"><i class="fa-solid fa-graduation-cap"></i></div>' +
+          '<div class="curso-body">' +
+            '<h3>' + esc(c.titulo) + '</h3>' +
+            '<p class="curso-tutor"><i class="fa-solid fa-chalkboard-user"></i> ' + esc(c.tutor || '—') + '</p>' +
+            '<p class="curso-desc">' + esc(desc) + '</p>' +
+            '<div class="curso-meta">' +
+              (c.duracion_horas ? '<span class="chip"><i class="fa-regular fa-clock"></i> ' + c.duracion_horas + ' h</span>' : '') +
+              (c.nivel ? '<span class="chip gold"><i class="fa-solid fa-signal"></i> ' + esc(c.nivel) + '</span>' : '') +
+              '<span class="chip green"><i class="fa-solid fa-certificate"></i> Certificado</span>' +
+            '</div>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join('');
+    grid.querySelectorAll('.curso-card').forEach(function (card) {
+      card.addEventListener('click', function () { seleccionarCurso(card.dataset.id); });
+    });
+    loader.style.display = 'none';
+  } catch (e) {
+    loader.innerHTML = '<div class="alert alert-error show" style="justify-content:center;"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+  }
+}
+
+function seleccionarCurso(id) {
+  STATE.cursoSeleccionado = STATE.cursos.find(function (c) { return String(c.id) === String(id); });
+  document.querySelectorAll('.curso-card').forEach(function (el) {
+    el.classList.toggle('selected', String(el.dataset.id) === String(id));
+  });
+  document.getElementById('btnStep1Next').disabled = false;
+}
+
+function irAPaso(n) {
+  STATE.paso = n;
+  document.querySelectorAll('.form-step').forEach(function (s) { s.classList.remove('active'); });
+  document.getElementById('step' + n).classList.add('active');
+  document.querySelectorAll('.step').forEach(function (s) {
+    const num = parseInt(s.dataset.step, 10);
+    s.classList.toggle('active', num === n);
+    s.classList.toggle('done', num < n);
+  });
+  document.getElementById('stepperProgress').style.width = ((n - 1) / 3) * 88 + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  ocultarAlerta('alertaGlobal');
+}
+
+function validarPaso1() {
+  if (!STATE.cursoSeleccionado) { mostrarAlerta('alertaGlobal', 'error', 'Debes seleccionar un curso.'); return false; }
+  return true;
+}
+
+function validarPaso2() {
+  const nombres = document.getElementById('nombres'), apellidos = document.getElementById('apellidos');
+  const tipo = document.getElementById('tipo_documento'), num = document.getElementById('numero_documento');
+  const email = document.getElementById('email');
+  const vN = VALID.min(nombres.value, 2), vA = VALID.min(apellidos.value, 2);
+  const vT = tipo.value !== '', vNum = VALID.min(num.value, 6), vE = VALID.email(email.value);
+  marcarCampo(nombres, vN); document.getElementById('err-nombres').classList.toggle('show', !vN);
+  marcarCampo(apellidos, vA); document.getElementById('err-apellidos').classList.toggle('show', !vA);
+  marcarCampo(tipo, vT); document.getElementById('err-tipo_documento').classList.toggle('show', !vT);
+  marcarCampo(num, vNum); document.getElementById('err-numero_documento').classList.toggle('show', !vNum);
+  marcarCampo(email, vE); document.getElementById('err-email').classList.toggle('show', !vE);
+  const ok = vN && vA && vT && vNum && vE;
+  if (!ok) mostrarAlerta('alertaGlobal', 'error', 'Revisa los campos marcados.');
+  return ok;
+}
+
+function validarPaso3() {
+  const p1 = document.getElementById('password'), p2 = document.getElementById('password2');
+  const ac = document.getElementById('acepto');
+  const v1 = VALID.min(p1.value, 8), v2 = VALID.igual(p1.value, p2.value) && p2.value.length > 0;
+  marcarCampo(p1, v1); document.getElementById('err-password').classList.toggle('show', !v1);
+  marcarCampo(p2, v2); document.getElementById('err-password2').classList.toggle('show', !v2);
+  document.getElementById('err-acepto').classList.toggle('show', !ac.checked);
+  const ok = v1 && v2 && ac.checked;
+  if (!ok) mostrarAlerta('alertaGlobal', 'error', 'Completa correctamente los campos.');
+  return ok;
+}
+
+function item(label, valor) { return '<div class="resumen-item"><span>' + label + '</span><strong>' + esc(valor || '—') + '</strong></div>'; }
+
+function construirResumen() {
+  const c = STATE.cursoSeleccionado;
+  document.getElementById('resumenCurso').innerHTML =
+    item('Curso', c.titulo) + item('Tutor', c.tutor || '—') +
+    item('Duración', (c.duracion_horas || '—') + (c.duracion_horas ? ' horas' : '')) + item('Nivel', c.nivel || '—');
+  document.getElementById('resumenDatos').innerHTML =
+    item('Nombres', document.getElementById('nombres').value) +
+    item('Apellidos', document.getElementById('apellidos').value) +
+    item('Documento', document.getElementById('tipo_documento').value + ' ' + document.getElementById('numero_documento').value) +
+    item('Correo', document.getElementById('email').value) +
+    item('Teléfono', document.getElementById('telefono').value) +
+    item('Institución', document.getElementById('universidad').value) +
+    item('Programa', document.getElementById('programa').value) +
+    item('Ciudad', document.getElementById('ciudad').value);
+}
+
+async function confirmarInscripcion() {
+  const btn = document.getElementById('btnConfirmar');
+  btnLoading(btn, true, 'Creando tu cuenta...');
+  ocultarAlerta('alertaGlobal');
+
+  const payload = {
+    curso_id: STATE.cursoSeleccionado.id,
+    nombres: document.getElementById('nombres').value.trim(),
+    apellidos: document.getElementById('apellidos').value.trim(),
+    tipo_documento: document.getElementById('tipo_documento').value,
+    numero_documento: document.getElementById('numero_documento').value.trim(),
+    email: document.getElementById('email').value.trim().toLowerCase(),
+    telefono: document.getElementById('telefono').value.trim(),
+    universidad: document.getElementById('universidad').value.trim(),
+    programa: document.getElementById('programa').value.trim(),
+    ciudad: document.getElementById('ciudad').value.trim(),
+    como_nos_conocio: document.getElementById('como_nos_conocio').value,
+    password: document.getElementById('password').value
+  };
+
+  try {
+    const r = await API.registrar(payload);
+    if (!r.success) throw new Error(r.message);
+    mostrarAlerta('alertaGlobal', 'success', '<strong>¡Inscripción exitosa!</strong> Redirigiendo a tu panel...');
+    if (r.token && r.usuario) {
+      AUTH.guardarSesion(r.usuario, r.token);
+      setTimeout(function () { AUTH.redirigirPorRol(r.usuario.rol); }, 1600);
+    } else {
+      setTimeout(function () { window.location.href = CONFIG.ROUTES.login; }, 1800);
+    }
+  } catch (e) {
+    mostrarAlerta('alertaGlobal', 'error', e.message);
+    btnLoading(btn, false);
+  }
+}
+
+document.getElementById('btnStep1Next').addEventListener('click', function () { if (validarPaso1()) irAPaso(2); });
+document.getElementById('btnStep2Back').addEventListener('click', function () { irAPaso(1); });
+document.getElementById('btnStep2Next').addEventListener('click', function () { if (validarPaso2()) irAPaso(3); });
+document.getElementById('btnStep3Back').addEventListener('click', function () { irAPaso(2); });
+document.getElementById('btnStep3Next').addEventListener('click', function () { if (validarPaso3()) { construirResumen(); irAPaso(4); } });
+document.getElementById('btnStep4Back').addEventListener('click', function () { irAPaso(3); });
+document.getElementById('btnConfirmar').addEventListener('click', confirmarInscripcion);
+
+cargarCursos();
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restablecer contraseña · Aula Virtual ERTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div data-topbar></div>
+<nav data-navbar></nav>
+
+<main>
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-head">
+        <div class="auth-icon"><i class="fa-solid fa-unlock-keyhole"></i></div>
+        <h2>Nueva contraseña</h2>
+        <p>Crea una nueva contraseña segura para tu cuenta</p>
+      </div>
+
+      <div class="alert" id="alertaRestablecer"></div>
+
+      <form id="formRestablecer" novalidate>
+        <div class="form-group">
+          <label for="password">Nueva contraseña</label>
+          <div class="input-icon"><i class="fa-solid fa-lock prefix"></i>
+            <input type="password" class="form-control" id="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+            <i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('password', this)"></i>
+          </div>
+          <div class="form-error" id="err-password"><i class="fa-solid fa-circle-exclamation"></i> Mínimo 8 caracteres.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="password2">Confirmar contraseña</label>
+          <div class="input-icon"><i class="fa-solid fa-lock prefix"></i>
+            <input type="password" class="form-control" id="password2" placeholder="Repite la contraseña" autocomplete="new-password">
+            <i class="fa-solid fa-eye toggle-pass" onclick="togglePassword('password2', this)"></i>
+          </div>
+          <div class="form-error" id="err-password2"><i class="fa-solid fa-circle-exclamation"></i> No coinciden.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnRestablecer">
+          <i class="fa-solid fa-check"></i> Cambiar contraseña
+        </button>
+      </form>
+
+      <div class="auth-foot"><a href="login.html"><i class="fa-solid fa-arrow-left"></i> Volver a iniciar sesión</a></div>
+    </div>
+  </div>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+initLayout('login');
+
+const params = new URLSearchParams(window.location.search);
+const token = params.get('token') || '';
+const email = params.get('email') || '';
+
+if (!token || !email) {
+  setTimeout(function () {
+    mostrarAlerta('alertaRestablecer', 'error', 'Enlace inválido o incompleto. Solicita uno nuevo.');
+    document.getElementById('formRestablecer').style.display = 'none';
+  }, 100);
+}
+
+document.getElementById('formRestablecer').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  ocultarAlerta('alertaRestablecer');
+  const p1 = document.getElementById('password'), p2 = document.getElementById('password2');
+  const btn = document.getElementById('btnRestablecer');
+  const v1 = VALID.min(p1.value, 8), v2 = VALID.igual(p1.value, p2.value) && p2.value.length > 0;
+  marcarCampo(p1, v1); document.getElementById('err-password').classList.toggle('show', !v1);
+  marcarCampo(p2, v2); document.getElementById('err-password2').classList.toggle('show', !v2);
+  if (!v1 || !v2) return;
+
+  btnLoading(btn, true, 'Actualizando...');
+  try {
+    const r = await API.restablecer({ token: token, email: email, password: p1.value });
+    if (!r.success) throw new Error(r.message);
+    mostrarAlerta('alertaRestablecer', 'success', 'Contraseña actualizada. Redirigiendo al inicio de sesión...');
+    setTimeout(function () { window.location.href = 'login.html'; }, 1800);
+  } catch (err) {
+    mostrarAlerta('alertaRestablecer', 'error', err.message);
+    btnLoading(btn, false);
+  }
+});
+</script>
+</body>
+</html>
