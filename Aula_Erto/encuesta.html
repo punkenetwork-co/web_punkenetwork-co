@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encuesta de satisfacción · Aula Virtual ERTO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+<style>
+  .rating { display:flex; gap:.5rem; }
+  .rating input { display:none; }
+  .rating label { cursor:pointer; font-size:1.8rem; color:#ddd; transition:0.2s; }
+  .rating label:hover, .rating label:hover ~ label { color:var(--accent); }
+  .rating input:checked ~ label { color:var(--accent); }
+  .rating { direction:rtl; justify-content:flex-end; }
+  .rating label:hover, .rating label:hover ~ label, .rating input:checked ~ label { color:var(--accent); }
+</style>
+</head>
+<body>
+<nav data-navbar></nav>
+
+<main>
+  <div class="container container-mid" style="padding-top:2rem;padding-bottom:4rem;">
+    <div class="card">
+      <div class="text-center mb-3">
+        <div class="auth-icon" style="margin:0 auto 1rem;"><i class="fa-solid fa-clipboard-list"></i></div>
+        <h1 style="font-size:1.6rem;font-weight:800;margin-bottom:.3rem;">Encuesta de satisfacción</h1>
+        <p style="color:var(--text-light);font-size:.92rem;">Tu opinión nos ayuda a mejorar</p>
+      </div>
+
+      <div class="alert" id="alertaEncuesta"></div>
+
+      <form id="formEncuesta">
+        <div class="form-group">
+          <label>¿Cómo calificas el curso en general?</label>
+          <div class="rating">
+            <input type="radio" name="calificacion_curso" id="cc5" value="5" required><label for="cc5">★</label>
+            <input type="radio" name="calificacion_curso" id="cc4" value="4"><label for="cc4">★</label>
+            <input type="radio" name="calificacion_curso" id="cc3" value="3"><label for="cc3">★</label>
+            <input type="radio" name="calificacion_curso" id="cc2" value="2"><label for="cc2">★</label>
+            <input type="radio" name="calificacion_curso" id="cc1" value="1"><label for="cc1">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Cómo calificas al tutor?</label>
+          <div class="rating">
+            <input type="radio" name="calificacion_tutor" id="ct5" value="5" required><label for="ct5">★</label>
+            <input type="radio" name="calificacion_tutor" id="ct4" value="4"><label for="ct4">★</label>
+            <input type="radio" name="calificacion_tutor" id="ct3" value="3"><label for="ct3">★</label>
+            <input type="radio" name="calificacion_tutor" id="ct2" value="2"><label for="ct2">★</label>
+            <input type="radio" name="calificacion_tutor" id="ct1" value="1"><label for="ct1">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Cómo calificas el contenido?</label>
+          <div class="rating">
+            <input type="radio" name="calificacion_contenido" id="cn5" value="5" required><label for="cn5">★</label>
+            <input type="radio" name="calificacion_contenido" id="cn4" value="4"><label for="cn4">★</label>
+            <input type="radio" name="calificacion_contenido" id="cn3" value="3"><label for="cn3">★</label>
+            <input type="radio" name="calificacion_contenido" id="cn2" value="2"><label for="cn2">★</label>
+            <input type="radio" name="calificacion_contenido" id="cn1" value="1"><label for="cn1">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>¿Recomendarías este curso?</label>
+          <select class="form-control" id="recomendaria" required>
+            <option value="SÍ">Sí</option>
+            <option value="NO">No</option>
+            <option value="TAL VEZ">Tal vez</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Comentarios (opcional)</label>
+          <textarea class="form-control" id="comentario" rows="4" placeholder="¿Qué podríamos mejorar?"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnEnviarEncuesta">
+          <i class="fa-solid fa-paper-plane"></i> Enviar encuesta
+        </button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer data-footer></footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/auth.js"></script>
+<script src="assets/js/ui.js"></script>
+<script>
+let SESION = null, CURSO_ID = 0;
+
+async function init() {
+  if (!(await AUTH.validar())) { window.location.href = 'login.html'; return; }
+  SESION = AUTH.sesion();
+  initLayout('panel');
+  AUTH.bloquearInspeccion();
+
+  const params = new URLSearchParams(location.search);
+  CURSO_ID = params.get('id');
+  if (!CURSO_ID) { window.location.href = 'panel-estudiante.html'; return; }
+}
+
+document.getElementById('formEncuesta').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  ocultarAlerta('alertaEncuesta');
+
+  const datos = {
+    curso_id: CURSO_ID,
+    calificacion_curso: document.querySelector('input[name="calificacion_curso"]:checked').value,
+    calificacion_tutor: document.querySelector('input[name="calificacion_tutor"]:checked').value,
+    calificacion_contenido: document.querySelector('input[name="calificacion_contenido"]:checked').value,
+    recomendaria: document.getElementById('recomendaria').value,
+    comentario: document.getElementById('comentario').value.trim()
+  };
+
+  const btn = document.getElementById('btnEnviarEncuesta');
+  btnLoading(btn, true, 'Enviando...');
+
+  try {
+    const r = await API.enviarEncuesta(SESION.token, datos);
+    if (!r.success) throw new Error(r.message);
+
+    document.querySelector('.card').innerHTML =
+      '<div class="text-center" style="padding:2rem 1rem;">' +
+        '<div style="width:100px;height:100px;margin:0 auto 1.5rem;border-radius:50%;display:grid;place-items:center;background:#e7f9ef;color:#2ecc71;font-size:3rem;">' +
+          '<i class="fa-solid fa-circle-check"></i>' +
+        '</div>' +
+        '<h1 style="font-size:1.8rem;font-weight:800;margin-bottom:.5rem;">¡Gracias por tu opinión!</h1>' +
+        '<p style="color:var(--text-light);margin-bottom:2rem;">' +
+          'Hemos recibido tu encuesta. Tu certificado será diseñado y enviado a tu correo electrónico en las próximas horas.' +
+        '</p>' +
+        '<a href="panel-estudiante.html" class="btn btn-primary btn-lg"><i class="fa-solid fa-house"></i> Volver al panel</a>' +
+      '</div>';
+  } catch (err) {
+    mostrarAlerta('alertaEncuesta', 'error', err.message);
+    btnLoading(btn, false);
+  }
+});
+
+init();
+</script>
+</body>
+</html>

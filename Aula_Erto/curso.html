@@ -15,84 +15,322 @@
 
 <div class="curso-layout">
   <aside class="curso-side">
-    <a href="panel-estudiante.html" class="btn btn-ghost btn-sm mb-2"><i class="fa-solid fa-arrow-left"></i> Volver al panel</a>
+    <a href="panel-estudiante.html" class="btn btn-ghost btn-sm mb-2">
+      <i class="fa-solid fa-arrow-left"></i> Volver al panel
+    </a>
     <h3 id="cursoTituloSide">Cargando...</h3>
     <ul class="curso-modulos" id="listaModulos"></ul>
+
+    <div id="panelProgreso" class="mt-3" style="padding:1rem;background:var(--primary-soft);border-radius:12px;">
+        <div style="font-size:.78rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:1px;margin-bottom:.5rem;">
+          Progreso del curso
+        </div>
+        <div class="progress-bar"><span id="barraProgreso" style="width:0%"></span></div>
+        <div id="textoProgreso" style="font-size:.82rem;color:var(--text-light);margin-top:.5rem;">Cargando...</div>
+        <div id="accionesCurso" class="mt-2"></div>
+      </div>
   </aside>
 
   <main class="curso-main">
     <div id="contenidoCurso">
-      <div class="text-center" style="padding:3rem 0;"><div class="loader-spin" style="margin:0 auto;"></div></div>
+      <div class="text-center" style="padding:3rem 0;">
+        <div class="loader-spin" style="margin:0 auto;"></div>
+      </div>
     </div>
   </main>
 </div>
 
 <footer data-footer></footer>
+<div class="loader-overlay" id="loaderOverlay"><div class="loader-spin"></div></div>
 
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/ui.js"></script>
 <script>
-let SESION = null, CURSO = null, MODULO_ACTIVO = 0;
+var SESION = null;
+var CURSO = null;
+var MODULO_ACTIVO = 0;
 
-(async function init() {
-  SESION = await AUTH.protegerPagina('estudiante');
-  if (!SESION) return;
+async function init() {
+  console.log('curso.html iniciando...');
+
+  var ok = await AUTH.validar();
+  if (!ok) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  SESION = AUTH.sesion();
+  console.log('SESION:', SESION);
+
   initLayout('panel');
   AUTH.bloquearInspeccion();
 
-  const params = new URLSearchParams(window.location.search);
-  const cursoId = params.get('id');
-  if (!cursoId) { window.location.href = 'panel-estudiante.html'; return; }
+  var params = new URLSearchParams(window.location.search);
+  var cursoId = params.get('id');
+  console.log('cursoId:', cursoId);
+
+  if (!cursoId) {
+    window.location.href = 'panel-estudiante.html';
+    return;
+  }
 
   try {
-    const r = await API.cursoContenido(SESION.token, cursoId);
+    var r = await API.cursoContenido(SESION.token, cursoId);
+    console.log('Respuesta curso:', r);
+
     if (!r.success) throw new Error(r.message);
+
     CURSO = r.curso;
     document.getElementById('cursoTituloSide').textContent = CURSO.titulo;
     document.title = CURSO.titulo + ' · Aula Virtual ERTO';
+
     renderModulos();
     cargarModulo(0);
+    cargarProgreso();
   } catch (e) {
-    document.getElementById('contenidoCurso').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+    console.error('Error:', e);
+    document.getElementById('contenidoCurso').innerHTML =
+      '<div class="alert alert-error show">' +
+        '<i class="fa-solid fa-triangle-exclamation"></i>' +
+        '<span>' + e.message + '</span>' +
+      '</div>';
   }
-})();
+}
 
 function renderModulos() {
-  const mods = CURSO.modulos || [];
+  var mods = CURSO.modulos || [];
+  if (!mods.length) {
+    document.getElementById('listaModulos').innerHTML =
+      '<li style="opacity:.6;cursor:default;"><i class="fa-solid fa-inbox"></i> Sin contenido aún</li>';
+    return;
+  }
   document.getElementById('listaModulos').innerHTML = mods.map(function (m, i) {
-    return '<li data-i="' + i + '" class="' + (i === 0 ? 'active' : '') + (m.completado ? ' completado' : '') + '" onclick="cargarModulo(' + i + ')">' +
-      '<i class="fa-solid ' + (m.icono || 'fa-book') + '"></i> ' + esc(m.titulo) + '</li>';
+    return '<li data-i="' + i + '" class="' + (i === 0 ? 'active' : '') +
+      (m.completado ? ' completado' : '') +
+      '" onclick="cargarModulo(' + i + ')">' +
+      '<i class="fa-solid ' + (m.icono || 'fa-book') + '"></i> ' + esc(m.titulo) +
+      '</li>';
   }).join('');
 }
 
 function cargarModulo(i) {
+  // ⬇️ AUTO-MARCAR el módulo anterior como completado
+  if (typeof MODULO_ACTIVO !== 'undefined' && MODULO_ACTIVO !== i && CURSO.modulos[MODULO_ACTIVO] && !CURSO.modulos[MODULO_ACTIVO].completado) {
+    marcarModuloAuto(MODULO_ACTIVO);
+  }
+
   MODULO_ACTIVO = i;
-  const m = (CURSO.modulos || [])[i];
+  var mods = CURSO.modulos || [];
+
+  if (!mods.length) {
+    document.getElementById('contenidoCurso').innerHTML =
+      '<div class="empty" style="padding:3rem 1rem;text-align:center;">' +
+        '<i class="fa-solid fa-folder-open" style="font-size:3rem;color:#c8cbe0;margin-bottom:1rem;"></i>' +
+        '<h2 style="margin-bottom:.5rem;">Este curso aún no tiene contenido</h2>' +
+        '<p style="color:#555570;margin-bottom:1.5rem;">El tutor está preparando los módulos.</p>' +
+        '<a href="panel-estudiante.html" class="btn btn-primary">' +
+          '<i class="fa-solid fa-arrow-left"></i> Volver al panel' +
+        '</a>' +
+      '</div>';
+    return;
+  }
+
+  var m = mods[i];
   if (!m) return;
+
   document.querySelectorAll('.curso-modulos li').forEach(function (li) {
     li.classList.toggle('active', Number(li.dataset.i) === i);
   });
+
+  var bloques = '';
+
+  // VIDEO
+  if (m.video_id) {
+    bloques +=
+      '<div class="recurso-bloque mb-3">' +
+        '<div class="recurso-head">' +
+          '<i class="fa-solid fa-play-circle"></i> Video del módulo' +
+          (m.duracion ? '<span class="chip gold" style="margin-left:auto;">' + esc(m.duracion) + '</span>' : '') +
+        '</div>' +
+        '<div class="video-wrap">' +
+          '<iframe src="https://www.youtube.com/embed/' + m.video_id + '?rel=0&modestbranding=1" ' +
+            'title="Video del módulo" frameborder="0" ' +
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" ' +
+            'allowfullscreen></iframe>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // PDF
+  if (m.pdf_url) {
+    bloques +=
+      '<div class="recurso-bloque mb-3">' +
+        '<div class="recurso-head">' +
+          '<i class="fa-solid fa-file-pdf"></i> Material PDF' +
+          '<a href="' + m.pdf_url.replace('/preview', '/view') + '" target="_blank" ' +
+            'class="btn btn-outline btn-sm" style="margin-left:auto;">' +
+            '<i class="fa-solid fa-download"></i> Abrir / Descargar' +
+          '</a>' +
+        '</div>' +
+        '<div class="pdf-wrap">' +
+          '<iframe src="' + m.pdf_url + '" frameborder="0"></iframe>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // SLIDES
+  if (m.slides_url) {
+    bloques +=
+      '<div class="recurso-bloque mb-3">' +
+        '<div class="recurso-head">' +
+          '<i class="fa-solid fa-images"></i> Diapositivas' +
+          '<a href="' + m.slides_url.replace('/embed?start=false&loop=false&delayms=3000', '/present') + '" ' +
+            'target="_blank" class="btn btn-outline btn-sm" style="margin-left:auto;">' +
+            '<i class="fa-solid fa-up-right-from-square"></i> Abrir en nueva pestaña' +
+          '</a>' +
+        '</div>' +
+        '<div class="slides-wrap">' +
+          '<iframe src="' + m.slides_url + '" frameborder="0" allowfullscreen="true"></iframe>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // ⬇️ Botón "Marcar completado" en TODOS los módulos
+  var botonMarcar = '';
+  if (!m.completado) {
+    botonMarcar =
+      '<button class="btn btn-success btn-block mt-3" onclick="marcarModuloManual(' + i + ')">' +
+        '<i class="fa-solid fa-circle-check"></i> Marcar este módulo como completado' +
+      '</button>';
+  } else {
+    botonMarcar =
+      '<div class="alert alert-success show mt-3" style="margin-bottom:0;">' +
+        '<i class="fa-solid fa-circle-check"></i>' +
+        '<span>Módulo completado</span>' +
+      '</div>';
+  }
+
   document.getElementById('contenidoCurso').innerHTML =
-    '<div class="chip green mb-2"><i class="fa-solid fa-book-open"></i> ' + esc(CURSO.titulo) + '</div>' +
+    '<div class="chip green mb-2">' +
+      '<i class="fa-solid fa-book-open"></i> ' + esc(CURSO.titulo) +
+    '</div>' +
     '<h1>' + esc(m.titulo) + '</h1>' +
     '<div class="contenido">' + (m.contenido_html || '<p>Contenido en preparación.</p>') + '</div>' +
+    bloques +
+    botonMarcar +
     '<div class="btn-row mt-3">' +
-      (i > 0 ? '<button class="btn btn-ghost" onclick="cargarModulo(' + (i - 1) + ')"><i class="fa-solid fa-arrow-left"></i> Anterior</button>' : '<span></span>') +
-      (i < (CURSO.modulos.length - 1)
-        ? '<button class="btn btn-primary" onclick="cargarModulo(' + (i + 1) + ')">Siguiente <i class="fa-solid fa-arrow-right"></i></button>'
-        : '<button class="btn btn-success" onclick="marcarCompletado()"><i class="fa-solid fa-circle-check"></i> Marcar como completado</button>') +
+      (i > 0
+        ? '<button class="btn btn-ghost" onclick="cargarModulo(' + (i - 1) + ')">' +
+            '<i class="fa-solid fa-arrow-left"></i> Anterior' +
+          '</button>'
+        : '<span></span>') +
+      (i < (mods.length - 1)
+        ? '<button class="btn btn-primary" onclick="cargarModulo(' + (i + 1) + ')">' +
+            'Siguiente <i class="fa-solid fa-arrow-right"></i>' +
+          '</button>'
+        : '<button class="btn btn-primary" onclick="irAEvaluacion()">' +
+            'Ir a la evaluación <i class="fa-solid fa-clipboard-check"></i>' +
+          '</button>') +
     '</div>';
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/** Marca un módulo manualmente (botón verde). */
+async function marcarModuloManual(i) {
+  var m = CURSO.modulos[i];
+  if (!m || m.completado) return;
+  try {
+    var r = await API.marcarProgreso(SESION.token, CURSO.id, m.id, true);
+    if (r.success) {
+      m.completado = true;
+      renderModulos();
+      cargarModulo(i);
+      cargarProgreso();
+    } else {
+      alert(r.message || 'No se pudo guardar.');
+    }
+  } catch (e) {
+    alert('Error al guardar el progreso.');
+  }
+}
+
+/** Marca automáticamente (al pasar al siguiente). */
+async function marcarModuloAuto(i) {
+  var m = CURSO.modulos[i];
+  if (!m || m.completado) return;
+  try {
+    var r = await API.marcarProgreso(SESION.token, CURSO.id, m.id, true);
+    if (r.success) {
+      m.completado = true;
+      renderModulos();
+      cargarProgreso();
+    }
+  } catch (e) { /* silencioso */ }
+}
+
+/** Va a la evaluación si todo está completo. */
+function irAEvaluacion() {
+  var total = CURSO.modulos.length;
+  var completos = CURSO.modulos.filter(function (m) { return m.completado; }).length;
+  if (completos < total) {
+    alert('Aún te faltan ' + (total - completos) + ' módulos por completar.');
+    return;
+  }
+  window.location.href = 'evaluacion.html?id=' + CURSO.id;
 }
 
 async function marcarCompletado() {
   try {
-    await API.marcarProgreso(SESION.token, CURSO.id, MODULO_ACTIVO, true);
-    alert('¡Progreso guardado!');
-  } catch (e) { alert('No se pudo guardar el progreso.'); }
+    var r = await API.marcarProgreso(SESION.token, CURSO.id, CURSO.modulos[MODULO_ACTIVO].id, true);
+    if (r.success) {
+      CURSO.modulos[MODULO_ACTIVO].completado = true;
+      renderModulos();
+      cargarProgreso(); // ⬅️ ESTA LÍNEA NUEVA
+    }
+  } catch (e) {
+    alert('No se pudo guardar el progreso.');
+  }
 }
+
+
+init();
+
+async function cargarProgreso() {
+  try {
+    const r = await API.estadoCurso(SESION.token, CURSO.id);
+    if (!r.success) return;
+    const e = r.estado;
+
+    document.getElementById('barraProgreso').style.width = e.porcentaje + '%';
+    document.getElementById('textoProgreso').textContent =
+      e.completados + ' de ' + e.total_modulos + ' módulos completados (' + e.porcentaje + '%)';
+
+    let html = '';
+
+    if (!e.puede_evaluacion) {
+      html = '<div style="font-size:.8rem;color:#888;text-align:center;padding:.5rem;">' +
+        '<i class="fa-solid fa-lock"></i> Completa todos los módulos para continuar</div>';
+    } else if (e.curso_terminado) {
+      html = '<div style="text-align:center;">' +
+        '<div class="chip green" style="margin-bottom:.5rem;font-size:.8rem;">' +
+          '<i class="fa-solid fa-circle-check"></i> Curso completado</div>' +
+        '<p style="font-size:.78rem;color:var(--text-light);margin:0;">Tu certificado será enviado por correo.</p>' +
+      '</div>';
+    } else if (e.aprobado && !e.encuesta_hecha) {
+      html = '<a href="encuesta.html?id=' + CURSO.id + '" class="btn btn-primary btn-block btn-sm">' +
+        '<i class="fa-solid fa-clipboard-list"></i> Ir a la encuesta</a>';
+    } else if (!e.aprobado) {
+      html = '<a href="evaluacion.html?id=' + CURSO.id + '" class="btn btn-primary btn-block btn-sm">' +
+        '<i class="fa-solid fa-clipboard-check"></i> Presentar evaluación</a>';
+    }
+
+    document.getElementById('accionesCurso').innerHTML = html;
+  } catch (e) { console.error(e); }
+}
+
 </script>
 </body>
 </html>

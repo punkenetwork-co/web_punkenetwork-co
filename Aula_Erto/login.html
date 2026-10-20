@@ -5,13 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Iniciar sesión · Aula Virtual ERTO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-
 <div data-topbar></div>
 <nav data-navbar></nav>
 
@@ -71,31 +69,59 @@
 <script>
 initLayout('login');
 
+// Si ya hay sesión, redirigir según el rol
 (async function () {
   if (await AUTH.validar()) {
-    const s = AUTH.sesion();
-    AUTH.redirigirPorRol(s.rol);
+    var s = AUTH.sesion();
+    var rol = s.rol ? s.rol.toLowerCase().trim() : 'estudiante';
+    if (rol === 'admin') window.location.href = 'panel-admin.html';
+    else if (rol === 'tutor') window.location.href = 'panel-tutor.html';
+    else window.location.href = 'panel-estudiante.html';
   }
 })();
 
 document.getElementById('formLogin').addEventListener('submit', async function (e) {
   e.preventDefault();
   ocultarAlerta('alertaLogin');
-  const emailEl = document.getElementById('email'), passEl = document.getElementById('password');
-  const btn = document.getElementById('btnLogin');
-  const vE = VALID.email(emailEl.value), vP = passEl.value.length > 0;
-  marcarCampo(emailEl, vE); marcarCampo(passEl, vP);
+  
+  var emailEl = document.getElementById('email');
+  var passEl = document.getElementById('password');
+  var btn = document.getElementById('btnLogin');
+  
+  var vE = VALID.email(emailEl.value);
+  var vP = passEl.value.length > 0;
+  
+  marcarCampo(emailEl, vE);
+  marcarCampo(passEl, vP);
   document.getElementById('err-email').classList.toggle('show', !vE);
   document.getElementById('err-password').classList.toggle('show', !vP);
+  
   if (!vE || !vP) return;
 
   btnLoading(btn, true, 'Verificando...');
+  
   try {
-    const r = await API.login(emailEl.value.trim().toLowerCase(), passEl.value);
+    var r = await API.login(emailEl.value.trim().toLowerCase(), passEl.value);
     if (!r.success) throw new Error(r.message);
+    
     AUTH.guardarSesion(r.usuario, r.token);
+    
+    // Forzar minúsculas y limpiar espacios por si acaso
+    var rolUsuario = (r.usuario.rol || 'estudiante').toLowerCase().trim();
+    console.log('Login exitoso. Redirigiendo a:', rolUsuario);
+    
     mostrarAlerta('alertaLogin', 'success', '¡Bienvenido, ' + r.usuario.nombres + '! Redirigiendo...');
-    setTimeout(function () { AUTH.redirigirPorRol(r.usuario.rol); }, 900);
+    
+    setTimeout(function () {
+      if (rolUsuario === 'admin') {
+        window.location.href = 'panel-admin.html';
+      } else if (rolUsuario === 'tutor') {
+        window.location.href = 'panel-tutor.html';
+      } else {
+        window.location.href = 'panel-estudiante.html';
+      }
+    }, 800);
+
   } catch (err) {
     mostrarAlerta('alertaLogin', 'error', err.message);
     btnLoading(btn, false);

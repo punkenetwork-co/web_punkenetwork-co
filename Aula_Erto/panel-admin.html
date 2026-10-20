@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi panel · Admin · Aula Virtual ERTO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="assets/css/styles.css">
@@ -17,7 +16,7 @@
   <aside class="panel-side">
     <div class="panel-user">
       <div class="panel-avatar" id="avatarAdm">AD</div>
-      <div class="panel-user-info"><strong id="nombreAdm">—</strong><span>Administrador</span></div>
+      <div class="panel-user-info"><strong id="nombreAdm">Cargando...</strong><span>Administrador</span></div>
     </div>
     <ul class="panel-menu">
       <li><a href="#" class="active" data-seccion="inicio"><i class="fa-solid fa-chart-line"></i> Resumen</a></li>
@@ -54,11 +53,10 @@
 
     <!-- CURSOS -->
     <div data-sec="cursos" class="hidden">
-      <div class="panel-header"><h1>Cursos</h1><p>Crea, edita y activa/desactiva cursos.</p></div>
+      <div class="panel-header"><h1>Cursos</h1><p>Lista de cursos en la plataforma.</p></div>
       <div class="panel-card">
         <div class="panel-card-head">
           <h3><i class="fa-solid fa-book"></i> Catálogo</h3>
-          <button class="btn btn-primary btn-sm" onclick="abrirModalCurso()"><i class="fa-solid fa-plus"></i> Nuevo curso</button>
         </div>
         <div id="tablaCursos"></div>
       </div>
@@ -66,95 +64,102 @@
 
     <!-- INSCRIPCIONES -->
     <div data-sec="inscripciones" class="hidden">
-      <div class="panel-header"><h1>Inscripciones</h1><p>Todas las inscripciones registradas en la plataforma.</p></div>
+      <div class="panel-header"><h1>Inscripciones</h1><p>Todas las inscripciones registradas.</p></div>
       <div class="panel-card"><div id="tablaInscripciones"></div></div>
     </div>
 
   </section>
 </div>
 
-<!-- Modal curso -->
-<div class="modal-overlay" id="modalCurso">
-  <div class="modal">
-    <div class="modal-head">
-      <h3 id="modalCursoTitulo"><i class="fa-solid fa-book"></i> Nuevo curso</h3>
-      <button class="modal-close" onclick="cerrarModalCurso()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="alert" id="alertaCurso"></div>
-      <form id="formCurso">
-        <input type="hidden" id="c_id">
-        <div class="form-group"><label>Título *</label><input type="text" class="form-control" id="c_titulo" required></div>
-        <div class="form-group"><label>Descripción *</label><textarea class="form-control" id="c_descripcion" rows="3" required></textarea></div>
-        <div class="form-group"><label>Tutor *</label><input type="text" class="form-control" id="c_tutor" required></div>
-        <div class="form-group"><label>Dirigido a</label><input type="text" class="form-control" id="c_dirigido_a"></div>
-        <div class="form-group"><label>Objetivo</label><textarea class="form-control" id="c_objetivo" rows="2"></textarea></div>
-        <div class="form-grid">
-          <div class="form-group"><label>Duración (horas)</label><input type="number" class="form-control" id="c_duracion_horas" min="1"></div>
-          <div class="form-group"><label>Nivel</label><select class="form-control" id="c_nivel"><option value="">—</option></select></div>
-          <div class="form-group"><label>Color</label><input type="color" class="form-control" id="c_color" value="#0200AF" style="height:46px;padding:.3rem;"></div>
-          <div class="form-group"><label>Activo</label><select class="form-control" id="c_activo"><option value="SÍ">SÍ</option><option value="NO">NO</option></select></div>
+<!-- Modal Certificado -->
+<div class="modal-overlay" id="modalCertificado">
+    <div class="modal">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-award"></i> Enviar Certificado</h3>
+        <button class="modal-close" onclick="cerrarModalCertificado()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert" id="alertaCertificado"></div>
+        <p>Estudiante: <strong id="cert_nombre"></strong></p>
+        <p>Correo: <strong id="cert_email"></strong></p>
+        
+        <div class="form-group mt-3">
+          <label>Selecciona el archivo PDF (descargado de Canva) *</label>
+          <input type="file" class="form-control" id="cert_pdf" accept=".pdf">
+          <div class="form-hint">El archivo no se guardará en Drive, solo se enviará por correo.</div>
         </div>
-        <div class="form-group"><label>URL de imagen (opcional)</label><input type="text" class="form-control" id="c_imagen" placeholder="https://..."></div>
-      </form>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="cerrarModalCurso()">Cancelar</button>
-      <button class="btn btn-primary" id="btnGuardarCurso"><i class="fa-solid fa-save"></i> Guardar</button>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="cerrarModalCertificado()">Cancelar</button>
+        <button class="btn btn-primary" id="btnEnviarCertificado"><i class="fa-solid fa-paper-plane"></i> Enviar ahora</button>
+      </div>
     </div>
   </div>
-</div>
 
 <footer data-footer></footer>
+<div class="loader-overlay" id="loaderOverlay"><div class="loader-spin"></div></div>
 
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/ui.js"></script>
 <script>
-let SESION = null;
-let USUARIOS = [], CURSOS = [], INSCRIPCIONES = [];
+var SESION = null;
 
-(async function init() {
-  SESION = await AUTH.protegerPagina('admin');
-  if (!SESION) return;
+async function init() {
+  console.log('Iniciando panel admin...');
+  
+  // Verificación manual de sesión
+  var s = AUTH.sesion();
+  if (!s || !s.token) {
+    window.location.href = 'login.html';
+    return;
+  }
+  
+  var rol = s.rol ? s.rol.toLowerCase().trim() : '';
+  if (rol !== 'admin') {
+    console.warn('No eres admin. Redirigiendo...');
+    if (rol === 'tutor') window.location.href = 'panel-tutor.html';
+    else window.location.href = 'panel-estudiante.html';
+    return;
+  }
+
+  SESION = s;
   initLayout('panel');
   AUTH.bloquearInspeccion();
+  
   document.getElementById('nombreAdm').textContent = SESION.nombres + ' ' + SESION.apellidos;
   document.getElementById('avatarAdm').textContent = iniciales(SESION.nombres, SESION.apellidos);
 
-  CONFIG.NIVELES.forEach(function (n) {
-    const o = document.createElement('option'); o.value = n; o.textContent = n;
-    document.getElementById('c_nivel').appendChild(o);
-  });
-
   await Promise.all([cargarResumen(), cargarUsuarios(), cargarCursos(), cargarInscripciones()]);
-})();
+}
 
 async function cargarResumen() {
   try {
-    const r = await API.adminResumen(SESION.token);
+    var r = await API.adminResumen(SESION.token);
     if (!r.success) throw new Error(r.message);
-    const s = r.stats || {};
+    var st = r.stats || {};
     document.getElementById('statsAdmin').innerHTML =
-      stat('blue', 'fa-users', s.total_usuarios || 0, 'Usuarios') +
-      stat('green', 'fa-book', s.total_cursos || 0, 'Cursos') +
-      stat('gold', 'fa-file-lines', s.total_inscripciones || 0, 'Inscripciones') +
-      stat('purple', 'fa-user-graduate', s.estudiantes_activos || 0, 'Estudiantes activos');
-    const ult = r.ultimas_inscripciones || [];
+      stat('blue', 'fa-users', st.total_usuarios || 0, 'Usuarios') +
+      stat('green', 'fa-book', st.total_cursos || 0, 'Cursos') +
+      stat('gold', 'fa-file-lines', st.total_inscripciones || 0, 'Inscripciones') +
+      stat('purple', 'fa-user-graduate', st.estudiantes_activos || 0, 'Estudiantes activos');
+      
+    var ult = r.ultimas_inscripciones || [];
     document.getElementById('ultimasInscripciones').innerHTML = ult.length
       ? tablaInscripciones(ult)
       : '<div class="empty"><i class="fa-solid fa-inbox"></i><h3>Sin inscripciones aún</h3></div>';
   } catch (e) {
+    console.error(e);
     document.getElementById('statsAdmin').innerHTML = '<div class="alert alert-error show" style="grid-column:1/-1;"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
   }
 }
 
 async function cargarUsuarios() {
   try {
-    const r = await API.adminUsuarios(SESION.token);
+    var r = await API.adminUsuarios(SESION.token);
     if (!r.success) throw new Error(r.message);
-    USUARIOS = r.usuarios || [];
+    window.USUARIOS = r.usuarios || [];
     renderUsuarios();
   } catch (e) {
     document.getElementById('tablaUsuarios').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
@@ -162,158 +167,69 @@ async function cargarUsuarios() {
 }
 
 function renderUsuarios(filtro) {
-  const f = (filtro || '').toLowerCase();
-  const lista = f ? USUARIOS.filter(function (u) {
-    return (u.nombres + ' ' + u.apellidos + ' ' + u.email + ' ' + u.numero_documento).toLowerCase().indexOf(f) !== -1;
-  }) : USUARIOS;
+  var lista = window.USUARIOS || [];
+  if (filtro) {
+    var f = filtro.toLowerCase();
+    lista = lista.filter(function (u) {
+      return (u.nombres + ' ' + u.apellidos + ' ' + u.email).toLowerCase().indexOf(f) !== -1;
+    });
+  }
 
   if (!lista.length) {
     document.getElementById('tablaUsuarios').innerHTML = '<div class="empty"><i class="fa-solid fa-users"></i><h3>Sin usuarios</h3></div>';
     return;
   }
+  
   document.getElementById('tablaUsuarios').innerHTML =
     '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
-      '<th>Nombre</th><th>Correo</th><th>Documento</th><th>Rol</th><th>Activo</th><th>Acciones</th>' +
+      '<th>Nombre</th><th>Correo</th><th>Rol</th><th>Estado</th>' +
     '</tr></thead><tbody>' +
     lista.map(function (u) {
       return '<tr>' +
         '<td><strong>' + esc(u.nombres) + ' ' + esc(u.apellidos) + '</strong></td>' +
         '<td>' + esc(u.email) + '</td>' +
-        '<td>' + esc(u.tipo_documento) + ' ' + esc(u.numero_documento) + '</td>' +
-        '<td><select class="form-control" style="padding:.35rem .6rem;font-size:.82rem;" onchange="cambiarRol(' + u.id + ', this.value)">' +
-          ['estudiante','tutor','admin'].map(function (r) {
-            return '<option value="' + r + '"' + (u.rol === r ? ' selected' : '') + '>' + r.charAt(0).toUpperCase() + r.slice(1) + '</option>';
-          }).join('') +
-        '</select></td>' +
-        '<td><span class="chip ' + (String(u.activo).toUpperCase().indexOf('S') === 0 ? 'green' : 'red') + '">' + esc(u.activo) + '</span></td>' +
-        '<td><button class="btn ' + (String(u.activo).toUpperCase().indexOf('S') === 0 ? 'btn-ghost' : 'btn-success') + ' btn-sm" onclick="toggleActivo(' + u.id + ', \'' + u.activo + '\')">' +
-          '<i class="fa-solid ' + (String(u.activo).toUpperCase().indexOf('S') === 0 ? 'fa-ban' : 'fa-check') + '"></i> ' +
-          (String(u.activo).toUpperCase().indexOf('S') === 0 ? 'Desactivar' : 'Activar') +
-        '</button></td>' +
+        '<td><span class="chip ' + (u.rol === 'admin' ? 'red' : u.rol === 'tutor' ? 'gold' : '') + '">' + esc(u.rol) + '</span></td>' +
+        '<td><span class="chip ' + (String(u.activo).toUpperCase().indexOf('S') === 0 ? 'green' : 'gray') + '">' + esc(u.activo) + '</span></td>' +
       '</tr>';
     }).join('') +
     '</tbody></table></div>';
-}
-
-async function cambiarRol(usuarioId, rol) {
-  if (!confirm('¿Cambiar el rol de este usuario a "' + rol + '"?')) { cargarUsuarios(); return; }
-  try {
-    const r = await API.cambiarRol(SESION.token, usuarioId, rol);
-    if (!r.success) throw new Error(r.message);
-    cargarUsuarios();
-  } catch (e) { alert(e.message); cargarUsuarios(); }
-}
-
-async function toggleActivo(usuarioId, activo) {
-  const nuevo = String(activo).toUpperCase().indexOf('S') === 0 ? 'NO' : 'SÍ';
-  if (!confirm('¿' + (nuevo === 'SÍ' ? 'Activar' : 'Desactivar') + ' este usuario?')) return;
-  try {
-    const r = await API.activarUsuario(SESION.token, usuarioId, nuevo);
-    if (!r.success) throw new Error(r.message);
-    cargarUsuarios();
-  } catch (e) { alert(e.message); }
 }
 
 document.getElementById('buscarUsuario').addEventListener('input', function (e) { renderUsuarios(e.target.value); });
 
 async function cargarCursos() {
   try {
-    const r = await API.adminCursos(SESION.token);
+    var r = await API.adminCursos(SESION.token);
     if (!r.success) throw new Error(r.message);
-    CURSOS = r.cursos || [];
-    renderCursos();
+    var lista = r.cursos || [];
+    if (!lista.length) {
+      document.getElementById('tablaCursos').innerHTML = '<div class="empty"><i class="fa-solid fa-book"></i><h3>Sin cursos</h3></div>';
+      return;
+    }
+    document.getElementById('tablaCursos').innerHTML =
+      '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
+        '<th>Título</th><th>Tutor</th><th>Estado</th>' +
+      '</tr></thead><tbody>' +
+      lista.map(function (c) {
+        return '<tr>' +
+          '<td><strong>' + esc(c.titulo) + '</strong></td>' +
+          '<td>' + esc(c.tutor) + '</td>' +
+          '<td><span class="chip ' + (String(c.activo).toUpperCase().indexOf('S') === 0 ? 'green' : 'gray') + '">' + esc(c.activo) + '</span></td>' +
+        '</tr>';
+      }).join('') +
+      '</tbody></table></div>';
   } catch (e) {
     document.getElementById('tablaCursos').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
   }
 }
 
-function renderCursos() {
-  if (!CURSOS.length) {
-    document.getElementById('tablaCursos').innerHTML = '<div class="empty"><i class="fa-solid fa-book"></i><h3>Sin cursos</h3></div>';
-    return;
-  }
-  document.getElementById('tablaCursos').innerHTML =
-    '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
-      '<th>Título</th><th>Tutor</th><th>Duración</th><th>Nivel</th><th>Estado</th><th>Acciones</th>' +
-    '</tr></thead><tbody>' +
-    CURSOS.map(function (c) {
-      return '<tr>' +
-        '<td><strong>' + esc(c.titulo) + '</strong></td>' +
-        '<td>' + esc(c.tutor) + '</td>' +
-        '<td>' + esc(c.duracion_horas || '—') + ' h</td>' +
-        '<td>' + esc(c.nivel || '—') + '</td>' +
-        '<td><span class="chip ' + (String(c.activo).toUpperCase().indexOf('S') === 0 ? 'green' : 'gray') + '">' + esc(c.activo) + '</span></td>' +
-        '<td><button class="btn btn-outline btn-sm" onclick=\'editarCurso(' + JSON.stringify(c).replace(/'/g, "&apos;") + ')\'><i class="fa-solid fa-pen"></i> Editar</button></td>' +
-      '</tr>';
-    }).join('') +
-    '</tbody></table></div>';
-}
-
-function abrirModalCurso() {
-  document.getElementById('modalCursoTitulo').innerHTML = '<i class="fa-solid fa-book"></i> Nuevo curso';
-  document.getElementById('formCurso').reset();
-  document.getElementById('c_id').value = '';
-  document.getElementById('c_color').value = '#0200AF';
-  document.getElementById('c_activo').value = 'SÍ';
-  ocultarAlerta('alertaCurso');
-  document.getElementById('modalCurso').classList.add('show');
-}
-
-function editarCurso(c) {
-  document.getElementById('modalCursoTitulo').innerHTML = '<i class="fa-solid fa-pen"></i> Editar curso';
-  document.getElementById('c_id').value = c.id;
-  document.getElementById('c_titulo').value = c.titulo || '';
-  document.getElementById('c_descripcion').value = c.descripcion || '';
-  document.getElementById('c_tutor').value = c.tutor || '';
-  document.getElementById('c_dirigido_a').value = c.dirigido_a || '';
-  document.getElementById('c_objetivo').value = c.objetivo || '';
-  document.getElementById('c_duracion_horas').value = c.duracion_horas || '';
-  document.getElementById('c_nivel').value = c.nivel || '';
-  document.getElementById('c_color').value = c.color || '#0200AF';
-  document.getElementById('c_activo').value = c.activo || 'SÍ';
-  document.getElementById('c_imagen').value = c.imagen || '';
-  ocultarAlerta('alertaCurso');
-  document.getElementById('modalCurso').classList.add('show');
-}
-
-function cerrarModalCurso() { document.getElementById('modalCurso').classList.remove('show'); }
-
-document.getElementById('btnGuardarCurso').addEventListener('click', async function () {
-  const btn = this;
-  btnLoading(btn, true, 'Guardando...');
-  ocultarAlerta('alertaCurso');
-  try {
-    const curso = {
-      id: document.getElementById('c_id').value || null,
-      titulo: document.getElementById('c_titulo').value.trim(),
-      descripcion: document.getElementById('c_descripcion').value.trim(),
-      tutor: document.getElementById('c_tutor').value.trim(),
-      dirigido_a: document.getElementById('c_dirigido_a').value.trim(),
-      objetivo: document.getElementById('c_objetivo').value.trim(),
-      duracion_horas: document.getElementById('c_duracion_horas').value,
-      nivel: document.getElementById('c_nivel').value,
-      color: document.getElementById('c_color').value,
-      activo: document.getElementById('c_activo').value,
-      imagen: document.getElementById('c_imagen').value.trim()
-    };
-    if (!curso.titulo || !curso.descripcion || !curso.tutor) throw new Error('Título, descripción y tutor son obligatorios.');
-    const r = await API.guardarCurso(SESION.token, curso);
-    if (!r.success) throw new Error(r.message);
-    cerrarModalCurso();
-    cargarCursos();
-    cargarResumen();
-  } catch (e) {
-    mostrarAlerta('alertaCurso', 'error', e.message);
-  } finally { btnLoading(btn, false); }
-});
-
 async function cargarInscripciones() {
   try {
-    const r = await API.adminInscripciones(SESION.token);
+    var r = await API.adminInscripciones(SESION.token);
     if (!r.success) throw new Error(r.message);
-    INSCRIPCIONES = r.inscripciones || [];
-    document.getElementById('tablaInscripciones').innerHTML = INSCRIPCIONES.length
-      ? tablaInscripciones(INSCRIPCIONES)
+    var lista = r.inscripciones || [];
+    document.getElementById('tablaInscripciones').innerHTML = lista.length
+      ? tablaInscripciones(lista)
       : '<div class="empty"><i class="fa-solid fa-inbox"></i><h3>Sin inscripciones</h3></div>';
   } catch (e) {
     document.getElementById('tablaInscripciones').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
@@ -322,15 +238,18 @@ async function cargarInscripciones() {
 
 function tablaInscripciones(lista) {
   return '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
-    '<th>Estudiante</th><th>Correo</th><th>Curso</th><th>Estado</th><th>Fecha</th>' +
+    '<th>Estudiante</th><th>Correo</th><th>Curso</th><th>Estado</th><th>Acciones</th>' +
   '</tr></thead><tbody>' +
   lista.map(function (i) {
+    const nombreCompleto = esc(i.nombres) + ' ' + esc(i.apellidos);
     return '<tr>' +
-      '<td><strong>' + esc(i.nombres) + ' ' + esc(i.apellidos) + '</strong></td>' +
+      '<td><strong>' + nombreCompleto + '</strong></td>' +
       '<td>' + esc(i.email) + '</td>' +
       '<td>' + esc(i.curso_titulo) + '</td>' +
       '<td><span class="chip ' + (i.estado === 'completado' ? 'green' : i.estado === 'cancelado' ? 'red' : '') + '">' + esc(i.estado) + '</span></td>' +
-      '<td>' + fmtFecha(i.fecha_inscripcion) + '</td>' +
+      '<td>' +
+        '<button class="btn btn-sm btn-primary" onclick="abrirModalCertificado(\'' + i.email + '\', \'' + nombreCompleto + '\', \'' + esc(i.curso_titulo) + '\')"><i class="fa-solid fa-paper-plane"></i> Enviar</button>' +
+      '</td>' +
     '</tr>';
   }).join('') +
   '</tbody></table></div>';
@@ -347,9 +266,72 @@ document.querySelectorAll('.panel-menu a[data-seccion]').forEach(function (a) {
     document.querySelectorAll('.panel-menu a').forEach(function (x) { x.classList.remove('active'); });
     a.classList.add('active');
     document.querySelectorAll('[data-sec]').forEach(function (s) { s.classList.add('hidden'); });
-    document.querySelector('[data-sec="' + a.dataset.seccion + '"]').classList.remove('hidden');
+    var sec = document.querySelector('[data-sec="' + a.dataset.seccion + '"]');
+    if (sec) sec.classList.remove('hidden');
   });
 });
+
+var certEmail = '', certNombre = '', certCurso = '';
+
+function abrirModalCertificado(email, nombre, curso) {
+  certEmail = email;
+  certNombre = nombre;
+  certCurso = curso;
+  document.getElementById('cert_nombre').textContent = nombre;
+  document.getElementById('cert_email').textContent = email;
+  document.getElementById('cert_pdf').value = ''; // Limpiar input
+  ocultarAlerta('alertaCertificado');
+  document.getElementById('modalCertificado').classList.add('show');
+}
+
+function cerrarModalCertificado() {
+  document.getElementById('modalCertificado').classList.remove('show');
+}
+
+document.getElementById('btnEnviarCertificado').addEventListener('click', async function() {
+  const fileInput = document.getElementById('cert_pdf');
+  if (!fileInput.files.length) {
+    return mostrarAlerta('alertaCertificado', 'error', 'Por favor selecciona un archivo PDF.');
+  }
+
+  const file = fileInput.files[0];
+  if (file.type !== 'application/pdf') {
+    return mostrarAlerta('alertaCertificado', 'error', 'El archivo debe ser un PDF.');
+  }
+
+  const btn = this;
+  btnLoading(btn, true, 'Enviando...');
+  ocultarAlerta('alertaCertificado');
+
+  // Leer archivo como Base64
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const pdfBase64 = e.target.result;
+    try {
+      const r = await API.enviarCertificado(SESION.token, {
+        email: certEmail,
+        nombre: certNombre,
+        curso: certCurso,
+        pdfBase64: pdfBase64
+      });
+      if (!r.success) throw new Error(r.message);
+      
+      mostrarAlerta('alertaCertificado', 'success', r.message);
+      setTimeout(cerrarModalCertificado, 2000);
+    } catch (err) {
+      mostrarAlerta('alertaCertificado', 'error', err.message);
+    } finally {
+      btnLoading(btn, false);
+    }
+  };
+  reader.onerror = function() {
+    mostrarAlerta('alertaCertificado', 'error', 'Error al leer el archivo.');
+    btnLoading(btn, false);
+  };
+  reader.readAsDataURL(file);
+});
+
+init();
 </script>
 </body>
 </html>

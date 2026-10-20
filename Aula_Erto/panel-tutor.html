@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi panel · Tutor · Aula Virtual ERTO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <link rel="stylesheet" href="assets/css/styles.css">
@@ -17,7 +16,7 @@
   <aside class="panel-side">
     <div class="panel-user">
       <div class="panel-avatar" id="avatarTut">TU</div>
-      <div class="panel-user-info"><strong id="nombreTut">—</strong><span>Tutor</span></div>
+      <div class="panel-user-info"><strong id="nombreTut">Cargando...</strong><span>Tutor</span></div>
     </div>
     <ul class="panel-menu">
       <li><a href="#" class="active" data-seccion="inicio"><i class="fa-solid fa-house"></i> Inicio</a></li>
@@ -29,11 +28,11 @@
   <section class="panel-content">
 
     <div data-sec="inicio">
-      <div class="panel-header"><h1>Hola, <span id="nombreHero">—</span></h1><p>Panel de tutor. Consulta tus cursos y estudiantes inscritos.</p></div>
+      <div class="panel-header"><h1>Hola, <span id="nombreHero">...</span></h1><p>Panel de tutor. Consulta tus cursos y estudiantes inscritos.</p></div>
       <div class="stats-grid" id="statsTutor"></div>
       <div class="panel-card">
         <div class="panel-card-head"><h3><i class="fa-solid fa-chalkboard-user"></i> Mis cursos</h3></div>
-        <div id="cursosTutorHome"></div>
+        <div id="cursosTutorHome"><p style="color:#888;">Cargando cursos...</p></div>
       </div>
     </div>
 
@@ -56,46 +55,98 @@
   </div>
 </div>
 
+<!-- Modal Certificado -->
+<div class="modal-overlay" id="modalCertificado">
+    <div class="modal">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-award"></i> Enviar Certificado</h3>
+        <button class="modal-close" onclick="cerrarModalCertificado()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert" id="alertaCertificado"></div>
+        <p>Estudiante: <strong id="cert_nombre"></strong></p>
+        <p>Correo: <strong id="cert_email"></strong></p>
+        
+        <div class="form-group mt-3">
+          <label>Selecciona el archivo PDF (descargado de Canva) *</label>
+          <input type="file" class="form-control" id="cert_pdf" accept=".pdf">
+          <div class="form-hint">El archivo no se guardará en Drive, solo se enviará por correo.</div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="cerrarModalCertificado()">Cancelar</button>
+        <button class="btn btn-primary" id="btnEnviarCertificado"><i class="fa-solid fa-paper-plane"></i> Enviar ahora</button>
+      </div>
+    </div>
+  </div>
+
 <footer data-footer></footer>
+<div class="loader-overlay" id="loaderOverlay"><div class="loader-spin"></div></div>
 
 <script src="assets/js/config.js"></script>
 <script src="assets/js/api.js"></script>
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/ui.js"></script>
 <script>
-let SESION = null, CURSOS = [];
+var SESION = null, CURSOS = [];
 
-(async function init() {
-  SESION = await AUTH.protegerPagina('tutor');
-  if (!SESION) return;
+async function init() {
+  console.log('🚀 init() panel-tutor arrancando...');
+
+  // 1. Validar sesión
+  if (!(await AUTH.validar())) { 
+    window.location.href = 'login.html'; 
+    return; 
+  }
+  
+  SESION = AUTH.sesion();
+  console.log('✅ SESION:', SESION);
+
+  // 2. Seguridad: solo tutores y admins pueden entrar aquí
+  if (SESION.rol !== 'tutor' && SESION.rol !== 'admin') {
+    window.location.href = 'login.html';
+    return;
+  }
+
   initLayout('panel');
   AUTH.bloquearInspeccion();
+
+  // 3. Pintar datos del usuario
   document.getElementById('nombreTut').textContent = SESION.nombres + ' ' + SESION.apellidos;
   document.getElementById('nombreHero').textContent = SESION.nombres;
-  document.getElementById('avatarTut').textContent = iniciales(SESION.nombres, SESION.apellidos);
+  document.getElementById('avatarTut').textContent = 
+    ((SESION.nombres || ' ')[0] + (SESION.apellidos || ' ')[0]).toUpperCase();
+
+  // 4. Cargar cursos
   await cargarCursos();
-})();
+}
 
 async function cargarCursos() {
   try {
-    const r = await API.cursosTutor(SESION.token);
+    console.log('📚 Cargando cursos del tutor...');
+    var r = await API.cursosTutor(SESION.token);
+    console.log('📚 Respuesta:', r);
     if (!r.success) throw new Error(r.message);
+    
     CURSOS = r.cursos || [];
     renderTodo();
   } catch (e) {
-    document.getElementById('cursosTutorHome').innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+    console.error('❌ Error:', e);
+    document.getElementById('cursosTutorHome').innerHTML = 
+      '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
   }
 }
 
 function renderTodo() {
-  const totalEst = CURSOS.reduce(function (a, c) { return a + (c.total_estudiantes || 0); }, 0);
+  var totalEst = CURSOS.reduce(function (a, c) { return a + (c.total_estudiantes || 0); }, 0);
+  
   document.getElementById('statsTutor').innerHTML =
     stat('blue', 'fa-chalkboard-user', CURSOS.length, 'Cursos a cargo') +
     stat('green', 'fa-users', totalEst, 'Estudiantes totales') +
-    stat('gold', 'fa-circle-check', CURSOS.filter(function (c) { return c.activo === 'SÍ'; }).length, 'Cursos activos');
+    stat('gold', 'fa-circle-check', CURSOS.filter(function (c) { return c.activo === 'SÍ' || c.activo === 'SI'; }).length, 'Cursos activos');
 
-  const html = CURSOS.length ? CURSOS.map(function (c) {
-    const color = c.color || '#0200AF';
+  var html = CURSOS.length ? CURSOS.map(function (c) {
+    var color = c.color || '#0200AF';
     return (
       '<div class="curso-item">' +
         '<div class="curso-item-cover" style="background:linear-gradient(135deg,' + color + ',' + color + 'dd);"><i class="fa-solid fa-graduation-cap"></i></div>' +
@@ -123,23 +174,32 @@ async function verEstudiantes(cursoId, titulo) {
   document.getElementById('modalTitulo').innerHTML = '<i class="fa-solid fa-users"></i> ' + titulo;
   document.getElementById('modalBody').innerHTML = '<div class="text-center" style="padding:1.5rem;"><div class="loader-spin" style="margin:0 auto;"></div></div>';
   document.getElementById('modalEstudiantes').classList.add('show');
+  
   try {
-    const r = await API.estudiantesCurso(SESION.token, cursoId);
+    var r = await API.estudiantesCurso(SESION.token, cursoId);
     if (!r.success) throw new Error(r.message);
-    const est = r.estudiantes || [];
+    
+    var est = r.estudiantes || [];
     if (!est.length) {
       document.getElementById('modalBody').innerHTML = '<div class="empty"><i class="fa-solid fa-user-slash"></i><h3>Sin estudiantes</h3><p>Aún no hay inscritos en este curso.</p></div>';
       return;
     }
+    
     document.getElementById('modalBody').innerHTML =
       '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
-        '<th>Estudiante</th><th>Correo</th><th>Documento</th><th>Estado</th>' +
+        '<th>Estudiante</th><th>Correo</th><th>Estado</th><th>Certificado</th>' +
       '</tr></thead><tbody>' +
       est.map(function (e) {
-        return '<tr><td><strong>' + esc(e.nombres) + ' ' + esc(e.apellidos) + '</strong></td>' +
+        // Guardamos los datos en atributos del botón
+        const nombreCompleto = esc(e.nombres) + ' ' + esc(e.apellidos);
+        return '<tr><td><strong>' + nombreCompleto + '</strong><br><small style="color:#888;">' + esc(e.tipo_documento) + ' ' + esc(e.numero_documento) + '</small></td>' +
           '<td>' + esc(e.email) + '</td>' +
-          '<td>' + esc(e.tipo_documento) + ' ' + esc(e.numero_documento) + '</td>' +
-          '<td><span class="chip ' + (e.estado === 'completado' ? 'green' : '') + '">' + esc(e.estado) + '</span></td></tr>';
+          '<td><span class="chip ' + (e.estado === 'completado' ? 'green' : '') + '">' + esc(e.estado) + '</span></td>' +
+          '<td>' +
+            '<button class="btn btn-sm btn-primary" onclick="abrirModalCertificado(\'' + e.email + '\', \'' + nombreCompleto + '\', \'' + esc(titulo) + '\')">' +
+              '<i class="fa-solid fa-paper-plane"></i> Enviar' +
+            '</button>' +
+          '</td></tr>';
       }).join('') +
       '</tbody></table></div>';
   } catch (e) {
@@ -161,6 +221,69 @@ document.querySelectorAll('.panel-menu a[data-seccion]').forEach(function (a) {
     document.querySelector('[data-sec="' + a.dataset.seccion + '"]').classList.remove('hidden');
   });
 });
+
+var certEmail = '', certNombre = '', certCurso = '';
+
+function abrirModalCertificado(email, nombre, curso) {
+  certEmail = email;
+  certNombre = nombre;
+  certCurso = curso;
+  document.getElementById('cert_nombre').textContent = nombre;
+  document.getElementById('cert_email').textContent = email;
+  document.getElementById('cert_pdf').value = ''; // Limpiar input
+  ocultarAlerta('alertaCertificado');
+  document.getElementById('modalCertificado').classList.add('show');
+}
+
+function cerrarModalCertificado() {
+  document.getElementById('modalCertificado').classList.remove('show');
+}
+
+document.getElementById('btnEnviarCertificado').addEventListener('click', async function() {
+  const fileInput = document.getElementById('cert_pdf');
+  if (!fileInput.files.length) {
+    return mostrarAlerta('alertaCertificado', 'error', 'Por favor selecciona un archivo PDF.');
+  }
+
+  const file = fileInput.files[0];
+  if (file.type !== 'application/pdf') {
+    return mostrarAlerta('alertaCertificado', 'error', 'El archivo debe ser un PDF.');
+  }
+
+  const btn = this;
+  btnLoading(btn, true, 'Enviando...');
+  ocultarAlerta('alertaCertificado');
+
+  // Leer archivo como Base64
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const pdfBase64 = e.target.result;
+    try {
+      const r = await API.enviarCertificado(SESION.token, {
+        email: certEmail,
+        nombre: certNombre,
+        curso: certCurso,
+        pdfBase64: pdfBase64
+      });
+      if (!r.success) throw new Error(r.message);
+      
+      mostrarAlerta('alertaCertificado', 'success', r.message);
+      setTimeout(cerrarModalCertificado, 2000);
+    } catch (err) {
+      mostrarAlerta('alertaCertificado', 'error', err.message);
+    } finally {
+      btnLoading(btn, false);
+    }
+  };
+  reader.onerror = function() {
+    mostrarAlerta('alertaCertificado', 'error', 'Error al leer el archivo.');
+    btnLoading(btn, false);
+  };
+  reader.readAsDataURL(file);
+});
+
+// ARRANCAR
+init();
 </script>
 </body>
 </html>

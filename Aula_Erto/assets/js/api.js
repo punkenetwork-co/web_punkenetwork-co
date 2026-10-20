@@ -52,5 +52,13 @@
     adminCursos(token)      { return this.post('adminCursos', { token }); },
     guardarCurso(token, curso) { return this.post('guardarCurso', { token, curso }); },
     cambiarRol(token, usuario_id, rol) { return this.post('cambiarRol', { token, usuario_id, rol }); },
-    activarUsuario(token, usuario_id, activo) { return this.post('activarUsuario', { token, usuario_id, activo }); }
+    activarUsuario(token, usuario_id, activo) { return this.post('activarUsuario', { token, usuario_id, activo }); },
+
+    estadoCurso(token, curso_id) { return this.post('estadoCurso', { token, curso_id }); },
+    examen(token, curso_id)      { return this.post('examen', { token, curso_id }); },
+    enviarExamen(token, curso_id, respuestas) { return this.post('enviarExamen', { token, curso_id, respuestas }); },
+    enviarEncuesta(token, datos) { return this.post('enviarEncuesta', Object.assign({ token }, datos)); },
+    enviarCertificado(token, datos) { return this.post('enviarCertificado', Object.assign({ token }, datos)); },
   };
+
+  
