@@ -71,6 +71,42 @@
   </section>
 </div>
 
+<!-- Modal Curso -->
+<div class="modal-overlay" id="modalCurso">
+  <div class="modal">
+    <div class="modal-head">
+      <h3><i class="fa-solid fa-book"></i> Editar Curso</h3>
+      <button class="modal-close" onclick="cerrarModalCurso()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert" id="alertaCurso"></div>
+      <form id="formCurso">
+        <input type="hidden" id="c_id">
+        <div class="form-group"><label>Título *</label><input type="text" class="form-control" id="c_titulo" required></div>
+        <div class="form-group">
+          <label>Tutor Asignado *</label>
+          <select class="form-control" id="c_tutor" required>
+            <option value="">— Selecciona un tutor —</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Descripción</label><textarea class="form-control" id="c_descripcion" rows="2"></textarea></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Duración (horas)</label><input type="number" class="form-control" id="c_duracion_horas" min="1"></div>
+          <div class="form-group"><label>Nivel</label><select class="form-control" id="c_nivel"><option value="Básico">Básico</option><option value="Intermedio">Intermedio</option><option value="Avanzado">Avanzado</option></select></div>
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select class="form-control" id="c_activo"><option value="SÍ">Activo</option><option value="NO">Inactivo</option></select>
+        </div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="cerrarModalCurso()">Cancelar</button>
+      <button class="btn btn-primary" id="btnGuardarCurso"><i class="fa-solid fa-save"></i> Guardar Cambios</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Certificado -->
 <div class="modal-overlay" id="modalCertificado">
     <div class="modal">
@@ -201,20 +237,23 @@ async function cargarCursos() {
   try {
     var r = await API.adminCursos(SESION.token);
     if (!r.success) throw new Error(r.message);
-    var lista = r.cursos || [];
-    if (!lista.length) {
+    window.CURSOS = r.cursos || []; // Guardamos globalmente para poder editar
+    
+    if (!window.CURSOS.length) {
       document.getElementById('tablaCursos').innerHTML = '<div class="empty"><i class="fa-solid fa-book"></i><h3>Sin cursos</h3></div>';
       return;
     }
+
     document.getElementById('tablaCursos').innerHTML =
       '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
-        '<th>Título</th><th>Tutor</th><th>Estado</th>' +
+        '<th>Título</th><th>Tutor</th><th>Estado</th><th>Acciones</th>' +
       '</tr></thead><tbody>' +
-      lista.map(function (c) {
+      window.CURSOS.map(function (c) {
         return '<tr>' +
           '<td><strong>' + esc(c.titulo) + '</strong></td>' +
           '<td>' + esc(c.tutor) + '</td>' +
           '<td><span class="chip ' + (String(c.activo).toUpperCase().indexOf('S') === 0 ? 'green' : 'gray') + '">' + esc(c.activo) + '</span></td>' +
+          '<td><button class="btn btn-outline btn-sm" onclick="abrirModalCurso(' + c.id + ')"><i class="fa-solid fa-pen"></i> Editar / Asignar</button></td>' +
         '</tr>';
       }).join('') +
       '</tbody></table></div>';
@@ -330,6 +369,85 @@ document.getElementById('btnEnviarCertificado').addEventListener('click', async 
   };
   reader.readAsDataURL(file);
 });
+
+function abrirModalCurso(id) {
+  var c = window.CURSOS.find(function(x) { return Number(x.id) === Number(id); });
+  if (!c) return;
+  
+  document.getElementById('c_id').value = c.id;
+  document.getElementById('c_titulo').value = c.titulo || '';
+  poblarTutoresSelect(); // 👈 Llena la lista desplegable
+  document.getElementById('c_tutor').value = c.tutor || ''; // 👈 Selecciona al tutor que ya tiene el curso
+  document.getElementById('c_descripcion').value = c.descripcion || '';
+  document.getElementById('c_duracion_horas').value = c.duracion_horas || '';
+  document.getElementById('c_nivel').value = c.nivel || 'Básico';
+  document.getElementById('c_activo').value = c.activo || 'SÍ';
+  
+  ocultarAlerta('alertaCurso');
+  document.getElementById('modalCurso').classList.add('show');
+}
+
+function cerrarModalCurso() {
+  document.getElementById('modalCurso').classList.remove('show');
+}
+
+document.getElementById('btnGuardarCurso').addEventListener('click', async function() {
+  var btn = this;
+  btnLoading(btn, true, 'Guardando...');
+  ocultarAlerta('alertaCurso');
+
+  var cursoData = {
+    id: document.getElementById('c_id').value,
+    titulo: document.getElementById('c_titulo').value.trim(),
+    tutor: document.getElementById('c_tutor').value.trim(),
+    descripcion: document.getElementById('c_descripcion').value.trim(),
+    duracion_horas: document.getElementById('c_duracion_horas').value,
+    nivel: document.getElementById('c_nivel').value,
+    activo: document.getElementById('c_activo').value
+  };
+
+  if (!cursoData.titulo || !cursoData.tutor) {
+    mostrarAlerta('alertaCurso', 'error', 'El título y el tutor son obligatorios.');
+    btnLoading(btn, false);
+    return;
+  }
+
+  try {
+    // Usamos el endpoint guardarCurso que ya tienes en el backend
+    var r = await API.post('guardarCurso', { token: SESION.token, curso: cursoData });
+    if (!r.success) throw new Error(r.message);
+    
+    mostrarAlerta('alertaCurso', 'success', 'Curso actualizado correctamente.');
+    setTimeout(function() {
+      cerrarModalCurso();
+      cargarCursos(); // Recarga la tabla
+    }, 1500);
+    
+  } catch (err) {
+    mostrarAlerta('alertaCurso', 'error', err.message);
+  } finally {
+    btnLoading(btn, false);
+  }
+});
+
+function poblarTutoresSelect() {
+  var select = document.getElementById('c_tutor');
+  // Limpiamos el select dejando solo la primera opción
+  select.innerHTML = '<option value="">— Selecciona un tutor —</option>';
+  
+  // window.USUARIOS se carga al inicio en tu función cargarUsuarios()
+  if (window.USUARIOS && window.USUARIOS.length) {
+    window.USUARIOS.forEach(function(u) {
+      // Filtramos para que solo salgan tutores o admins en la lista
+      if (u.rol === 'tutor' || u.rol === 'admin') {
+        var opt = document.createElement('option');
+        opt.value = u.nombres + ' ' + u.apellidos; // Este es el valor exacto que se guardará
+        opt.textContent = u.nombres + ' ' + u.apellidos + ' (' + u.rol + ')';
+        select.appendChild(opt);
+      }
+    });
+  }
+}
 
 init();
 </script>
