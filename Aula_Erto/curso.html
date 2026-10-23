@@ -106,45 +106,54 @@ function renderModulos() {
       '<li style="opacity:.6;cursor:default;"><i class="fa-solid fa-inbox"></i> Sin contenido aún</li>';
     return;
   }
+  
   document.getElementById('listaModulos').innerHTML = mods.map(function (m, i) {
-    return '<li data-i="' + i + '" class="' + (i === 0 ? 'active' : '') +
-      (m.completado ? ' completado' : '') +
-      '" onclick="cargarModulo(' + i + ')">' +
-      '<i class="fa-solid ' + (m.icono || 'fa-book') + '"></i> ' + esc(m.titulo) +
+    var isLocked = m.bloqueado;
+    var isActive = (i === MODULO_ACTIVO);
+    
+    // Si está bloqueado, se ve gris, con candado y no responde al clic
+    var classes = (isActive ? 'active' : '') + 
+                  (m.completado ? ' completado' : '') + 
+                  (isLocked ? ' locked' : '');
+                  
+    var style = isLocked ? 'opacity:0.5; cursor:not-allowed;' : '';
+    var icon = isLocked ? 'fa-lock' : (m.icono || 'fa-book');
+    var onclick = isLocked ? 'alert("Este módulo aún no está habilitado. El tutor lo abrirá pronto.")' : 'cargarModulo(' + i + ')';
+    
+    return '<li data-i="' + i + '" class="' + classes + '" style="' + style + '" onclick="' + onclick + '">' +
+      '<i class="fa-solid ' + icon + '"></i> ' + esc(m.titulo) +
       '</li>';
   }).join('');
 }
 
 function cargarModulo(i) {
-  // ⬇️ AUTO-MARCAR el módulo anterior como completado
-  if (typeof MODULO_ACTIVO !== 'undefined' && MODULO_ACTIVO !== i && CURSO.modulos[MODULO_ACTIVO] && !CURSO.modulos[MODULO_ACTIVO].completado) {
-    marcarModuloAuto(MODULO_ACTIVO);
-  }
-
   MODULO_ACTIVO = i;
   var mods = CURSO.modulos || [];
+  var m = mods[i];
+  if (!m) return;
 
-  if (!mods.length) {
+  // 🛑 VALIDACIÓN DE SEGURIDAD
+  if (m.bloqueado) {
+    document.querySelectorAll('.curso-modulos li').forEach(function (li) {
+      li.classList.toggle('active', Number(li.dataset.i) === i);
+    });
+    
     document.getElementById('contenidoCurso').innerHTML =
       '<div class="empty" style="padding:3rem 1rem;text-align:center;">' +
-        '<i class="fa-solid fa-folder-open" style="font-size:3rem;color:#c8cbe0;margin-bottom:1rem;"></i>' +
-        '<h2 style="margin-bottom:.5rem;">Este curso aún no tiene contenido</h2>' +
-        '<p style="color:#555570;margin-bottom:1.5rem;">El tutor está preparando los módulos.</p>' +
-        '<a href="panel-estudiante.html" class="btn btn-primary">' +
-          '<i class="fa-solid fa-arrow-left"></i> Volver al panel' +
-        '</a>' +
+        '<i class="fa-solid fa-lock" style="font-size:4rem;color:#c8cbe0;margin-bottom:1rem;"></i>' +
+        '<h2 style="margin-bottom:.5rem;">Módulo Bloqueado</h2>' +
+        '<p style="color:#555570;margin-bottom:1.5rem;">Este módulo aún no está habilitado por el tutor.</p>' +
+        '<a href="panel-estudiante.html" class="btn btn-primary"><i class="fa-solid fa-arrow-left"></i> Volver al panel</a>' +
       '</div>';
     return;
   }
-
-  var m = mods[i];
-  if (!m) return;
 
   document.querySelectorAll('.curso-modulos li').forEach(function (li) {
     li.classList.toggle('active', Number(li.dataset.i) === i);
   });
 
   var bloques = '';
+  // ... DEJA EL RESTO DE TU CÓDIGO DE CARGARMODULO TAL CUAL ESTÁ ...
 
   // VIDEO
   if (m.video_id) {

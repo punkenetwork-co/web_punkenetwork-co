@@ -4,7 +4,7 @@
 
    const CONFIG = {
     // ⚠️ PEGA AQUÍ la URL /exec de tu Web App de Google Apps Script
-    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycby5M4sWxsC5eBn2k3sok73s3IUpmcv-EwhcctRFhWFNubcGdkslr08T1oNIBB3fi3Ec/exec',
+    APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbzAilQI6RS4eBrdkQ90XdbRo9X-kbWpQUsKOPwXNV6Cd4PWDo2_jUajIj7yrRlgnS_G/exec',
   
     // 🖼️ URL del logo (deja '' para mostrar la letra "E" por defecto)
     LOGO_URL: 'https://static.wixstatic.com/media/1580a1_49c5e261837d47559bffdca0f03228c4~mv2.png/v1/fill/w_117,h_87,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/logo_edited.png',          // Ej: 'assets/img/logo-erto.png' o 'https://.../logo.png'
