@@ -187,17 +187,23 @@ async function verEstudiantes(cursoId, titulo) {
     
     document.getElementById('modalBody').innerHTML =
       '<div class="tabla-wrap"><table class="tabla"><thead><tr>' +
-        '<th>Estudiante</th><th>Correo</th><th>Estado</th><th>Certificado</th>' +
+        '<th>Estudiante</th><th>Correo</th><th>Estado Curso</th><th>Nota Examen</th><th>Acción</th>' +
       '</tr></thead><tbody>' +
       est.map(function (e) {
-        // Guardamos los datos en atributos del botón
         const nombreCompleto = esc(e.nombres) + ' ' + esc(e.apellidos);
+        
+        // Color de la nota (Verde si aprobó con 70+, rojo si perdió, gris si no lo ha hecho)
+        let chipColor = 'gray';
+        if (e.porcentaje >= 70) chipColor = 'green';
+        else if (e.porcentaje > 0) chipColor = 'red';
+        
         return '<tr><td><strong>' + nombreCompleto + '</strong><br><small style="color:#888;">' + esc(e.tipo_documento) + ' ' + esc(e.numero_documento) + '</small></td>' +
           '<td>' + esc(e.email) + '</td>' +
           '<td><span class="chip ' + (e.estado === 'completado' ? 'green' : '') + '">' + esc(e.estado) + '</span></td>' +
+          '<td><span class="chip ' + chipColor + '">' + esc(e.nota_examen) + '</span></td>' +
           '<td>' +
             '<button class="btn btn-sm btn-primary" onclick="abrirModalCertificado(\'' + e.email + '\', \'' + nombreCompleto + '\', \'' + esc(titulo) + '\')">' +
-              '<i class="fa-solid fa-paper-plane"></i> Enviar' +
+              '<i class="fa-solid fa-paper-plane"></i> Certificado' +
             '</button>' +
           '</td></tr>';
       }).join('') +
