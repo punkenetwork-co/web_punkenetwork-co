@@ -569,3 +569,54 @@ main { flex: 1; padding: 0 0 4rem; }
     .pdf-wrap { height: 480px; }
     .recurso-head { font-size: .82rem; padding: .7rem .9rem; }
   }
+
+  /* ============================================================
+   ARREGLOS PARA CELULAR (RESPONSIVE TABLAS Y MENÚ)
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* 1. Arreglar el menú lateral para que no ocupe tanta altura */
+  .panel-side {
+    padding: 1rem;
+  }
+  .panel-menu {
+    flex-direction: row !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.5rem;
+    gap: 0.5rem;
+  }
+  .panel-menu a {
+    padding: 0.6rem 1rem;
+    flex-shrink: 0;
+    font-size: 0.85rem;
+  }
+  
+  /* 2. Arreglar las tarjetas de estadísticas (que salgan de 2 en 2) */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .stat-card {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  .stat-info strong {
+    font-size: 1.2rem;
+  }
+
+  /* 3. Arreglar la tabla para que no se aplaste y se pueda deslizar */
+  .tabla-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabla {
+    min-width: 650px; /* Fuerza a la tabla a mantener su ancho y activar el scroll */
+  }
+  .tabla th, .tabla td {
+    white-space: nowrap; /* Evita que el texto se baje en muchas líneas */
+    padding: 0.75rem;
+    font-size: 0.82rem;
+  }
+}
