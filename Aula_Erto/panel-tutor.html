@@ -80,6 +80,37 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="modalActividades">
+    <div class="modal" style="max-width:800px;">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-tasks"></i> Gestionar Actividades</h3>
+        <button class="modal-close" onclick="document.getElementById('modalActividades').classList.remove('show')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert" id="alertaActividad"></div>
+        
+        <div class="form-grid" style="background:var(--primary-soft); padding:1rem; border-radius:12px; margin-bottom:1.5rem;">
+          <div class="form-group full">
+            <label>Seleccionar Módulo *</label>
+            <select class="form-control" id="act_modulo_id"></select>
+          </div>
+          <div class="form-group full">
+            <label>Título de la Actividad *</label>
+            <input type="text" class="form-control" id="act_titulo" placeholder="Ej: Ensayo sobre la IA">
+          </div>
+          <div class="form-group full">
+            <label>Instrucciones *</label>
+            <textarea class="form-control" id="act_instrucciones" rows="2" placeholder="Describe qué debe hacer el estudiante..."></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" onclick="guardarActividad(this)"><i class="fa-solid fa-plus"></i> Crear Actividad</button>
+        </div>
+  
+        <h4>Actividades de este curso</h4>
+        <div id="listaActividadesCreadas"></div>
+      </div>
+    </div>
+  </div>
+
 <footer data-footer></footer>
 <div class="loader-overlay" id="loaderOverlay"><div class="loader-spin"></div></div>
 
@@ -156,8 +187,9 @@ function renderTodo() {
         '</div>' +
         '<div class="curso-item-actions">' +
           '<button class="btn btn-outline btn-sm" onclick="verEstudiantes(' + c.id + ', \'' + esc(c.titulo).replace(/'/g, "\\'") + '\')"><i class="fa-solid fa-users"></i> Ver estudiantes</button>' +
-        '</div>' +
-      '</div>'
+          '<button class="btn btn-ghost btn-sm" onclick="abrirActividades(' + c.id + ')"><i class="fa-solid fa-tasks"></i> Tareas</button>' +
+          '</div>' +
+      '</div>' 
     );
   }).join('') : '<div class="empty"><i class="fa-solid fa-chalkboard-user"></i><h3>Sin cursos asignados</h3><p>Contacta al administrador.</p></div>';
 
@@ -287,6 +319,56 @@ document.getElementById('btnEnviarCertificado').addEventListener('click', async 
   };
   reader.readAsDataURL(file);
 });
+
+let cursoActivoId = 0;
+
+async function abrirActividades(cursoId) {
+  cursoActivoId = cursoId;
+  document.getElementById('modalActividades').classList.add('show');
+  document.getElementById('alertaActividad').className = 'alert';
+  document.getElementById('listaActividadesCreadas').innerHTML = '<div class="text-center"><div class="loader-spin" style="margin:0 auto;"></div></div>';
+  
+  // Cargar módulos para el select
+  const r = await API.cursoContenido(SESION.token, cursoId);
+  const select = document.getElementById('act_modulo_id');
+  select.innerHTML = '';
+  if (r.success && r.curso.modulos) {
+    r.curso.modulos.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.id; opt.textContent = m.titulo;
+      select.appendChild(opt);
+    });
+  }
+
+  // Aquí podríamos cargar las actividades ya creadas (si tuviéramos un endpoint que las liste por curso)
+  document.getElementById('listaActividadesCreadas').innerHTML = '<p style="color:#888; font-size:.85rem;">Las actividades creadas aparecerán en el módulo correspondiente del estudiante.</p>';
+}
+
+async function guardarActividad(btn) {
+  const modId = document.getElementById('act_modulo_id').value;
+  const titulo = document.getElementById('act_titulo').value.trim();
+  const instrucciones = document.getElementById('act_instrucciones').value.trim();
+
+  if (!titulo || !instrucciones) return mostrarAlerta('alertaActividad', 'error', 'Llena todos los campos.');
+
+  btnLoading(btn, true, 'Creando...');
+  try {
+    const r = await API.crearActividad(SESION.token, {
+      curso_id: cursoActivoId, modulo_id: modId, titulo: titulo, instrucciones: instrucciones
+    });
+    if (!r.success) throw new Error(r.message);
+    
+    mostrarAlerta('alertaActividad', 'success', r.message);
+    document.getElementById('act_titulo').value = '';
+    document.getElementById('act_instrucciones').value = '';
+    
+    // Si tuvieras un endpoint para listar, lo llamarías aquí para refrescar la tabla
+  } catch (e) {
+    mostrarAlerta('alertaActividad', 'error', e.message);
+  } finally {
+    btnLoading(btn, false);
+  }
+}
 
 // ARRANCAR
 init();

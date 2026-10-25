@@ -59,6 +59,12 @@
     enviarExamen(token, curso_id, respuestas) { return this.post('enviarExamen', { token, curso_id, respuestas }); },
     enviarEncuesta(token, datos) { return this.post('enviarEncuesta', Object.assign({ token }, datos)); },
     enviarCertificado(token, datos) { return this.post('enviarCertificado', Object.assign({ token }, datos)); },
+    inscribirCurso(token, curso_id) { return this.post('inscribirCurso', { token, curso_id }); },
+    crearActividad(token, datos) { return this.post('crearActividad', Object.assign({ token }, datos)); },
+    obtenerActividadesModulo(token, modulo_id) { return this.post('obtenerActividadesModulo', { token, modulo_id }); },
+    subirEntrega(token, datos) { return this.post('subirEntrega', Object.assign({ token }, datos)); },
+    verEntregas(token, actividad_id) { return this.post('verEntregas', { token, actividad_id }); },
+
   };
 
   

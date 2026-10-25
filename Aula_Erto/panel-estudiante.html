@@ -25,6 +25,7 @@
     <ul class="panel-menu">
       <li><a href="#" class="active" data-seccion="inicio"><i class="fa-solid fa-house"></i> Inicio</a></li>
       <li><a href="#" data-seccion="cursos"><i class="fa-solid fa-book-open"></i> Mis cursos</a></li>
+      <li><a href="#" onclick="abrirModalCursos(); return false;"><i class="fa-solid fa-circle-plus" style="color: var(--accent);"></i> Inscribirme a otro curso</a></li>
       <li><a href="#" data-seccion="certificados"><i class="fa-solid fa-certificate"></i> Certificados</a></li>
       <li><a href="#" data-seccion="perfil"><i class="fa-solid fa-user"></i> Mi perfil</a></li>
       <li><a href="#" onclick="AUTH.logoutUI(); return false;"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a></li>
@@ -74,6 +75,22 @@
     </div>
 
   </section>
+</div>
+
+<!-- Modal Nuevos Cursos -->
+<div class="modal-overlay" id="modalNuevosCursos">
+  <div class="modal" style="max-width: 800px;">
+    <div class="modal-head">
+      <h3><i class="fa-solid fa-graduation-cap"></i> Explorar Cursos</h3>
+      <button class="modal-close" onclick="cerrarModalCursos()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="alert" id="alertaNuevoCurso"></div>
+      <div id="listaCursosDisponibles" style="display: grid; gap: 1rem;">
+        <div class="text-center" style="padding: 1rem;"><div class="loader-spin" style="margin: 0 auto;"></div></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <footer data-footer></footer>
@@ -236,6 +253,80 @@ document.querySelectorAll('.panel-menu a[data-seccion]').forEach(function (a) {
     if (sec) sec.classList.remove('hidden');
   });
 });
+
+async function abrirModalCursos() {
+  document.getElementById('modalNuevosCursos').classList.add('show');
+  document.getElementById('alertaNuevoCurso').className = 'alert';
+  const contenedor = document.getElementById('listaCursosDisponibles');
+  
+  try {
+    // 1. Traemos todos los cursos
+    const rCursos = await API.cursos();
+    if (!rCursos.success) throw new Error(rCursos.message);
+    
+    // 2. Filtramos los que ya está inscrito (usando el arreglo global MIS_CURSOS)
+    const misCursosIds = (MIS_CURSOS || []).map(function(c) { return Number(c.id); });
+    const disponibles = rCursos.cursos.filter(function(c) {
+      return !misCursosIds.includes(Number(c.id));
+    });
+
+    if (!disponibles.length) {
+      contenedor.innerHTML = '<div class="empty"><i class="fa-solid fa-check-circle" style="color:#2ecc71;"></i><h3>¡Estás al día!</h3><p>Ya estás inscrito en todos los cursos disponibles.</p></div>';
+      return;
+    }
+
+    // 3. Pintar los cursos
+    contenedor.innerHTML = disponibles.map(function(c) {
+      const color = c.color || '#0200AF';
+      return (
+        '<div class="curso-item" style="border-left: 4px solid ' + color + '; padding: 1rem;">' +
+          '<div class="curso-item-info">' +
+            '<h4 style="margin-bottom:.4rem;">' + esc(c.titulo) + '</h4>' +
+            '<p style="font-size:.85rem; color:#555570;"><i class="fa-solid fa-chalkboard-user"></i> ' + esc(c.tutor || '—') + '</p>' +
+            '<div class="curso-meta mt-1">' +
+              (c.duracion_horas ? '<span class="chip"><i class="fa-regular fa-clock"></i> ' + c.duracion_horas + ' h</span>' : '') +
+              (c.nivel ? '<span class="chip gold">' + esc(c.nivel) + '</span>' : '') +
+            '</div>' +
+          '</div>' +
+          '<div class="curso-item-actions">' +
+            '<button class="btn btn-primary btn-sm" onclick="confirmarInscripcion(\'' + c.id + '\', this)">' +
+              '<i class="fa-solid fa-plus"></i> Inscribirme' +
+            '</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+    
+  } catch (e) {
+    contenedor.innerHTML = '<div class="alert alert-error show"><i class="fa-solid fa-triangle-exclamation"></i><span>' + e.message + '</span></div>';
+  }
+}
+
+function cerrarModalCursos() {
+  document.getElementById('modalNuevosCursos').classList.remove('show');
+}
+
+async function confirmarInscripcion(cursoId, btn) {
+  btnLoading(btn, true, 'Inscribiendo...');
+  ocultarAlerta('alertaNuevoCurso');
+  
+  try {
+    const r = await API.inscribirCurso(SESION.token, cursoId);
+    if (!r.success) throw new Error(r.message);
+    
+    mostrarAlerta('alertaNuevoCurso', 'success', r.message);
+    
+    // Recargar el panel del estudiante para que vea su nuevo curso
+    setTimeout(function() {
+      cargarMisCursos(); // Vuelve a pedir los datos
+      abrirModalCursos(); // Vuelve a abrir el modal para quitar el curso recién agregado
+    }, 1500);
+    
+  } catch (e) {
+    mostrarAlerta('alertaNuevoCurso', 'error', e.message);
+    btnLoading(btn, false);
+  }
+}
 
 // 🔥 ARRANCAR
 init();

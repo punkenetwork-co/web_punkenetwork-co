@@ -245,6 +245,9 @@ function cargarModulo(i) {
     '</div>';
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Cargar actividades del tutor para este módulo
+    cargarActividadesModulo(m.id);
 }
 
 /** Marca un módulo manualmente (botón verde). */
@@ -338,6 +341,90 @@ async function cargarProgreso() {
 
     document.getElementById('accionesCurso').innerHTML = html;
   } catch (e) { console.error(e); }
+}
+
+async function cargarActividadesModulo(moduloId) {
+  const contenedor = document.getElementById('contenidoCurso');
+  const divActividades = document.createElement('div');
+  divActividades.id = 'actividadesAlumno';
+  divActividades.className = 'mt-3';
+  contenedor.appendChild(divActividades);
+
+  try {
+    const r = await API.obtenerActividadesModulo(SESION.token, moduloId);
+    if (!r.success || !r.actividades.length) return;
+
+    let html = '<h3 style="margin-top:2rem; margin-bottom:1rem;"><i class="fa-solid fa-tasks" style="color:var(--primary);"></i> Actividades del Tutor</h3>';
+
+    r.actividades.forEach(function(act) {
+      html += '<div class="card mb-3" style="border-left: 4px solid var(--primary);">' +
+        '<h4>' + esc(act.titulo) + '</h4>' +
+        '<p style="color:var(--text-light); font-size:.9rem; margin-bottom:1rem;">' + esc(act.instrucciones) + '</p>';
+
+      if (act.entrega) {
+        // Si ya entregó
+        html += '<div class="alert alert-success show"><i class="fa-solid fa-check-circle"></i><div>' +
+          '<strong>¡Tarea entregada!</strong><br>' +
+          (act.entrega.url ? '<a href="' + act.entrega.url + '" target="_blank">Ver archivo subido</a><br>' : '') +
+          (act.entrega.comentario ? 'Comentario: ' + esc(act.entrega.comentario) : '') +
+          (act.entrega.nota ? '<br><strong>Calificación: ' + act.entrega.nota + '</strong>' : '') +
+        '</div></div>';
+      } else {
+        // Si no ha entregado, mostrar formulario
+        html += '<div class="form-group">' +
+          '<label style="font-size:.85rem;">Adjuntar archivo (PDF, Word, Imagen - opcional)</label>' +
+          '<input type="file" class="form-control" id="file_act_' + act.id + '">' +
+        '</div>' +
+        '<div class="form-group">' +
+          '<label style="font-size:.85rem;">Comentario (opcional)</label>' +
+          '<textarea class="form-control" id="txt_act_' + act.id + '" rows="2"></textarea>' +
+        '</div>' +
+        '<button class="btn btn-primary btn-sm" onclick="entregarTarea(' + act.id + ', this)"><i class="fa-solid fa-paper-plane"></i> Entregar Tarea</button>';
+      }
+      html += '</div>';
+    });
+
+    divActividades.innerHTML = html;
+  } catch (e) {
+    console.error('Error cargando actividades:', e);
+  }
+}
+
+async function entregarTarea(actividadId, btn) {
+  const fileInput = document.getElementById('file_act_' + actividadId);
+  const txtInput = document.getElementById('txt_act_' + actividadId);
+  
+  btnLoading(btn, true, 'Subiendo...');
+
+  const payload = { actividad_id: actividadId, comentario: txtInput.value.trim() };
+
+  const procesarEnvio = async () => {
+    try {
+      const r = await API.subirEntrega(SESION.token, payload);
+      if (!r.success) throw new Error(r.message);
+      alert('¡Tarea entregada con éxito!');
+      cargarModulo(MODULO_ACTIVO); // Recargar el módulo
+    } catch (err) {
+      alert(err.message);
+      btnLoading(btn, false);
+    }
+  };
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    if (file.size > 5 * 1024 * 1024) return alert('El archivo supera los 5MB.');
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      payload.archivoBase64 = e.target.result;
+      payload.nombreArchivo = file.name;
+      payload.tipoArchivo = file.type;
+      procesarEnvio();
+    };
+    reader.readAsDataURL(file);
+  } else {
+    procesarEnvio();
+  }
 }
 
 </script>
